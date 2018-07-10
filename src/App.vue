@@ -3,28 +3,36 @@
         <Row>
             <Col span="10" offset="3">
                 <label for="">标题：</label>
-                <Input v-model="value7" size="large" type="text" :autosize="true" maxlength=200 autofocus=true></Input>
+                <Input size="large" type="text" :autosize='true' :autofocus='true'></Input>
             </Col>
         </Row>
         <br>
         <Row>
             <Col span="10" offset="3">
                 <label for="">描述：</label>
-                <Input v-model="value7" size="large" type="text" :autosize="true" maxlength=200></Input>
+                <Input size="large" type="text" :autosize='true'></Input>
             </Col>
         </Row>
         <br>
         <Row>
             <Col span="10" offset="3">
                 <label for="">标签：</label>
-                <Input v-model="value7" size="large" type="text" :autosize="true" maxlength=200></Input>
+                <Select
+                    v-model="model14"
+                    multiple
+                    filterable
+                    remote
+                    :remote-method="remoteMethod2"
+                    :loading="loading2">
+                    <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
+                </Select>
             </Col>
         </Row>
         <br>
         <Row>
             <Col span="10" offset="3">
                 <label for="">内容：</label>
-                <Input v-model="value7" size="large" type="textarea" :autosize="true"></Input>
+                <mavon-editor placeholder="开始编辑"></mavon-editor>
             </Col>
         </Row>
         <br>
@@ -37,7 +45,33 @@
 </template>
 <script>
 export default {
-    
+    data () {
+        return {
+            model14: [],
+            loading2: false,
+            options2: [],
+            list: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New hampshire', 'New jersey', 'New mexico', 'New york', 'North carolina', 'North dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode island', 'South carolina', 'South dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West virginia', 'Wisconsin', 'Wyoming']
+        }
+    },
+    methods: {
+        remoteMethod2 (query) {
+            if (query !== '') {
+                this.loading2 = true;
+                setTimeout(() => {
+                    this.loading2 = false;
+                    const list = this.list.map(item => {
+                        return {
+                            value: item,
+                            label: item
+                        };
+                    });
+                    this.options2 = list.filter(item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1);
+                }, 200);
+            } else {
+                this.options2 = [];
+            }
+        }
+    }
 }
 </script>
 <style scoped>
