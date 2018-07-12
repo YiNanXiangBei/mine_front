@@ -1,55 +1,95 @@
 <template>
     <div id="edit">
-        <Form label-position="right">
-
+        <Form :model="formValues">
             <Row>
                 <Col span="10" offset="3">
                     <FormItem label="日期">
-                        <DatePicker  format="yyyy/MM/dd" type="daterange" placement="bottom-end" placeholder="Select date" style="width: 100%"></DatePicker>                    
+                        <DatePicker @on-change="changeDate" v-model="formValues.datetime"  format="yyyy/MM/dd" type="daterange" placement="bottom-end" placeholder="请选择日期" style="width: 100%"></DatePicker>                    
                     </FormItem>
-                </Col>
-                        
+                </Col>     
             </Row>
             <Row>
                 <Col span="2" offset="3">
-                    <Button type="success" long>查询</Button>
+                    <Button type="success" long @click="search">查询</Button>
                 </Col>
             </Row>
             <br>
-            <Row>
-                <Col span="10" offset="3">
-                    <Card style="width:100%">
-                        <p slot="title">
-                            <Icon type="compose"></Icon>
-                            Classic film
-                        </p>
-                        <p>
-                            <Tag color="#A569BD">标签二</Tag>
-                        </p>
-                        <a href="#" slot="extra" @click.prevent="changeLimit">
-                            <Icon type="ios-loop-strong"></Icon>
-                            Change
-                        </a>
-                        <ul>
-                            <li v-for="item in randomMovieList">
-                                <a :href="item.url" target="_blank">{{ item.name }}</a>
-                                <span>
-                                    <Icon type="ios-star" v-for="n in 4" :key="n"></Icon><Icon type="ios-star" v-if="item.rate >= 9.5"></Icon><Icon type="ios-star-half" v-else></Icon>
-                                    {{ item.rate }}
-                                </span>
-                            </li>
-                        </ul>
-                    </Card>
-                </Col>
-            </Row>
-
+            <div v-for="(article, index) in articles" :key="index">
+                <Row>
+                    <Col span="15" offset="3">
+                        <Card style="width:100%">
+                            <p slot="title" @click="detailArtice" style="cursor: pointer">
+                                <Icon type="compose"></Icon>
+                                {{ article.title }}
+                            </p>
+                             <a href="#" slot="extra">
+                                {{ article.datetime }}
+                            </a>
+                            <p>
+                                <Tag color="#A569BD" v-for="(tag, ind) in article.tags" :key="ind"> {{ tag.value }} </Tag>
+                            </p>
+                        </Card>
+                    </Col>
+                </Row>
+                <br>
+            </div>
         </Form>
         
     </div>    
 </template>
 <script>
 export default {
-    
+    data() {
+        return {
+            articles: [
+                {
+                    title: '今天是个好日子',
+                    tags: [
+                        {
+                            value: '吃'
+                        },
+                        {
+                            value: '喝'
+                        },
+                        {
+                            value: '睡'
+                        }
+                    ],
+                    datetime: '2018/02/06'
+                },
+                {
+                    title: '今天天气不好',
+                    tags: [
+                        {
+                            value: '吃'
+                        },
+                        {
+                            value: '睡'
+                        }
+                    ],
+                    datetime: '2018/07/12'
+                }
+            ],
+            formValues: {
+                beginTime: '',
+                endTime: ''
+            }
+        }
+    },
+    methods: {
+        detailArtice(value) {
+            console.log(value)
+            this.$Message.info('detail article');
+        },
+        search() {
+            this.$Message.info(this.formValues.beginTime + ',' + this.formValues.endTime);
+        },
+        changeDate(value) {
+            this.formValues.beginTime = value[0]
+            this.formValues.endTime = value[1]
+            this.$Message.info(this.formValues.beginTime + ',' + this.formValues.endTime);
+        }
+    }
 }
 </script>
 <style scoped>
