@@ -12,35 +12,36 @@
                 <Col span="2" offset="3">
                     <Button type="success" long @click="search">查询</Button>
                 </Col>
+            </Row>     
+        </Form>
+        <br>
+        <div v-for="(article, index) in articles" :key="index">
+            <Row>
+                <Col span="18" offset="3">
+                    <Card style="width:100%">
+                        <p slot="title" @click="detailArtice" style="cursor: pointer">
+                            <Icon type="compose"></Icon>
+                            {{ article.title }}
+                        </p>
+                            <a href="#" slot="extra">
+                            {{ article.datetime }}
+                        </a>
+                        <p>
+                            <Tag color="#A569BD" v-for="(tag, ind) in article.tags" :key="ind"> {{ tag.value }} </Tag>
+                        </p>
+                    </Card>
+                </Col>
             </Row>
             <br>
-            <div v-for="(article, index) in articles" :key="index">
-                <Row>
-                    <Col span="15" offset="3">
-                        <Card style="width:100%">
-                            <p slot="title" @click="detailArtice" style="cursor: pointer">
-                                <Icon type="compose"></Icon>
-                                {{ article.title }}
-                            </p>
-                             <a href="#" slot="extra">
-                                {{ article.datetime }}
-                            </a>
-                            <p>
-                                <Tag color="#A569BD" v-for="(tag, ind) in article.tags" :key="ind"> {{ tag.value }} </Tag>
-                            </p>
-                        </Card>
-                    </Col>
-                </Row>
-                <br>
-            </div>
-        </Form>
-        
+        </div>
+        <Page :total="total" style="text-align: center"></Page>
     </div>    
 </template>
 <script>
 export default {
     data() {
         return {
+            total: 12,
             articles: [
                 {
                     title: '今天是个好日子',
