@@ -33,7 +33,7 @@
         <Row>
             <Col span="18" offset="3">
                 <label for="">内容：</label>
-                <mavon-editor placeholder="开始编辑" style="z-index:0"></mavon-editor>
+                <mavon-editor placeholder="开始编辑"></mavon-editor>
             </Col>
         </Row>
         <br>
@@ -81,6 +81,7 @@ export default {
     font-size: 16px;
     padding-top: 40px;
     padding-bottom: 50px;
+    z-index: inherit
 }
 </style>
 

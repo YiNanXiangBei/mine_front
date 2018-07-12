@@ -1,7 +1,7 @@
 <template>
     <div class="layout">
         <Sider :style="{position: 'fixed', height: '100vh', left: 0, overflow: 'auto'}">
-            <Menu active-name="person" theme="dark" width="auto" :open-names="['person', 'create']" @on-select="select">
+            <Menu active-name="person" theme="dark" width="auto" :open-names="openNames" @on-select="select">
                 <MenuItem name="person">
                     <Icon type="person"></Icon>
                     <!-- <router-link to="/person" tag="span">个人中心</router-link> -->
@@ -44,11 +44,9 @@
         <Layout :style="{marginLeft: '200px'}">
             <Header style="position: fixed; width: 100%; background: #fff; boxShadow: 0 2px 3px 2px rgba(0,0,0,.1); z-index: 1">
                 <Input  icon="ios-search-strong"  placeholder="输入要查找的内容" style="width: 200px; cursor: pointer"></Input>
-                <div @click="changeAvatar">
-                    <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg" size="large" style="position: fixed; right: 20px; top: 12px; cursor: pointer"/>
-                </div>
+                <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg" size="large" style="position: fixed; right: 20px; top: 12px;"/>
             </Header>
-            <Content style="margin: 88px 20px 0; background: #fff; minHeight: 600px">
+            <Content style="margin: 88px 20px 0; background: #fff; minHeight: 500px">
                 <router-view></router-view>
             </Content>
         </Layout>
@@ -59,15 +57,19 @@
         name: 'Sidebar',
         data() {
             return {
+                openNames: [
+                    'person', 
+                    'publish',
+                    'editor',
+                    'comment',
+                    'tag'
+                ]
 
             }
         },
         methods: {
             select(name) {
                 this.$router.push({path: name})
-            },
-            changeAvatar() {
-                this.$router.push({path: 'person'})
             }
         }
     }
