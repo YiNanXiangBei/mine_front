@@ -52,7 +52,6 @@
 export default {
     data() {
         return {
-
             showmodal: false,
             formValues: {
                 name: 'laowang',
@@ -71,23 +70,6 @@ export default {
                 mail: [
                     { required: true, message: '邮箱不能为空', trigger: 'blur' },
                     { type: 'email', message: '不符合邮箱规范', trigger: 'blur' }
-                ],
-                gender: [
-                    { required: true, message: 'Please select gender', trigger: 'change' }
-                ],
-                interest: [
-                    { required: true, type: 'array', min: 1, message: 'Choose at least one hobby', trigger: 'change' },
-                    { type: 'array', max: 2, message: 'Choose two hobbies at best', trigger: 'change' }
-                ],
-                date: [
-                    { required: true, type: 'date', message: 'Please select the date', trigger: 'change' }
-                ],
-                time: [
-                    { required: true, type: 'string', message: 'Please select time', trigger: 'change' }
-                ],
-                desc: [
-                    { required: true, message: 'Please enter a personal introduction', trigger: 'blur' },
-                    { type: 'string', min: 20, message: 'Introduce no less than 20 words', trigger: 'blur' }
                 ]
             }
         }
