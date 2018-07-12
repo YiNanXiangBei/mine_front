@@ -11,26 +11,40 @@ import Upload from '@/components/Upload'
 Vue.use(Router)
 
 export default new Router({
+  //修改默认路由格式
+  mode: 'history',
   routes: [
     {
       path: '/comment',
       name: 'comment',
-      component: Comments
+      component: Comments,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     {
       path: '/editor',
       name: 'editor',
-      component: Editor
+      component: Editor,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     {
       path: '/person',
       name: 'person',
-      component: Person
+      component: Person,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     {
       path: '/publish',
       name: 'publish',
-      component: Publish
+      component: Publish,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     {
       path: '/sidebar',
@@ -40,12 +54,18 @@ export default new Router({
     {
       path: '/tag',
       name: 'tag',
-      component: Tag
+      component: Tag,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     },
     {
       path: '/upload',
       name: 'upload',
-      component: Upload
+      component: Upload,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
     }
   ]
 })

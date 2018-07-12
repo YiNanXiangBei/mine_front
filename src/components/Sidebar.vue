@@ -1,42 +1,35 @@
 <template>
     <div class="layout">
         <Sider :style="{position: 'fixed', height: '100vh', left: 0, overflow: 'auto'}">
-            <Menu active-name="person" theme="dark" width="auto" :open-names="openNames" @on-select="select">
+            <Menu :active-name="menuName" theme="dark" width="auto" :open-names="openNames" @on-select="select">
                 <MenuItem name="person">
                     <Icon type="person"></Icon>
-                    <!-- <router-link to="/person" tag="span">个人中心</router-link> -->
                     <span>个人中心</span>
                 </MenuItem>
                 <MenuItem name="publish">
                     <Icon type="ios-compose-outline"></Icon>
-                    <!-- <router-link to="/publish" tag="span">发布文章</router-link> -->
                     <span>发布文章</span>
                 </MenuItem>
                 <MenuItem name="editor">
                     <Icon type="edit"></Icon>
-                    <!-- <router-link to="/editor" tag="span">编辑文章</router-link> -->
                     <span>编辑文章</span>
                 </MenuItem>
                 <MenuItem name="comment">
                     <Icon type="chatbubble-working"></Icon>
                     <Badge dot count='1'>
-                        <!-- <router-link to="/comment" tag="span">评论管理</router-link> -->
                         <span>评论管理</span>
                     </Badge>
                 </MenuItem>
                 <MenuItem name="upload">
                     <Icon type="image"></Icon>
-                    <!-- <router-link to="/upload" tag="span">图片管理</router-link> -->
                     <span>图片管理</span>
                 </MenuItem>
                 <MenuItem name="tag">
                     <Icon type="ios-pricetag-outline"></Icon>
-                    <!-- <router-link to="/tag" tag="span">标签管理</router-link> -->
                     <span>标签管理</span>
                 </MenuItem>
                 <MenuItem name="home">
                     <Icon type="home"></Icon>
-                    <!-- <router-link to="/" tag="span">返回主页</router-link> -->
                     <span>返回主页</span>
                 </MenuItem>
             </Menu>
@@ -46,8 +39,10 @@
                 <Input  icon="ios-search-strong"  placeholder="输入要查找的内容" style="width: 200px; cursor: pointer"></Input>
                 <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg" size="large" style="position: fixed; right: 20px; top: 12px;"/>
             </Header>
-            <Content style="margin: 88px 20px 0; background: #fff; minHeight: 500px">
-                <router-view @showheader='changeHeaders'></router-view>
+            <Content style="margin: 88px 20px 0; background: #fff; min-height: 600px">
+                <keep-alive>
+                    <router-view @showheader="changeHeaders" v-if="$route.meta.keepAlive"></router-view>
+                </keep-alive>
             </Content>
         </Layout>
     </div>
@@ -57,6 +52,7 @@
         name: 'Sidebar',
         data() {
             return {
+                menuName : 'person',
                 openNames: [
                     'person', 
                     'publish',
@@ -68,12 +64,27 @@
 
             }
         },
+        mounted() {
+            this.$nextTick(function () {
+                this.changeMenu() 
+            })
+        },
         methods: {
             select(name) {
                 this.$router.push({path: name})
             },
             changeHeaders(value) {
                 this.showHeader = value
+            },
+            changeMenu() {
+                //修改menu显示问题
+                let path = this.$route.path; 
+                let name = path.substring(1, path.length)
+                if(name === "" || name === null) {
+                    this.menuName = "person"
+                } else {
+                    this.menuName = name
+                }
             }
         }
     }

@@ -79,7 +79,6 @@ export default {
     },
     methods: {
         detailArtice(value) {
-            console.log(value)
             this.$Message.info('detail article');
         },
         search() {
