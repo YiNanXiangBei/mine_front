@@ -19,17 +19,8 @@
                         <Input type="email" v-model="formValues.email"></Input>
                     </FormItem>
                 </Col>
-                <Col span="6" offset="3">
-                    <FormItem>
-                       <vueCropper
-                            ref="cropper3"
-                            :img="example3.img"
-                            :autoCrop="example3.autoCrop"
-                            :autoCropWidth="example3.autoCropWidth"
-                            :autoCropHeight="example3.autoCropHeight"
-                            :fixedBox="example3.fixedBox"
-                        ></vueCropper>
-                    </FormItem>
+                <Col span="6" offset="3" style="margin-top: 35px ">
+                       <Button type="info" shape="circle" icon="upload" @click="showavatar = !showavatar">上传头像</Button>
                 </Col>
             </Row>
             <Row>
@@ -46,27 +37,32 @@
             @on-ok="ok">
             <Input v-model="passagain" type="password"></Input>
         </Modal>
-        <Spin size="large" fix v-show="showspin"></Spin>
+        <Spin size="large" fix v-show="showspin" style="height: 100%"></Spin>
+        <my-upload field="img"
+            @crop-success="cropSuccess"
+            @crop-upload-success="cropUploadSuccess"
+            @crop-upload-fail="cropUploadFail"
+            v-model="showavatar"
+            :width="300"
+            :height="300"
+            url="/upload"
+            :params="params"
+            :headers="headers"
+            img-format="png">
+        </my-upload>
     </div>
 </template>
 <script>
 import axios from 'axios'
 const qs = require('qs')
-import VueCropper from 'vue-cropper'
+import 'babel-polyfill'
+import myUpload from 'vue-image-crop-upload';
 export default {
     data() {
         return {
-
-            example3: {
-				img: 'https://o90cnn3g2.qnssl.com/0C3ABE8D05322EAC3120DDB11F9D1F72.png',
-				autoCrop: true,
-				autoCropWidth: 200,
-				autoCropHeight: 200,
-				fixedBox: true
-			},
-
             showmodal: false,
             showspin: false,
+            //传值到后台的参数
             formValues: {
                 id: '',
                 name: 'laowang',
@@ -88,6 +84,15 @@ export default {
                     { required: true, message: '邮箱不能为空', trigger: 'blur' },
                     { type: 'email', message: '不符合邮箱规范', trigger: 'blur' }
                 ]
+            },
+            //图片上传相关参数
+            showavatar: false,
+            params: {
+                token: '123456798',
+                name: 'avatar'
+            },
+            headers: {
+                smail: '*_~'
             }
         }
     },
@@ -106,7 +111,7 @@ export default {
             let params = this.formValues;
             let _this = this;
             if(this.passagain === this.formValues.password) {
-                _this.showspin = true;
+                _this.$Spin.show();
                 axios({
                     url: 'https://www.easy-mock.com/mock/5b485e01cd6b6d356c8a3f67/person/person',
                     method: 'post',
@@ -125,11 +130,11 @@ export default {
                     transformResponse: [function (data) {
                         //处理返回数据问题，异步
                         // Do whatever you want to transform the data
-                        _this.showspin = false;
+                        _this.$Spin.hide();
                         data = JSON.parse(data);
                         console.log(data)
                         if(data.code === '200') {
-                            _this.showspin = false;
+                            // _this.showspin = false;
                         } else {
                                 
                         }
@@ -148,7 +153,36 @@ export default {
         },
         uploadError(error, file, fileList) {
             this.$Message.error("上传失败！");
+        },
+        cropSuccess(imgDataUrl, field){
+            console.log('-------- crop success --------');
+            this.imgDataUrl = imgDataUrl;
+        },
+        /**
+         * upload success
+         *
+         * [param] jsonData   服务器返回数据，已进行json转码
+         * [param] field
+         */
+        cropUploadSuccess(jsonData, field){
+            console.log('-------- upload success --------');
+            console.log(jsonData);
+            console.log('field: ' + field);
+        },
+        /**
+         * upload fail
+         *
+         * [param] status    server api return error status, like 500
+         * [param] field
+         */
+        cropUploadFail(status, field){
+            console.log('-------- upload fail --------');
+            console.log(status);
+            console.log('field: ' + field);
         }
+    },
+    components: {
+        'my-upload': myUpload
     }
 }
 </script>
@@ -158,4 +192,5 @@ export default {
     font-size: 16px;
     padding-top: 60px;
 }
+
 </style>

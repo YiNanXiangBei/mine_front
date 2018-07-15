@@ -7,7 +7,7 @@ import Publish from '@/components/Publish'
 import Sidebar from '@/components/Sidebar'
 import Tag from '@/components/Tag'
 import Upload from '@/components/Upload'
-
+import Login from '@/components/Login'
 Vue.use(Router)
 
 export default new Router({
@@ -63,6 +63,14 @@ export default new Router({
       path: '/upload',
       name: 'upload',
       component: Upload,
+      meta: {
+        keepAlive: true // 需要被缓存
+      }
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login,
       meta: {
         keepAlive: true // 需要被缓存
       }
