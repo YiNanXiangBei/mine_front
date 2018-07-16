@@ -18,6 +18,7 @@ Vue.use(mavonEditor)
 // http request 拦截器
 axios.interceptors.request.use(
   config => {
+      console.log(config)
       if (store.state.token) {  // 判断是否存在token，如果存在的话，则每个http header都加上token
           config.headers.Authorization = store.state.token;
           console.log(config.headers.Authorization);
@@ -32,7 +33,6 @@ axios.interceptors.request.use(
 axios.interceptors.response.use(
   response => {
       console.log(response)
-      console.log(response.request.response)
       return response;
   },
   error => {

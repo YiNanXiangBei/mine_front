@@ -9,9 +9,10 @@ import Tag from '@/components/Tag'
 import Upload from '@/components/Upload'
 import Login from '@/components/Login'
 import store from '../store'
+import axios from 'axios'
 Vue.use(Router)
 
-sessionStorage.setItem('token', '123');
+// sessionStorage.setItem('token', '123');
 
 if (sessionStorage.getItem('token')) {
   store.commit('set_token', sessionStorage.getItem('token'))
@@ -87,15 +88,21 @@ const router =  new Router({
     {
       path: '/sysadmin/login',
       name: 'login',
-      component: Login
+      component: Login,
+      meta: {
+        requireAuth: true
+      }
     } 
   ]
 });
 
 
 router.beforeEach((to, from, next) => {
+  console.log("1111")
   if (to.matched.some(r => r.meta.requireAuth)) {           //这里的requireAuth为路由中定义的 meta:{requireAuth:true}，意思为：该路由添加该字段，表示进入该路由需要登陆的
     if (store.state.token) {
+      axios.post("http://127.0.0.1:5000/sysadmin/validate_token")
+      console.log(to.fullPath)
       next();
     }
     else {
