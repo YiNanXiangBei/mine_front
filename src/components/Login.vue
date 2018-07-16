@@ -66,7 +66,7 @@ export default {
                         sessionStorage.setItem('token', data.data);
                         // console.log(data.data)
                     } else {
-                            
+                        
                     }
                 }],
             })
