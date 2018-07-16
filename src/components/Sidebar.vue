@@ -80,10 +80,12 @@
                 //修改menu显示问题
                 let path = this.$route.path; 
                 let name = path.substring(1, path.length)
-                if(name === "" || name === null) {
-                    this.menuName = "person"
+                if(name === "sysadmin") {
+                    this.menuName = "person";
+                    this.$router.push({path: '/sysadmin/person'})
                 } else {
-                    this.menuName = name
+                    let names = name.split('/');
+                    this.menuName = names[1];
                 }
             }
         }
