@@ -48,48 +48,48 @@
     </div>
 </template>
 <script>
-    export default {
-        name: 'Sidebar',
-        data() {
-            return {
-                menuName : 'person',
-                openNames: [
-                    'person', 
-                    'publish',
-                    'editor',
-                    'comment',
-                    'tag'
-                ],
-                showHeader: true
+export default {
+    name: 'Sidebar',
+    data() {
+        return {
+            menuName : 'person',
+            openNames: [
+                'person', 
+                'publish',
+                'editor',
+                'comment',
+                'tag'
+            ],
+            showHeader: true
 
-            }
+        }
+    },
+    mounted() {
+        this.$nextTick(function () {
+            this.changeMenu() 
+        })
+    },
+    methods: {
+        select(name) {
+            this.$router.push({path: name})
         },
-        mounted() {
-            this.$nextTick(function () {
-                this.changeMenu() 
-            })
+        changeHeaders(value) {
+            this.showHeader = value
         },
-        methods: {
-            select(name) {
-                this.$router.push({path: name})
-            },
-            changeHeaders(value) {
-                this.showHeader = value
-            },
-            changeMenu() {
-                //修改menu显示问题
-                let path = this.$route.path; 
-                let name = path.substring(1, path.length)
-                if(name === "sysadmin") {
-                    this.menuName = "person";
-                    this.$router.push({path: '/sysadmin/person'})
-                } else {
-                    let names = name.split('/');
-                    this.menuName = names[1];
-                }
+        changeMenu() {
+            //修改menu显示问题
+            let path = this.$route.path; 
+            let name = path.substring(1, path.length)
+            if(name === "sysadmin") {
+                this.menuName = "person";
+                this.$router.push({path: '/sysadmin/person'})
+            } else {
+                let names = name.split('/');
+                this.menuName = names[1];
             }
         }
     }
+}
 </script>
 <style scoped>
     .layout{

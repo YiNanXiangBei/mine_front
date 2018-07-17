@@ -3,8 +3,8 @@
         <Form ref="formValues" :rules="ruleValidate" :model="formValues">
             <Row>
                 <Col span="6" offset="3">
-                    <FormItem label="用户名" prop="name">
-                        <Input v-model="formValues.name" type="text"></Input>
+                    <FormItem label="用户名" prop="username">
+                        <Input v-model="formValues.username" type="text"></Input>
                     </FormItem>
                 </Col>
                 <Col span="6" offset="3">
@@ -57,6 +57,7 @@ import axios from 'axios'
 const qs = require('qs')
 import 'babel-polyfill'
 import myUpload from 'vue-image-crop-upload';
+// import func from './vue-temp/vue-editor-bridge';
 export default {
     data() {
         return {
@@ -64,16 +65,14 @@ export default {
             showspin: false,
             //传值到后台的参数
             formValues: {
-                id: '',
-                name: 'laowang',
+                username: 'laowang',
                 email: '123@qq.com',
                 password: '11111111111111111',
-                avatar: '',
-                token: ''
+                avatar: ''
             },
             passagain: '11111111111111111',
             ruleValidate: {
-                name: [
+                username: [
                     { required: true, message: '用户名不能为空', trigger: 'blur' }
                 ],
                 password: [
@@ -179,11 +178,49 @@ export default {
             console.log('-------- upload fail --------');
             console.log(status);
             console.log('field: ' + field);
+        },
+        /**
+         * 从服务端加载数据
+         */
+        loadData() {
+            let _this = this;
+            axios.get('http://127.0.0.1:5000/sysadmin/info',{
+                params: {
+                    'username': sessionStorage.getItem('username')
+                }
+            })
+            .then(function(response) {
+                console.log(response);
+                if (response.data.code == 200) {
+                    _this.formValues = response.data.data.info;
+                    _this.$store.commit('set_token', response.data.data.token);
+                } else {
+                    _this.$store.commit('del_token');
+                    _this.$router.replace({path: '/sysadmin/login'});
+                }
+                
+            })
+            .catch(function(error) {
+                console.log(error);
+            })
         }
     },
     components: {
         'my-upload': myUpload
-    }
+    },
+    mounted() {
+        this.loadData();
+    },
+    // watch: {
+    //     getPersonInfo(val) {
+    //         this.formValues = val;
+    //     }
+    // },
+    // computed: {
+    //     getPersonInfo() {
+    //         return this.$store.state.personData;
+    //     }
+    // }
 }
 </script>
 <style scoped>

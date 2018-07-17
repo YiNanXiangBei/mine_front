@@ -4,9 +4,20 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        token: ''
+        token: '',
+        username: '',
+        personData: {
+            username: '',
+            password: '',
+            email: '',
+            avatar: ''
+        }
     },
     mutations: {
+        set_username(state, username) {
+            state.username = username;
+            sessionStorage.setItem('username', username)
+        },
         set_token(state, token) {
             state.token = token;
             sessionStorage.token = token;
