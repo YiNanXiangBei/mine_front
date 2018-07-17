@@ -55,12 +55,12 @@ export default {
                         transformRequest: [
                             function (params) { // 解决传递数组变成对象的问题
                                 Object.keys(params).forEach((key) => {
-                                if ((typeof params[key]) === 'object') {
-                                    params[key] = JSON.stringify(params[key]) // 这里必须使用内置JSON对象转换
-                                }
+                                    if ((typeof params[key]) === 'object') {
+                                        params[key] = JSON.stringify(params[key]) // 这里必须使用内置JSON对象转换
+                                    }
                                 })
-                                params = qs.stringify(params) // 这里必须使用qs库进行转换
-                                return params
+                                params = qs.stringify(params);// 这里必须使用qs库进行转换
+                                return params;
                             }
                         ],
                         transformResponse: [function (data) {
@@ -68,14 +68,10 @@ export default {
                             // Do whatever you want to transform the data
                             _this.$Spin.hide();
                             data = JSON.parse(data);
-                            console.log(data)
                             if(data.code === 200) {
-                                debugger;
                                 sessionStorage.setItem('token', data.data);
                                 _this.$store.commit('set_username', params.username)
-                                console.log(_this.$store.state.username)
                                 let redirect = _this.$route.query.redirect;
-                                console.log(redirect)
                                 if (redirect == "" || redirect == undefined) {
                                     _this.$router.push({path: '/sysadmin'});
                                 } else {

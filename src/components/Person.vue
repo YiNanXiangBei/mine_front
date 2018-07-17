@@ -45,7 +45,7 @@
             v-model="showavatar"
             :width="300"
             :height="300"
-            url="/upload"
+            url="http://127.0.0.1:5000/sysadmin/upload"
             :params="params"
             :headers="headers"
             img-format="png">
@@ -65,12 +65,12 @@ export default {
             showspin: false,
             //传值到后台的参数
             formValues: {
-                username: 'laowang',
-                email: '123@qq.com',
-                password: '11111111111111111',
+                username: '',
+                email: '',
+                password: '',
                 avatar: ''
             },
-            passagain: '11111111111111111',
+            passagain: '',
             ruleValidate: {
                 username: [
                     { required: true, message: '用户名不能为空', trigger: 'blur' }
@@ -87,11 +87,11 @@ export default {
             //图片上传相关参数
             showavatar: false,
             params: {
-                token: '123456798',
-                name: 'avatar'
+                name: 'Avatar',
+                img: ''
             },
             headers: {
-                smail: '*_~'
+                Authorization: sessionStorage.getItem('token')
             }
         }
     },
@@ -154,8 +154,7 @@ export default {
             this.$Message.error("上传失败！");
         },
         cropSuccess(imgDataUrl, field){
-            console.log('-------- crop success --------');
-            this.imgDataUrl = imgDataUrl;
+            this.params.img = imgDataUrl;
         },
         /**
          * upload success
@@ -174,10 +173,8 @@ export default {
          * [param] status    server api return error status, like 500
          * [param] field
          */
-        cropUploadFail(status, field){
-            console.log('-------- upload fail --------');
+        cropUploadFail(status, field){           
             console.log(status);
-            console.log('field: ' + field);
         },
         /**
          * 从服务端加载数据
@@ -190,18 +187,22 @@ export default {
                 }
             })
             .then(function(response) {
-                console.log(response);
                 if (response.data.code == 200) {
+                    //请求信息正常，将数据加载到页面上，同时将新的token放入sessionStorage中
                     _this.formValues = response.data.data.info;
                     _this.$store.commit('set_token', response.data.data.token);
                 } else {
+                    //请求信息不正常，删除token，页面跳转到登录页面
                     _this.$store.commit('del_token');
                     _this.$router.replace({path: '/sysadmin/login'});
                 }
                 
             })
             .catch(function(error) {
-                console.log(error);
+                this.$Message.error({
+                    content: '获取用户信息出现异常： ' + error,
+                    duration: 2
+                });
             })
         }
     },
@@ -210,17 +211,7 @@ export default {
     },
     mounted() {
         this.loadData();
-    },
-    // watch: {
-    //     getPersonInfo(val) {
-    //         this.formValues = val;
-    //     }
-    // },
-    // computed: {
-    //     getPersonInfo() {
-    //         return this.$store.state.personData;
-    //     }
-    // }
+    }
 }
 </script>
 <style scoped>
