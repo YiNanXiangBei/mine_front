@@ -70,6 +70,7 @@ export default {
             if (response.code == 200) {
                 //文件上传成功
                 this.imgUrl = response.data.image_url;
+                this.$store.commit('set_token', response.data.token);
             } else if (response.code == 400) {
                 //token验证成功，文件上传失败
                 this.$Notice.error({
@@ -78,8 +79,8 @@ export default {
                 });
             } else {
                 //token 验证失败
-                 _this.$store.commit('del_token');
-                 _this.$router.replace({path: '/sysadmin/login'});
+                this.$store.commit('del_token');
+                this.$router.replace({path: '/sysadmin/login'});
             }
         },
         uploadError(error, file, fileList) {

@@ -137,7 +137,6 @@ export default {
                             //保存数据成功
                             _this.formValues = data.data.info;
                             _this.$store.commit('set_token', data.data.token);
-                            sessionStorage.setItem('avatar',_this.formValues.avatar);
                         } else if(data.data.code === 400) {
                             //保存数据失败
                             _this.$Message.error({
@@ -170,9 +169,25 @@ export default {
          * [param] field
          */
         cropUploadSuccess(jsonData, field){
-            this.formValues.avatar = jsonData.data.image_url;
-            this.$emit('changeAvatar', jsonData.data.image_url);
-            sessionStorage.setItem('avatar', jsonData.data.image_url);
+
+            if (jsonData.code == 200) {
+                //文件上传成功
+                this.formValues.avatar = jsonData.data.image_url;
+                this.$emit('changeAvatar', jsonData.data.image_url);
+                this.$store.commit('set_token', jsonData.data.token);
+            } else if (jsonData.code == 400) {
+                //token验证成功，文件上传失败
+                this.$Notice.error({
+                    title: '文件上传失败',
+                    desc: '文件上传到云存储失败'
+                });
+            } else {
+                //token 验证失败
+                this.$store.commit('del_token');
+                this.$router.replace({path: '/sysadmin/login'});
+            }
+
+            
         },
         /**
          * upload fail
@@ -201,7 +216,7 @@ export default {
                     //请求信息正常，将数据加载到页面上，同时将新的token放入sessionStorage中
                     _this.formValues = response.data.data.info;
                     _this.$store.commit('set_token', response.data.data.token);
-                    sessionStorage.setItem('avatar', _this.formValues.avatar);
+                    _this.$emit('changeAvatar', _this.formValues.avatar);
                 } else {
                     //请求信息不正常，删除token，页面跳转到登录页面
                     _this.$store.commit('del_token');
@@ -210,9 +225,9 @@ export default {
                 
             })
             .catch(function(error) {
-                this.$Message.error({
+                _this.$Message.error({
                     content: '获取用户信息出现异常： ' + error,
-                    duration: 2
+                    duration: 3
                 });
             })
         }
