@@ -67,7 +67,8 @@ export default {
     mounted() {
         this.$nextTick(function () {
             this.changeMenu() 
-        })
+        });
+        this.avatar = sessionStorage.getItem('avatar');
     },
     methods: {
         changeAvatar(img_url){
@@ -91,9 +92,6 @@ export default {
                 this.menuName = names[1];
             }
         }
-    },
-    mounted() {
-        this.avatar = sessionStorage.getItem('avatar')
     }
 }
 </script>
