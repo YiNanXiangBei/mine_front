@@ -4,7 +4,7 @@
             <Row>
                 <Col span="6" offset="3">
                     <FormItem label="用户名" prop="username">
-                        <Input v-model="formValues.username" type="text"></Input>
+                        <Input v-model="formValues.username" disabled type="text"></Input>
                     </FormItem>
                 </Col>
                 <Col span="6" offset="3">
@@ -64,6 +64,7 @@ export default {
             showmodal: false,
             showspin: false,
             //传值到后台的参数
+            id: '',
             formValues: {
                 username: '',
                 email: '',
@@ -77,7 +78,7 @@ export default {
                 ],
                 password: [
                     { required: true, message: '密码不能为空', trigger: 'blur' },
-                    { type: 'string', min: 15, message: '新密码不少于15位', trigger: 'blur' }
+                    { type: 'string', min: 3, message: '新密码不少于3位', trigger: 'blur' }
                 ],
                 email: [
                     { required: true, message: '邮箱不能为空', trigger: 'blur' },
@@ -87,7 +88,7 @@ export default {
             //图片上传相关参数
             showavatar: false,
             params: {
-                name: 'Avatar',
+                username: '',
                 img: ''
             },
             headers: {
@@ -112,7 +113,7 @@ export default {
             if(this.passagain === this.formValues.password) {
                 _this.$Spin.show();
                 axios({
-                    url: 'https://www.easy-mock.com/mock/5b485e01cd6b6d356c8a3f67/person/person',
+                    url: 'http://127.0.0.1:5000/sysadmin/info',
                     method: 'post',
                     data: params,
                     transformRequest: [
@@ -132,10 +133,21 @@ export default {
                         _this.$Spin.hide();
                         data = JSON.parse(data);
                         console.log(data)
-                        if(data.code === '200') {
-                            // _this.showspin = false;
+                        if(data.code === 200) {
+                            //保存数据成功
+                            _this.formValues = data.data.info;
+                            _this.$store.commit('set_token', data.data.token);
+                            sessionStorage.setItem('avatar',_this.formValues.avatar);
+                        } else if(data.data.code === 400) {
+                            //保存数据失败
+                            _this.$Message.error({
+                                content: '保存数据失败！',
+                                duration: 2
+                            })
                         } else {
-                                
+                            //token有问题
+                             _this.$store.commit('del_token');
+                             _this.$router.replace({path: '/sysadmin/login'});
                         }
                     }],
                 })
@@ -147,14 +159,15 @@ export default {
             }
             
         },
-        uploadSuccess(response, file, fileList) {
-            this.$Message.info("上传成功！");
+        uploadSuccess(img_url) {
+            
         },
         uploadError(error, file, fileList) {
             this.$Message.error("上传失败！");
         },
         cropSuccess(imgDataUrl, field){
             this.params.img = imgDataUrl;
+            this.params.username = this.formValues.username;
         },
         /**
          * upload success
@@ -166,6 +179,9 @@ export default {
             console.log('-------- upload success --------');
             console.log(jsonData);
             console.log('field: ' + field);
+            this.formValues.avatar = jsonData.data.image_url;
+            this.$emit('changeAvatar', jsonData.data.image_url);
+            sessionStorage.setItem('avatar', jsonData.data.image_url);
         },
         /**
          * upload fail
@@ -191,6 +207,7 @@ export default {
                     //请求信息正常，将数据加载到页面上，同时将新的token放入sessionStorage中
                     _this.formValues = response.data.data.info;
                     _this.$store.commit('set_token', response.data.data.token);
+                    sessionStorage.setItem('avatar', _this.formValues.avatar);
                 } else {
                     //请求信息不正常，删除token，页面跳转到登录页面
                     _this.$store.commit('del_token');

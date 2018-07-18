@@ -37,11 +37,11 @@
         <Layout :style="{marginLeft: '200px'}">
             <Header v-show="showHeader" style="position: fixed; width: 100%; background: #fff; boxShadow: 0 2px 3px 2px rgba(0,0,0,.1); z-index: 1">
                 <Input  icon="ios-search-strong"  placeholder="输入要查找的内容" style="width: 200px; cursor: pointer"></Input>
-                <Avatar src="https://i.loli.net/2017/08/21/599a521472424.jpg" size="large" style="position: fixed; right: 20px; top: 12px;"/>
+                <Avatar :src="avatar" size="large" style="position: fixed; right: 20px; top: 12px;"/>
             </Header>
             <Content style="margin: 88px 20px 0; background: #fff; min-height: 600px">
                 <keep-alive>
-                    <router-view @showheader="changeHeaders" v-if="$route.meta.keepAlive"></router-view>
+                    <router-view @showheader="changeHeaders" @changeAvatar="changeAvatar" v-if="$route.meta.keepAlive"></router-view>
                 </keep-alive>
             </Content>
         </Layout>
@@ -60,8 +60,8 @@ export default {
                 'comment',
                 'tag'
             ],
-            showHeader: true
-
+            showHeader: true,
+            avatar: ''
         }
     },
     mounted() {
@@ -70,6 +70,9 @@ export default {
         })
     },
     methods: {
+        changeAvatar(img_url){
+            this.avatar = img_url
+        },
         select(name) {
             this.$router.push({path: name})
         },
@@ -88,6 +91,9 @@ export default {
                 this.menuName = names[1];
             }
         }
+    },
+    mounted() {
+        this.avatar = sessionStorage.getItem('avatar')
     }
 }
 </script>
