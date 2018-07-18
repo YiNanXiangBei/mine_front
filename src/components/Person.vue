@@ -159,12 +159,6 @@ export default {
             }
             
         },
-        uploadSuccess(img_url) {
-            
-        },
-        uploadError(error, file, fileList) {
-            this.$Message.error("上传失败！");
-        },
         cropSuccess(imgDataUrl, field){
             this.params.img = imgDataUrl;
             this.params.username = this.formValues.username;
@@ -176,9 +170,6 @@ export default {
          * [param] field
          */
         cropUploadSuccess(jsonData, field){
-            console.log('-------- upload success --------');
-            console.log(jsonData);
-            console.log('field: ' + field);
             this.formValues.avatar = jsonData.data.image_url;
             this.$emit('changeAvatar', jsonData.data.image_url);
             sessionStorage.setItem('avatar', jsonData.data.image_url);
@@ -189,8 +180,11 @@ export default {
          * [param] status    server api return error status, like 500
          * [param] field
          */
-        cropUploadFail(status, field){           
-            console.log(status);
+        cropUploadFail(status, field){       
+            this.$Notice.error({
+                title: '文件上传失败',
+                desc: '文件上传服务端失败'
+            })    
         },
         /**
          * 从服务端加载数据
