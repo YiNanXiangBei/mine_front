@@ -67,20 +67,23 @@ export default {
         },
         uploadSuccess(response, file, fileList) {
             this.$Spin.hide();
-            if (response.code == 200) {
-                //文件上传成功
-                this.imgUrl = response.data.image_url;
-                this.$store.commit('set_token', response.data.token);
-            } else if (response.code == 400) {
-                //token验证成功，文件上传失败
-                this.$Notice.error({
-                    title: '文件上传失败',
-                    desc: '文件  ' + file.name + ' 上传到云存储失败'
-                });
-            } else {
-                //token 验证失败
-                this.$store.commit('del_token');
-                this.$router.replace({path: '/sysadmin/login'});
+            switch(response.code) {
+                case 200:
+                    //文件上传成功
+                    this.imgUrl = response.data.image_url;
+                    this.$store.commit('set_token', response.data.token);
+                    break;
+                case 400:
+                    //token验证成功，文件上传失败
+                    this.$Notice.error({
+                        title: '文件上传失败',
+                        desc: '文件  ' + file.name + ' 上传到云存储失败'
+                    });
+                    break;
+                default:
+                    //token 验证失败
+                    this.$store.commit('del_token');
+                    this.$router.replace({path: '/sysadmin/login'});
             }
         },
         uploadError(error, file, fileList) {

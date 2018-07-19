@@ -169,25 +169,25 @@ export default {
          * [param] field
          */
         cropUploadSuccess(jsonData, field){
-
-            if (jsonData.code == 200) {
-                //文件上传成功
-                this.formValues.avatar = jsonData.data.image_url;
-                this.$emit('changeAvatar', jsonData.data.image_url);
-                this.$store.commit('set_token', jsonData.data.token);
-            } else if (jsonData.code == 400) {
-                //token验证成功，文件上传失败
-                this.$Notice.error({
-                    title: '文件上传失败',
-                    desc: '文件上传到云存储失败'
-                });
-            } else {
-                //token 验证失败
-                this.$store.commit('del_token');
-                this.$router.replace({path: '/sysadmin/login'});
+            let code = jsonData.code;
+            switch(code) {
+                case 200:
+                    //文件上传成功
+                    this.formValues.avatar = jsonData.data.image_url;
+                    this.$emit('changeAvatar', jsonData.data.image_url);
+                    this.$store.commit('set_token', jsonData.data.token);
+                    break;
+                case 400:
+                    //token验证成功，文件上传失败
+                    this.$Notice.error({
+                        title: '文件上传失败',
+                        desc: '文件上传到云存储失败'
+                    });
+                default:
+                    //token 验证失败
+                    this.$store.commit('del_token');
+                    this.$router.replace({path: '/sysadmin/login'});
             }
-
-            
         },
         /**
          * upload fail
@@ -212,17 +212,18 @@ export default {
                 }
             })
             .then(function(response) {
-                if (response.data.code == 200) {
-                    //请求信息正常，将数据加载到页面上，同时将新的token放入sessionStorage中
-                    _this.formValues = response.data.data.info;
-                    _this.$store.commit('set_token', response.data.data.token);
-                    _this.$emit('changeAvatar', _this.formValues.avatar);
-                } else {
-                    //请求信息不正常，删除token，页面跳转到登录页面
-                    _this.$store.commit('del_token');
-                    _this.$router.replace({path: '/sysadmin/login'});
+                switch(response.data.code) {
+                    case 200:
+                        //请求信息正常，将数据加载到页面上，同时将新的token放入sessionStorage中
+                        _this.formValues = response.data.data.info;
+                        _this.$store.commit('set_token', response.data.data.token);
+                        _this.$emit('changeAvatar', _this.formValues.avatar);
+                        break;
+                    default:
+                        //请求信息不正常，删除token，页面跳转到登录页面
+                        _this.$store.commit('del_token');
+                        _this.$router.replace({path: '/sysadmin/login'});
                 }
-                
             })
             .catch(function(error) {
                 _this.$Message.error({
