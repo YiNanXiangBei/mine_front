@@ -16,7 +16,7 @@
             v-model="showCard"
             title="添加新的标签"
             @on-ok="ok">
-            <Input v-model="newTag" placeholder="请输入新的标签名" style="width: 100%"></Input>
+            <Input v-model="newTag" placeholder="请输入新的标签名" @keyup.enter.native="ok" style="width: 100%"></Input>
         </Modal>
     </div>    
 </template>
@@ -33,6 +33,7 @@ export default {
     },
     methods: {
         ok () {
+            this.showCard = false;
             this.tags.push(this.newTag);
             //添加新的标签到数据库
             this.$Spin.show();

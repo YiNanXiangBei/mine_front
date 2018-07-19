@@ -102,8 +102,33 @@ export default {
         handleSubmit(name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
+                    //判断没有未填项，准备向后台传数据
+                    axios({
+                        method: 'post',
+                        url: 'http://127.0.0.1:5000/sysadmin/article',
+                        data: {
+                            tags: this.selectOption,
+                            title: this.formValues.title,
+                            desc: this.formValues.desc,
+                            content: this.formValues.content
+                        },
+                        transformRequest: [function(params) {
+                            //解决传递数组变成对象的问题
+                            Object.keys(params).forEach((key) => {
+                            if ((typeof params[key]) === 'object') {
+                                params[key] = JSON.stringify(params[key]) // 这里必须使用内置JSON对象转换
+                            }
+                            })
+                            params = qs.stringify(params) // 这里必须使用qs库进行转换
+                            return params
+                        }],
+                        transformResponse: [function(response) {
+                            console.log(response)
+                        }]
+                    })
                     this.$Message.info('success!');
                 } else {
+                    //有未填项，直接报错
                     this.$Message.error('Fail!');
                 }
             })
@@ -122,7 +147,6 @@ export default {
             
         },
         onQueryChange(value) {
-            // console.log(value);
             let _this = this;
             if (value != '') {
                 axios.get('http://127.0.0.1:5000/sysadmin/blurry_tags', {
@@ -149,7 +173,6 @@ export default {
             switch(data.code) {
                 case 200:
                     if (data.data.tags != undefined) {
-                        console.log(data.tags)
                         this.list = data.data.tags;
                     }
                     this.$store.commit('set_token', data.data.token);
