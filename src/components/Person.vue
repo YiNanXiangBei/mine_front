@@ -133,20 +133,24 @@ export default {
                         _this.$Spin.hide();
                         data = JSON.parse(data);
                         console.log(data)
-                        if(data.code === 200) {
-                            //保存数据成功
-                            _this.formValues = data.data.info;
-                            _this.$store.commit('set_token', data.data.token);
-                        } else if(data.data.code === 400) {
-                            //保存数据失败
-                            _this.$Message.error({
-                                content: '保存数据失败！',
-                                duration: 2
-                            })
-                        } else {
-                            //token有问题
-                             _this.$store.commit('del_token');
-                             _this.$router.replace({path: '/sysadmin/login'});
+
+                        switch(data.code) {
+                            case 200:
+                                //保存数据成功
+                                _this.formValues = data.data.info;
+                                _this.$store.commit('set_token', data.data.token);
+                                break;
+                            case 400:
+                                //保存数据失败
+                                _this.$Message.error({
+                                    content: '保存数据失败！',
+                                    duration: 2
+                                })
+                                break;
+                            default:
+                                //token有问题
+                                _this.$store.commit('del_token');
+                                _this.$router.replace({path: '/sysadmin/login'});
                         }
                     }],
                 })

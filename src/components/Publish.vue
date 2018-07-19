@@ -23,10 +23,11 @@
                             multiple
                             filterable
                             remote
-                            :remote-method="remoteMethod2"
-                            :loading="loading2"
+                            :remote-method="remoteMethod"
+                            @on-query-change="onQueryChange"
+                            :loading="loading"
                             size="large">
-                            <Option v-for="(option, index) in options2" :value="option.value" :key="index">{{option.label}}</Option>
+                            <Option v-for="(option, index) in options" :value="option.value" :key="index">{{option.label}}</Option>
                         </Select>
                     </FormItem>
                 </Col>
@@ -49,15 +50,17 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
+const qs = require('qs')
 export default {
     data () {
         return {
             showheader: true,
             showButton: true,
             selectOption: [],
-            loading2: false,
-            options2: [],
-            list: ['Alabama', 'Alaska', 'Arizona', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Florida', 'Georgia', 'Hawaii', 'Idaho', 'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan', 'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'New hampshire', 'New jersey', 'New mexico', 'New york', 'North carolina', 'North dakota', 'Ohio', 'Oklahoma', 'Oregon', 'Pennsylvania', 'Rhode island', 'South carolina', 'South dakota', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'West virginia', 'Wisconsin', 'Wyoming'],
+            loading: false,
+            options: [],
+            list: [],
             formValues: {
                 title: '今天是个好日子',
                 desc: '关于今天天气的介绍',
@@ -79,21 +82,21 @@ export default {
         }
     },
     methods: {
-        remoteMethod2 (query) {
+        remoteMethod (query) {
             if (query !== '') {
-                this.loading2 = true;
+                this.loading = true;
                 setTimeout(() => {
-                    this.loading2 = false;
+                    this.loading = false;
                     const list = this.list.map(item => {
                         return {
                             value: item,
                             label: item,
                         };
                     });
-                    this.options2 = list.filter(item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1);
+                    this.options = list.filter(item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1);
                 }, 200);
             } else {
-                this.options2 = [];
+                this.options = [];
             }
         },
         handleSubmit(name) {
@@ -117,6 +120,52 @@ export default {
                 this.$emit('showheader', true);
             }
             
+        },
+        onQueryChange(value) {
+            // console.log(value);
+            let _this = this;
+            if (value != '') {
+                axios.get('http://127.0.0.1:5000/sysadmin/blurry_tags', {
+                    params: {
+                        tag: value
+                    },
+                    headers: {
+                        'Authorization': sessionStorage.getItem('token')
+                    }
+                })
+                .then(function (response) {
+                    // this.detailResult(response);
+                    _this.detailResult(response.data);
+                })
+                .catch(function (error) {
+                    _this.$Message.error({
+                        content: error,
+                        duration: 2
+                    })
+                })
+            }
+        },
+        detailResult(data) {
+            switch(data.code) {
+                case 200:
+                    if (data.data.tags != undefined) {
+                        console.log(data.tags)
+                        this.list = data.data.tags;
+                    }
+                    this.$store.commit('set_token', data.data.token);
+                    break;
+                case 400:
+                    //保存数据失败
+                    this.$Message.error({
+                        content: '保存数据失败！',
+                        duration: 2
+                    })
+                    break;
+                default:
+                    //token有问题
+                    this.$store.commit('del_token');
+                    this.$router.replace({path: '/sysadmin/login'});
+            }
         }
     }
 }
