@@ -34,14 +34,21 @@
             </Row>
             <Row>
                 <Col span="18" offset="3">
-                    <mavon-editor v-model="formValues.content" placeholder="开始编辑" style="z-index: 0" @fullScreen="fullScreen"></mavon-editor>
+                    <mavon-editor ref=md v-model="formValues.content" :imageClick="imageClick" placeholder="开始编辑" style="z-index: 0" @imgAdd="imgAdd" @fullScreen="fullScreen"></mavon-editor>
                 </Col>
             </Row>
             <br>
-            <Row v-show="showButton">
+            <Row v-show="showPublishButton">
                 <Col span="3" offset="3">
                     <FormItem>
                         <Button type="success" size="large" long @click="handleSubmit('formValues')">发布</Button>
+                    </FormItem>
+                </Col>
+            </Row>
+            <Row v-show="isEditer">
+                <Col span="3" offset="3">
+                    <FormItem>
+                        <Button type="info" size="large" long @click="handleUpdate('formValues')">更新</Button>
                     </FormItem>
                 </Col>
             </Row>
@@ -55,8 +62,9 @@ const qs = require('qs')
 export default {
     data () {
         return {
+            isEditer: false,
+            showPublishButton: true,
             showheader: true,
-            showButton: true,
             selectOption: [],
             loading: false,
             options: [],
@@ -99,10 +107,13 @@ export default {
                 this.options = [];
             }
         },
+        //发布文章
         handleSubmit(name) {
+            let _this = this;
             this.$refs[name].validate((valid) => {
                 if (valid) {
                     //判断没有未填项，准备向后台传数据
+                    this.$Spin.show();
                     axios({
                         method: 'post',
                         url: 'http://127.0.0.1:5000/sysadmin/article',
@@ -123,28 +134,73 @@ export default {
                             return params
                         }],
                         transformResponse: [function(response) {
-                            console.log(response)
+                            _this.$Spin.hide();
+                            response = JSON.parse(response);
+                            _this.detailResult(response);
                         }]
                     })
-                    this.$Message.info('success!');
                 } else {
                     //有未填项，直接报错
-                    this.$Message.error('Fail!');
+                    this.$Message.error('发布失败!');
                 }
             })
         },
+        //更新文章
+        handleUpdate(name) {
+            let _this = this;
+            this.$refs[name].validate((valid) => {
+                if (valid) {
+                    //判断没有未填项，准备向后台传数据
+                    this.$Spin.show();
+                    axios({
+                        method: 'put',
+                        url: 'http://127.0.0.1:5000/sysadmin/article',
+                        data: {
+                            tags: this.selectOption,
+                            title: this.formValues.title,
+                            desc: this.formValues.desc,
+                            content: this.formValues.content
+                        },
+                        transformRequest: [function(params) {
+                            //解决传递数组变成对象的问题
+                            Object.keys(params).forEach((key) => {
+                            if ((typeof params[key]) === 'object') {
+                                params[key] = JSON.stringify(params[key]) // 这里必须使用内置JSON对象转换
+                            }
+                            })
+                            params = qs.stringify(params) // 这里必须使用qs库进行转换
+                            return params
+                        }],
+                        transformResponse: [function(response) {
+                            _this.$Spin.hide();
+                            response = JSON.parse(response);
+                            _this.detailResult(response);
+                        }]
+                    })
+                } else {
+                    //有未填项，直接报错
+                    this.$Message.error('更新失败!');
+                }
+
+            })
+        },
+        //全屏事件
         fullScreen(status, value) {
             if (status === true) {
                 this.$Message.info('full screen!');
-                this.showButton = false;
+                this.showPublishButton = false;
                 //向sidebar传值
                 this.$emit('showheader', false);
             } else if(status === false) {
                 this.$Message.info('screen!');
-                this.showButton = true;
+                this.showPublishButton = true;
                 this.$emit('showheader', true);
             }
             
+        },
+        // 点击图片事件
+        imageClick() {
+            return false;
         },
         onQueryChange(value) {
             let _this = this;
@@ -169,11 +225,19 @@ export default {
                 })
             }
         },
-        detailResult(data) {
+        detailResult(data, pos) {
             switch(data.code) {
                 case 200:
+                    if (data.data.image_url != undefined) {
+                        this.$refs.md.$img2Url(pos, data.data.image_url);
+                    }
                     if (data.data.tags != undefined) {
                         this.list = data.data.tags;
+                    } else {
+                        this.$Message.success({
+                            content: '提交成功！',
+                            duration: 2
+                        })
                     }
                     this.$store.commit('set_token', data.data.token);
                     break;
@@ -184,11 +248,39 @@ export default {
                         duration: 2
                     })
                     break;
+                case 417:
+                    this.$Message.warning({
+                        content: '文章标题已经存在!',
+                        duration: 4
+                    })
+                    break;
                 default:
                     //token有问题
                     this.$store.commit('del_token');
                     this.$router.replace({path: '/sysadmin/login'});
             }
+        },
+        imgAdd(pos, $file) {
+            let _this = this;
+            var formdata = new FormData();
+            console.log($file);
+            formdata.append('file', $file);
+            axios({
+                url: 'http://127.0.0.1:5000/sysadmin/upload_image',
+                method: 'post',
+                data: formdata,
+                headers: { 
+                   'Authorization': sessionStorage.getItem('token')
+                },
+            }).then((response) => {
+                console.log(response)
+                this.detailResult(response.data, pos);
+            }).catch((error) => {
+                _this.$Message.error({
+                    content: '上传图片出现异常： ' + error,
+                    duration: 3
+                });
+            })
         }
     }
 }
