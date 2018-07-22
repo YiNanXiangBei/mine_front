@@ -19,26 +19,36 @@
             <Row>
                 <Col span="18" offset="3">
                     <Card style="width:100%">
-                        <p slot="title" @click="detailArtice" style="cursor: pointer">
+                        <p slot="title" @click="detailArtice(article.id)" style="cursor: pointer">
                             <Icon type="compose"></Icon>
                             {{ article.title }}
                         </p>
-                        <a href="#" slot="extra">
+                        
+                        <a href="javascript:void(0)" slot="extra">
                             {{ article.datetime }}
                         </a>
-                        <span @click="deleteArticle" style="position: absolute; right: 15px; cursor: pointer">
-                            <Icon type="trash-b" size="20"></Icon>
+                        <span slot="extra" @click="deleteArticle(article.title, article.id)" style="cursor: pointer; text-align: center; vertical-align: middle; margin-left: 20px">
+                            <Icon type="trash-b" size="18"></Icon>
                         </span>
+                        
                         <p>
                             <Tag color="#A569BD" v-for="(tag, ind) in article.tags" :key="ind"> {{ tag }} </Tag>
                         </p>
+
+                        
                     </Card>
                 </Col>
             </Row>
             <br>
         </div>
         <BackTop></BackTop>
-        <Page :total="total" @on-change="research" style="text-align: center; padding-bottom: 15px"></Page>
+        <Page :total="total" v-show="showPage" @on-change="research" style="text-align: center; padding-bottom: 15px"></Page>
+        <Modal
+            v-model="showmodal"
+            title="您将删除这一篇文章以及这篇文章的相关评论，请确认这篇文章的标题"
+            @on-ok="validateTitle">
+            <Input v-model="tagTitle" type="text"></Input>
+        </Modal>
     </div>    
 </template>
 <script>
@@ -47,20 +57,14 @@ const qs = require('qs')
 export default {
     data() {
         return {
-            total: 12,
+            showPage: false,
+            articleId: '',
+            currentTitle: '',
+            showmodal: false,
+            tagTitle: '',
+            total: 0,
             articles: [
-                {
-                    id: '',
-                    title: '今天是个好日子',
-                    tags: [ '吃' ,'喝', '睡'],
-                    datetime: '2018/02/06'
-                },
-                {   
-                    id: '',
-                    title: '今天天气不好',
-                    tags: ['吃', '睡'],
-                    datetime: '2018/07/12'
-                }
+                
             ],
             formValues: {
                 beginTime: '',
@@ -72,8 +76,16 @@ export default {
     methods: {
         //跳转到publish页面,将相关的数据要带过去
         detailArtice(value) {
-            this.$Message.info('detail article');
+            // this.$Message.info('detail article');
+            // this.$router.push({name: 'publish', params: {articld_id: value, }})
+            let params = {
+                article_id : value,
+                name: 'publish'
+            }
+            this.$router.push({path: '/sysadmin/publish'})
+            this.$emit('publishToEdit', params);
         },
+        //查询数据
         search() {
             axios.get('http://127.0.0.1:5000/sysadmin/oldArticles',{
                 params: this.formValues,
@@ -81,37 +93,81 @@ export default {
                     'Authorization': sessionStorage.getItem('token')
                 }
             }).then((response) => {
-                console.log(response)
                 this.total = response.data.data.total;
-                this.detailResult(response.data);
+                this.handleResult(response.data);
 
             }).catch((error) => {
-                console.log(error)
+                this.$Message.eror({
+                   content:  "处理数据出现问题： " + error,
+                   duration: 2
+                });
             })
         },
+        //查询后面的页数数据
         research(number) {
             this.formValues.pageNo = number;
             this.search();
         },
+        //修改查询条件
         changeDate(value) {
             this.formValues.beginTime = value[0]
             this.formValues.endTime = value[1]
         },
-        deleteArticle() {
-            console.log("delete")
+        /**
+         * 删除文章
+         */
+        deleteArticle(title, id) {
+            this.showmodal = true;
+            this.currentTitle = title;
+            this.articleId = id;
         },
-        detailResult(data) {
+        /**
+         * 验证删除条件
+         */
+        validateTitle() {
+            if (this.currentTitle === this.tagTitle.trim()) {
+                axios.delete('http://127.0.0.1:5000/sysadmin/article',{
+                    params: {
+                        article_id: this.articleId
+                    },
+                    headers: {
+                        'Authorization': sessionStorage.getItem('token')
+                    }
+                }).then((response) => {
+                    this.handleResult(response.data);
+                    this.search();
+                    this.$Message.success("文章删除成功！")
+                }).catch((error) => {
+                    this.$Message.eror({
+                        content:  "处理数据出现问题： " + error,
+                        duration: 2
+                    });
+                })
+                
+            } else {
+                this.$Message.warning({
+                   content:  "目标标题与输入的标题不匹配，删除失败！",
+                   duration: 2
+                });
+            }
+            this.tagTitle = "";
+        },
+        /**
+         * 处理返回数据
+         */
+        handleResult(data) {
             switch(data.code) {
                 case 200:
                     if (data.data.articles != undefined) {
                         this.articles = data.data.articles;
+                        this.showPage = true;
                     } 
                     this.$store.commit('set_token', data.data.token);
                     break;
                 case 400:
-                    //保存数据失败
+                    //处理数据失败
                     this.$Message.error({
-                        content: '保存数据失败！',
+                        content: '处理数据失败！',
                         duration: 2
                     })
                     break;

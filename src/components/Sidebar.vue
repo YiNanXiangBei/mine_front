@@ -41,7 +41,8 @@
             </Header>
             <Content style="margin: 88px 20px 0; background: #fff; min-height: 600px">
                 <keep-alive>
-                    <router-view @showheader="changeHeaders" @changeAvatar="changeAvatar" v-if="$route.meta.keepAlive"></router-view>
+                    <router-view @showheader="changeHeaders" @changeAvatar="changeAvatar" @publishToEdit="publishToEdit" v-if="$route.meta.keepAlive"
+                    ref="publish"></router-view>
                 </keep-alive>
             </Content>
         </Layout>
@@ -90,6 +91,16 @@ export default {
                 let names = name.split('/');
                 this.menuName = names[1];
             }
+        },
+        publishToEdit(params) {
+            let path = '/sysadmin/publish';
+            this.menuName = params.name;
+            // this.$router.push({path: path})
+            
+            // console.log(this.menuName)
+            console.log(this.$refs['publish'])
+            // this.$refs['publish'].test();
+            // this.$refs['publish'].$emit('test');
         }
     }
 }

@@ -34,7 +34,6 @@ export default {
     methods: {
         ok () {
             this.showCard = false;
-            this.tags.push(this.newTag);
             //添加新的标签到数据库
             this.$Spin.show();
             let _this = this;
@@ -88,6 +87,7 @@ export default {
             switch(data.code) {
                 case 200:
                     if (data.data.tags != undefined) {
+                        this.tags.push(this.newTag);
                         this.tags = data.data.tags;
                     } else {
                         this.newTag = '';

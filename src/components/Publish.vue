@@ -119,7 +119,7 @@ export default {
                         url: 'http://127.0.0.1:5000/sysadmin/article',
                         data: {
                             tags: this.selectOption,
-                            title: this.formValues.title,
+                            title: this.formValues.title.trim(),
                             desc: this.formValues.desc,
                             content: this.formValues.content
                         },
@@ -281,8 +281,23 @@ export default {
                     duration: 3
                 });
             })
+        },
+        /**
+         * 编辑页面从数据库加载数据
+         */
+        loadData(articleId) {
+            console.log(articleId)
+        },
+        test() {
+            console.log('1')
         }
+    },
+    updated:function(){ 
+        this.$nextTick(function(){ 
+            console.log('updated')
+        }) 
     }
+
 }
 </script>
 <style scoped>
