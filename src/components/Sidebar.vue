@@ -41,9 +41,9 @@
             </Header>
             <Content style="margin: 88px 20px 0; background: #fff; min-height: 600px">
                 <keep-alive>
-                    <router-view @showheader="changeHeaders" @changeAvatar="changeAvatar" @publishToEdit="publishToEdit" v-if="$route.meta.keepAlive"
-                    ref="publish"></router-view>
+                    <router-view @showheader="changeHeaders" @changeAvatar="changeAvatar" v-if="$route.meta.keepAlive"></router-view>
                 </keep-alive>
+                <router-view @showheader="changeHeaders" v-if="!$route.meta.keepAlive"></router-view>
             </Content>
         </Layout>
     </div>
@@ -69,13 +69,22 @@ export default {
         this.$nextTick(function () {
             this.changeMenu() 
         });
+        this.avatar = localStorage.getItem("avatar");
     },
     methods: {
         changeAvatar(img_url){
             this.avatar = img_url
         },
+        /**
+         * 页面跳转
+         */
         select(name) {
-            this.$router.push({path: name})
+            if (name === 'editor' && localStorage.getItem('article_id')) {
+                this.$router.push({path: 'editArticle'})
+            } else {
+                this.$router.push({path: name})  
+            }
+            
         },
         changeHeaders(value) {
             this.showHeader = value
@@ -89,18 +98,13 @@ export default {
                 this.$router.push({path: '/sysadmin/person'})
             } else {
                 let names = name.split('/');
-                this.menuName = names[1];
+                if (names[1] === 'editArticle') {
+                    this.menuName = 'editor';
+                } else {
+                    this.menuName = names[1];
+                }
+                
             }
-        },
-        publishToEdit(params) {
-            let path = '/sysadmin/publish';
-            this.menuName = params.name;
-            // this.$router.push({path: path})
-            
-            // console.log(this.menuName)
-            console.log(this.$refs['publish'])
-            // this.$refs['publish'].test();
-            // this.$refs['publish'].$emit('test');
         }
     }
 }

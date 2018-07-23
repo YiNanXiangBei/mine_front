@@ -38,10 +38,15 @@
                 </Col>
             </Row>
             <br>
-            <Row v-show="showPublishButton">
+            <Row v-show="showEditButton">
                 <Col span="3" offset="3">
                     <FormItem>
-                        <Button type="success" size="large" long @click="handleSubmit('formValues')">发布</Button>
+                        <Button type="info" size="large" long @click="handleUpdate('formValues')">更新</Button>
+                    </FormItem>
+                </Col>
+                <Col span="3" offset="1">
+                    <FormItem>
+                        <Button size="large" long @click="cancleUpdate">取消</Button>
                     </FormItem>
                 </Col>
             </Row>
@@ -55,8 +60,7 @@ const qs = require('qs')
 export default {
     data () {
         return {
-            isEditer: false,
-            showPublishButton: true,
+            showEditButton: true,
             showheader: true,
             selectOption: [],
             loading: false,
@@ -67,7 +71,6 @@ export default {
                 desc: '',
                 content: ''
             },
-            passagain: '',
             ruleValidate: {
                 title: [
                     { required: true, message: '标题不能为空', trigger: 'blur' }
@@ -83,6 +86,9 @@ export default {
         }
     },
     methods: {
+        /**
+         * 标签查询方法
+         */
         remoteMethod (query) {
             if (query !== '') {
                 this.loading = true;
@@ -96,59 +102,67 @@ export default {
                     });
                     this.options = list.filter(item => item.label.toLowerCase().indexOf(query.toLowerCase()) > -1);
                 }, 200);
-            } else {
+            } else {   
                 this.options = [];
             }
         },
-        //发布文章
-        handleSubmit(name) {
+        /**
+         * 取消更新文章
+         */
+        cancleUpdate() {
+            localStorage.removeItem("article_id");
+            this.$router.push({path: "editor"});
+        },
+        //更新文章
+        handleUpdate(name) {
             let _this = this;
             this.$refs[name].validate((valid) => {
                 if (valid) {
                     //判断没有未填项，准备向后台传数据
                     this.$Spin.show();
                     axios({
-                        method: 'post',
+                        method: 'put',
                         url: 'http://127.0.0.1:5000/sysadmin/article',
                         data: {
+                            article_id: localStorage.getItem("article_id"),
                             tags: this.selectOption,
-                            title: this.formValues.title.trim(),
+                            title: this.formValues.title,
                             desc: this.formValues.desc,
                             content: this.formValues.content
-                        },
-                        headers: {
-                            Authorization: sessionStorage.getItem('token')
                         },
                         transformRequest: [function(params) {
                             //解决传递数组变成对象的问题
                             Object.keys(params).forEach((key) => {
-                            if ((typeof params[key]) === 'object') {
-                                params[key] = JSON.stringify(params[key]) // 这里必须使用内置JSON对象转换
-                            }
-                            })
-                            params = qs.stringify(params) // 这里必须使用qs库进行转换
+                                if ((typeof params[key]) === 'object') {
+                                    params[key] = JSON.stringify(params[key]) // 这里必须使用内置JSON对象转换
+                                }
+                            });
+                            params = qs.stringify(params); // 这里必须使用qs库进行转换
                             return params
                         }],
                         transformResponse: [function(response) {
                             _this.$Spin.hide();
                             response = JSON.parse(response);
                             _this.detailResult(response);
+                            localStorage.removeItem("article_id");
+                            _this.$router.push({path: "editor"});
                         }]
                     })
                 } else {
                     //有未填项，直接报错
-                    this.$Message.error('发布失败!');
+                    this.$Message.error('更新失败!');
                 }
+
             })
         },
         //全屏事件
         fullScreen(status, value) {
             if (status === true) {
-                this.showPublishButton = false;
+                this.showEditButton = false;
                 //向sidebar传值
                 this.$emit('showheader', false);
             } else if(status === false) {
-                this.showPublishButton = true;
+                this.showEditButton = true;
                 this.$emit('showheader', true);
             }
             
@@ -157,15 +171,15 @@ export default {
         imageClick() {
             return false;
         },
+        /**
+         * 标签查询
+         */
         onQueryChange(value) {
             let _this = this;
             if (value != '') {
                 axios.get('http://127.0.0.1:5000/sysadmin/blurry_tags', {
                     params: {
                         tag: value
-                    },
-                    headers: {
-                        Authorization: sessionStorage.getItem('token')
                     }
                 })
                 .then(function (response) {
@@ -180,6 +194,9 @@ export default {
                 })
             }
         },
+        /**
+         * 返回结果查询
+         */
         detailResult(data, pos) {
             switch(data.code) {
                 case 200:
@@ -215,6 +232,9 @@ export default {
                     this.$router.replace({path: '/sysadmin/login'});
             }
         },
+        /**
+         * 图片添加
+         */
         imgAdd(pos, $file) {
             let _this = this;
             var formdata = new FormData();
@@ -224,9 +244,9 @@ export default {
                 url: 'http://127.0.0.1:5000/sysadmin/upload_image',
                 method: 'post',
                 data: formdata,
-                headers: {
-                    Authorization: sessionStorage.getItem('token')
-                }
+                headers: { 
+                   'Authorization': sessionStorage.getItem('token')
+                },
             }).then((response) => {
                 console.log(response)
                 this.detailResult(response.data, pos);
@@ -236,7 +256,56 @@ export default {
                     duration: 3
                 });
             })
+        },
+        /**
+         * 加载数据
+         */
+        loadData() {
+            let _this = this;
+            axios.get('http://127.0.0.1:5000/sysadmin/article', {
+                params: {
+                    article_id: localStorage.getItem("article_id")
+                },
+                headers: {
+                    Authorization: sessionStorage.getItem('token')
+                }
+            }).then(response => {
+                let code = response.data.code;
+                switch(code) {
+                    case 200:
+                        //返回数据成功
+                        let article = response.data.data.article;
+                        _this.options = article.tags.map(item => {
+                            return {
+                                value: item,
+                                label: item,
+                            };
+                        });
+                        _this.selectOption = article.tags;
+                        _this.formValues.title = article.title;
+                        _this.formValues.desc = article.desc;
+                        _this.formValues.content = article.content;
+                        _this.$store.commit('set_token', response.data.data.token);
+                        break;
+                    case 400:
+                        //数据返回失败
+                        _this.$Message.error({
+                            content: '获取数据失败！',
+                            duration: 2
+                        })
+                        break;
+                    default: 
+                        //token有问题
+                        _this.$store.commit('del_token');
+                        _this.$router.replace({path: '/sysadmin/login'});
+                }
+            }).catch(error => {
+                console.log(error)
+            })
         }
+    },
+    mounted() {
+        this.loadData();
     }
 
 }

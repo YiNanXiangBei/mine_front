@@ -116,6 +116,9 @@ export default {
                     url: 'http://127.0.0.1:5000/sysadmin/info',
                     method: 'post',
                     data: params,
+                    headers: {
+                        Authorization: sessionStorage.getItem('token')
+                    },
                     transformRequest: [
                         function (params) { // 解决传递数组变成对象的问题
                             Object.keys(params).forEach((key) => {
@@ -179,6 +182,7 @@ export default {
                     //文件上传成功
                     this.formValues.avatar = jsonData.data.image_url;
                     this.$emit('changeAvatar', jsonData.data.image_url);
+                    localStorage.setItem("avatar", jsonData.data.image_url);
                     this.$store.commit('set_token', jsonData.data.token);
                     break;
                 case 400:
@@ -213,6 +217,9 @@ export default {
             axios.get('http://127.0.0.1:5000/sysadmin/info',{
                 params: {
                     'username': sessionStorage.getItem('username')
+                },
+                headers: {
+                    Authorization: sessionStorage.getItem('token')
                 }
             })
             .then(function(response) {
@@ -222,6 +229,7 @@ export default {
                         _this.formValues = response.data.data.info;
                         _this.$store.commit('set_token', response.data.data.token);
                         _this.$emit('changeAvatar', _this.formValues.avatar);
+                        localStorage.setItem("avatar", _this.formValues.avatar);
                         break;
                     default:
                         //请求信息不正常，删除token，页面跳转到登录页面

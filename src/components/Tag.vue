@@ -42,7 +42,7 @@ export default {
                 method: 'post',
                 data: {tag: _this.newTag},
                 headers: {
-                    'Authorization': sessionStorage.getItem('token')
+                    Authorization: sessionStorage.getItem('token')
                 },
                 transformRequest: [
                     function (params) { // 解决传递数组变成对象的问题
@@ -71,7 +71,7 @@ export default {
                 method: 'GET',
                 url: 'http://127.0.0.1:5000/sysadmin/tags',
                 headers: {
-                    'Authorization': sessionStorage.getItem('token')
+                    Authorization: sessionStorage.getItem('token')
                 },
                 transformResponse: [function (data) {
                     //处理返回数据问题，异步

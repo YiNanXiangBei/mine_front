@@ -74,23 +74,18 @@ export default {
         }
     },
     methods: {
-        //跳转到publish页面,将相关的数据要带过去
+        //跳转到子组件页面
         detailArtice(value) {
-            // this.$Message.info('detail article');
-            // this.$router.push({name: 'publish', params: {articld_id: value, }})
-            let params = {
-                article_id : value,
-                name: 'publish'
-            }
-            this.$router.push({path: '/sysadmin/publish'})
-            this.$emit('publishToEdit', params);
+            //设置articleid 到全局
+            localStorage.setItem("article_id", value);
+            this.$router.push({path: 'editArticle'});
         },
         //查询数据
         search() {
             axios.get('http://127.0.0.1:5000/sysadmin/oldArticles',{
                 params: this.formValues,
                 headers: {
-                    'Authorization': sessionStorage.getItem('token')
+                    Authorization: sessionStorage.getItem('token')
                 }
             }).then((response) => {
                 this.total = response.data.data.total;
@@ -131,7 +126,7 @@ export default {
                         article_id: this.articleId
                     },
                     headers: {
-                        'Authorization': sessionStorage.getItem('token')
+                        Authorization: sessionStorage.getItem('token')
                     }
                 }).then((response) => {
                     this.handleResult(response.data);

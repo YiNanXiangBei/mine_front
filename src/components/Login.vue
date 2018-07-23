@@ -52,6 +52,9 @@ export default {
                         url: 'http://127.0.0.1:5000/sysadmin/login',
                         method: 'post',
                         data: params,
+                        headers: {
+                            Authorization: sessionStorage.getItem('token')
+                        },
                         transformRequest: [
                             function (params) { // 解决传递数组变成对象的问题
                                 Object.keys(params).forEach((key) => {

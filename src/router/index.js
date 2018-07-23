@@ -8,6 +8,7 @@ import Sidebar from '@/components/Sidebar'
 import Tag from '@/components/Tag'
 import Upload from '@/components/Upload'
 import Login from '@/components/Login'
+import EditArticle from '@/components/EditArticle'
 import store from '../store'
 import axios from 'axios'
 Vue.use(Router)
@@ -74,6 +75,14 @@ const router =  new Router({
           component: Upload,
           meta: {
             keepAlive: true, // 需要被缓存
+            requireAuth: true  // 添加该字段，表示进入这个路由是需要登录的
+          }
+        },
+        {
+          path: 'editArticle',
+          name: 'editArticle',
+          component: EditArticle,
+          meta: {
             requireAuth: true  // 添加该字段，表示进入这个路由是需要登录的
           }
         }
