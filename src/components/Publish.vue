@@ -218,7 +218,6 @@ export default {
         imgAdd(pos, $file) {
             let _this = this;
             var formdata = new FormData();
-            console.log($file);
             formdata.append('file', $file);
             axios({
                 url: 'http://127.0.0.1:5000/sysadmin/upload_image',
@@ -228,7 +227,6 @@ export default {
                     Authorization: sessionStorage.getItem('token')
                 }
             }).then((response) => {
-                console.log(response)
                 this.detailResult(response.data, pos);
             }).catch((error) => {
                 _this.$Message.error({

@@ -61,6 +61,7 @@ export default {
                     _this.$Spin.hide();
                     data = JSON.parse(data);
                     _this.detailResult(data);
+                    _this.loadsData();
                 }],
             })
         },
@@ -87,7 +88,6 @@ export default {
             switch(data.code) {
                 case 200:
                     if (data.data.tags != undefined) {
-                        this.tags.push(this.newTag);
                         this.tags = data.data.tags;
                     } else {
                         this.newTag = '';
