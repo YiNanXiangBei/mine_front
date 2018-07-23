@@ -60,6 +60,9 @@ const qs = require('qs')
 export default {
     data () {
         return {
+            isAutoSave: false,
+            intervalId: '',
+            time: '',
             showEditButton: true,
             showheader: true,
             selectOption: [],
@@ -112,42 +115,51 @@ export default {
         cancleUpdate() {
             localStorage.removeItem("article_id");
             this.$router.push({path: "editor"});
+            clearInterval(this.intervalId);
+        },
+        //保存数据
+        updateData() {
+            let _this = this;
+            axios({
+                method: 'put',
+                url: 'http://127.0.0.1:5000/sysadmin/article',
+                data: {
+                    article_id: localStorage.getItem("article_id"),
+                    tags: this.selectOption,
+                    title: this.formValues.title,
+                    desc: this.formValues.desc,
+                    content: this.formValues.content
+                },
+                transformRequest: [function(params) {
+                    //解决传递数组变成对象的问题
+                    Object.keys(params).forEach((key) => {
+                        if ((typeof params[key]) === 'object') {
+                            params[key] = JSON.stringify(params[key]) // 这里必须使用内置JSON对象转换
+                        }
+                    });
+                    params = qs.stringify(params); // 这里必须使用qs库进行转换
+                    return params
+                }],
+                transformResponse: [function(response) {
+                    _this.$Spin.hide();
+                    response = JSON.parse(response);
+                    _this.detailResult(response);
+                    if (!_this.isAutoSave) {
+                        localStorage.removeItem("article_id");
+                        _this.$router.push({path: "editor"});
+                    }
+                    _this.isAutoSave = false;
+                }]
+            })
         },
         //更新文章
         handleUpdate(name) {
-            let _this = this;
             this.$refs[name].validate((valid) => {
                 if (valid) {
                     //判断没有未填项，准备向后台传数据
+                    clearInterval(this.intervalId);
                     this.$Spin.show();
-                    axios({
-                        method: 'put',
-                        url: 'http://127.0.0.1:5000/sysadmin/article',
-                        data: {
-                            article_id: localStorage.getItem("article_id"),
-                            tags: this.selectOption,
-                            title: this.formValues.title,
-                            desc: this.formValues.desc,
-                            content: this.formValues.content
-                        },
-                        transformRequest: [function(params) {
-                            //解决传递数组变成对象的问题
-                            Object.keys(params).forEach((key) => {
-                                if ((typeof params[key]) === 'object') {
-                                    params[key] = JSON.stringify(params[key]) // 这里必须使用内置JSON对象转换
-                                }
-                            });
-                            params = qs.stringify(params); // 这里必须使用qs库进行转换
-                            return params
-                        }],
-                        transformResponse: [function(response) {
-                            _this.$Spin.hide();
-                            response = JSON.parse(response);
-                            _this.detailResult(response);
-                            localStorage.removeItem("article_id");
-                            _this.$router.push({path: "editor"});
-                        }]
-                    })
+                    this.updateData();
                 } else {
                     //有未填项，直接报错
                     this.$Message.error('更新失败!');
@@ -206,10 +218,17 @@ export default {
                     if (data.data.tags != undefined) {
                         this.list = data.data.tags;
                     } else {
-                        this.$Message.success({
-                            content: '提交成功！',
-                            duration: 2
-                        })
+                        if (this.isAutoSave) {
+                            this.$Message.success({
+                                content: '数据成功自动保存！',
+                                duration: 2
+                            })
+                        } else {
+                            this.$Message.success({
+                                content: '提交成功！',
+                                duration: 2
+                            })
+                        }
                     }
                     this.$store.commit('set_token', data.data.token);
                     break;
@@ -233,7 +252,7 @@ export default {
             }
         },
         /**
-         * 图片添加
+         * 图片添加baocun
          */
         imgAdd(pos, $file) {
             let _this = this;
@@ -302,10 +321,48 @@ export default {
             }).catch(error => {
                 console.log(error)
             })
+        },
+        /**
+        * 重置时间计数器
+        */
+        resetTime() {
+            clearInterval(this.intervalId);
+            this.time = 0;
+            this.intervalId = setInterval(this.autoSubmit, 1000);
+            console.log("1")
+        },
+        /**
+        *自动保存 
+        */
+        autoSubmit() {
+            this.time += 1;
+            if (this.time == 0.1 * 60) {
+                //自动保存数据操作
+                this.isAutoSave = true;
+                this.updateData();
+                clearInterval(this.intervalId);
+                console.log(this.isAutoSave);
+            }
         }
+        
     },
     mounted() {
         this.loadData();
+        let _this = this;
+        document.onclick = ()=> {
+            console.log(this.$route.path);
+            if (this.$route.path === '/sysadmin/editArticle') {
+                _this.resetTime();
+            }
+        }
+        // document.onkeydown = ()=> {
+        //     console.log("key down")
+        //     _this.resetTime();
+        // }
+
+    },
+    destroyed() {
+        clearInterval(this.intervalId);
     }
 
 }
