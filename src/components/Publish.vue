@@ -41,7 +41,12 @@
             <Row v-show="showPublishButton">
                 <Col span="3" offset="3">
                     <FormItem>
-                        <Button type="success" size="large" long @click="handleSubmit('formValues')">发布</Button>
+                        <Button type="success" size="large" :disabled="buttonDisable" long @click="handleSubmit('formValues')">发布</Button>
+                    </FormItem>
+                </Col>
+                <Col span="3" offset="1">
+                    <FormItem>
+                        <Button size="large" :disabled="buttonDisable" long @click="canclePublish">放弃</Button>
                     </FormItem>
                 </Col>
             </Row>
@@ -55,6 +60,10 @@ const qs = require('qs')
 export default {
     data () {
         return {
+            buttonDisable: false,
+            isAutoSave: false,
+            intervalId: '',
+            time: 0,
             isEditer: false,
             showPublishButton: true,
             showheader: true,
@@ -234,6 +243,82 @@ export default {
                     duration: 3
                 });
             })
+        },
+         /**
+        * 重置时间计数器
+        */
+        resetTime() {
+            clearInterval(this.intervalId);
+            this.time = 0;
+            this.intervalId = setInterval(this.autoSubmit, 1000);
+        },
+        /**
+        *自动保存 
+        */
+        autoSubmit() {
+            this.time += 1;
+            if (this.time == 1 * 30) {
+                //自动保存数据操作
+                this.buttonDisable = true;
+                this.isAutoSave = true;
+                if (this.formValues) {
+                    localStorage.setItem("formValues", JSON.stringify(this.formValues));
+                }
+                if (this.selectOption) {
+                    localStorage.setItem("tags", JSON.stringify(this.selectOption));
+                }
+                this.$Message.success({
+                    content: '数据成功自动保存！',
+                    duration: 2
+                });
+                clearInterval(this.intervalId);
+                this.buttonDisable = false;
+            }
+        },
+        /**
+        放弃发布文章*/
+        canclePublish() {
+            clearInterval(this.intervalId);
+            this.formValues.title = '';
+            this.formValues.desc = '';
+            this.formValues.content = '';
+            this.selectOption = [];
+            if (localStorage.getItem("formValues")) {
+                localStorage.removeItem("formValues");
+            }
+            if (localStorage.getItem("tags")) {
+                localStorage.removeItem("tags");
+            }
+            
+        }
+    },
+    mounted() {
+        if (localStorage.getItem("formValues")) {
+            this.formValues = JSON.parse(localStorage.getItem("formValues"));
+        }
+        if (localStorage.getItem("tags")) {
+            this.selectOption = JSON.parse(localStorage.getItem("tags"));
+            this.options = this.selectOption.map(item => {
+                return {
+                    value: item,
+                    label: item,
+                };
+            });
+        }
+        let _this = this;
+        document.onkeydown = ()=> {
+            if (this.$route.path === '/sysadmin/publish') {
+                if(this.formValues) {
+                    _this.resetTime();
+                } 
+            }
+        };
+        document.onclick = ()=> {
+            if (this.$route.path === '/sysadmin/publish') {
+                if(this.formValues) {
+                    _this.resetTime();
+                } 
+            }
         }
     }
 

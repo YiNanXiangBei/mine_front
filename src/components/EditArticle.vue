@@ -41,12 +41,12 @@
             <Row v-show="showEditButton">
                 <Col span="3" offset="3">
                     <FormItem>
-                        <Button type="info" size="large" long @click="handleUpdate('formValues')">更新</Button>
+                        <Button type="info" :disabled="buttonDisable" size="large" long @click="handleUpdate('formValues')">更新</Button>
                     </FormItem>
                 </Col>
                 <Col span="3" offset="1">
                     <FormItem>
-                        <Button size="large" long @click="cancleUpdate">取消</Button>
+                        <Button size="large" :disabled="buttonDisable" long @click="cancleUpdate">取消</Button>
                     </FormItem>
                 </Col>
             </Row>
@@ -60,6 +60,7 @@ const qs = require('qs')
 export default {
     data () {
         return {
+            buttonDisable: false,
             isAutoSave: false,
             intervalId: '',
             time: '',
@@ -114,8 +115,9 @@ export default {
          */
         cancleUpdate() {
             localStorage.removeItem("article_id");
-            this.$router.push({path: "editor"});
+            this.$router.replace({path: "editor"});
             clearInterval(this.intervalId);
+            this.time = 0;
         },
         //保存数据
         updateData() {
@@ -146,7 +148,7 @@ export default {
                     _this.detailResult(response);
                     if (!_this.isAutoSave) {
                         localStorage.removeItem("article_id");
-                        _this.$router.push({path: "editor"});
+                        _this.$router.replace({path: "editor"});
                     }
                     _this.isAutoSave = false;
                 }]
@@ -158,6 +160,7 @@ export default {
                 if (valid) {
                     //判断没有未填项，准备向后台传数据
                     clearInterval(this.intervalId);
+                    this.time = 0;
                     this.$Spin.show();
                     this.updateData();
                 } else {
@@ -245,8 +248,15 @@ export default {
                         duration: 4
                     })
                     break;
+                case 404:
+                    this.$Message.warning({
+                        content: data.msg,
+                        duration: 4
+                    })
+                    break;
                 default:
                     //token有问题
+                    debugger;
                     this.$store.commit('del_token');
                     this.$router.replace({path: '/sysadmin/login'});
             }
@@ -281,46 +291,52 @@ export default {
          */
         loadData() {
             let _this = this;
-            axios.get('http://127.0.0.1:5000/sysadmin/article', {
-                params: {
-                    article_id: localStorage.getItem("article_id")
-                },
-                headers: {
-                    Authorization: sessionStorage.getItem('token')
-                }
-            }).then(response => {
-                let code = response.data.code;
-                switch(code) {
-                    case 200:
-                        //返回数据成功
-                        let article = response.data.data.article;
-                        _this.options = article.tags.map(item => {
-                            return {
-                                value: item,
-                                label: item,
-                            };
-                        });
-                        _this.selectOption = article.tags;
-                        _this.formValues.title = article.title;
-                        _this.formValues.desc = article.desc;
-                        _this.formValues.content = article.content;
-                        _this.$store.commit('set_token', response.data.data.token);
-                        break;
-                    case 400:
-                        //数据返回失败
-                        _this.$Message.error({
-                            content: '获取数据失败！',
-                            duration: 2
-                        })
-                        break;
-                    default: 
-                        //token有问题
-                        _this.$store.commit('del_token');
-                        _this.$router.replace({path: '/sysadmin/login'});
-                }
-            }).catch(error => {
-                console.log(error)
-            })
+            let article_id = localStorage.getItem("article_id");
+            if (article_id) {
+                axios.get('http://127.0.0.1:5000/sysadmin/article', {
+                    params: {
+                        article_id: localStorage.getItem("article_id")
+                    },
+                    headers: {
+                        Authorization: sessionStorage.getItem('token')
+                    }
+                }).then(response => {
+                    let code = response.data.code;
+                    switch(code) {
+                        case 200:
+                            //返回数据成功
+                            let article = response.data.data.article;
+                            _this.options = article.tags.map(item => {
+                                return {
+                                    value: item,
+                                    label: item,
+                                };
+                            });
+                            _this.selectOption = article.tags;
+                            _this.formValues.title = article.title;
+                            _this.formValues.desc = article.desc;
+                            _this.formValues.content = article.content;
+                            _this.$store.commit('set_token', response.data.data.token);
+                            break;
+                        case 400:
+                            //数据返回失败
+                            _this.$Message.error({
+                                content: '获取数据失败！',
+                                duration: 2
+                            })
+                            break;
+                        default: 
+                            //token有问题
+                            _this.$store.commit('del_token');
+                            _this.$router.replace({path: '/sysadmin/login'});
+                    }
+                }).catch(error => {
+                    console.log(error)
+                })
+            } else {
+                this.$router.replace({path: "editor"})
+            }
+            
         },
         /**
         * 重置时间计数器
@@ -329,40 +345,30 @@ export default {
             clearInterval(this.intervalId);
             this.time = 0;
             this.intervalId = setInterval(this.autoSubmit, 1000);
-            console.log("1")
         },
         /**
         *自动保存 
         */
         autoSubmit() {
             this.time += 1;
-            if (this.time == 0.1 * 60) {
+            if (this.time == 1 * 30) {
                 //自动保存数据操作
+                this.buttonDisable = true;
                 this.isAutoSave = true;
                 this.updateData();
                 clearInterval(this.intervalId);
-                console.log(this.isAutoSave);
+                this.buttonDisable = false;
             }
         }
-        
     },
     mounted() {
         this.loadData();
         let _this = this;
-        document.onclick = ()=> {
-            console.log(this.$route.path);
+        document.onkeydown = ()=> {
             if (this.$route.path === '/sysadmin/editArticle') {
                 _this.resetTime();
             }
-        }
-        // document.onkeydown = ()=> {
-        //     console.log("key down")
-        //     _this.resetTime();
-        // }
-
-    },
-    destroyed() {
-        clearInterval(this.intervalId);
+        };
     }
 
 }

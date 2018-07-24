@@ -105,8 +105,10 @@ export default {
         },
         //修改查询条件
         changeDate(value) {
-            this.formValues.beginTime = value[0]
-            this.formValues.endTime = value[1]
+            this.formValues.beginTime = value[0];
+            this.formValues.endTime = value[1];
+            this.formValues.pageNo = 1;
+
         },
         /**
          * 删除文章
