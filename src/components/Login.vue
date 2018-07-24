@@ -15,7 +15,7 @@
                     </FormItem>
                 </Form>
                 <p>
-                    <a href="#">忘记密码了?</a>
+                    <a href="#" @click="forgetPassword">忘记密码了?</a>
                 </p>
             </Col>
         </Row>
@@ -96,6 +96,14 @@ export default {
                     });
                 }
             })
+        },
+        forgetPassword() {
+            const {href} = this.$router.resolve({
+              name: 'findPassword',
+              path: '/sysadmin/password_find',
+              query: {}
+          });
+          window.open(href, '_blank');
         }
     }
 }

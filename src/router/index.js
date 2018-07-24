@@ -9,6 +9,7 @@ import Tag from '@/components/Tag'
 import Upload from '@/components/Upload'
 import Login from '@/components/Login'
 import EditArticle from '@/components/EditArticle'
+import PasswordFind from '@/components/PasswordFind'
 import store from '../store'
 import axios from 'axios'
 Vue.use(Router)
@@ -95,7 +96,12 @@ const router =  new Router({
       meta: {
         requireAuth: true
       }
-    } 
+    },
+    {
+      path: '/sysadmin/password_find',
+      name: 'findPassword',
+      component: PasswordFind
+    }
   ]
 });
 
