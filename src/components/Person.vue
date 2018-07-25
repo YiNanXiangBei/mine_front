@@ -35,7 +35,7 @@
             v-model="showmodal"
             title="请再输入一遍新密码"
             @on-ok="ok">
-            <Input v-model="passagain" type="password"></Input>
+            <Input v-model="passagain" type="password" @keyup.enter.native="ok"></Input>
         </Modal>
         <Spin size="large" fix v-show="showspin" style="height: 100%"></Spin>
         <my-upload field="img"
@@ -63,6 +63,7 @@ export default {
         return {
             showmodal: false,
             showspin: false,
+            oldPass: '',
             //传值到后台的参数
             id: '',
             formValues: {
@@ -100,7 +101,13 @@ export default {
         handleSubmit (name) {
             this.$refs[name].validate((valid) => {
                 if (valid) {
-                    this.showmodal = true;
+                    if (this.oldPass !== this.formValues.password) {
+                        this.showmodal = true;
+                    } else {
+                        this.passagain = this.oldPass;
+                        this.ok();
+                    }
+                    
                 } else {
                     this.$Message.error('Fail!');
                 }
@@ -109,6 +116,7 @@ export default {
         ok () {
             //传参到后台
             let params = this.formValues;
+            this.showmodal = false;
             let _this = this;
             if(this.passagain === this.formValues.password) {
                 _this.$Spin.show();
@@ -135,13 +143,20 @@ export default {
                         // Do whatever you want to transform the data
                         _this.$Spin.hide();
                         data = JSON.parse(data);
-                        console.log(data)
-
+                        console.log(data);
                         switch(data.code) {
                             case 200:
                                 //保存数据成功
                                 _this.formValues = data.data.info;
+                                _this.passagain = '';
+                                _this.formValues.password = _this.formValues.password.substring(0, 20);
+                                _this.oldPass = _this.formValues.password;
                                 _this.$store.commit('set_token', data.data.token);
+                                _this.passagain = '';
+                                _this.$Notice.success({
+                                    title: '修改成功',
+                                    desc: '基本信息修改成功 '
+                                });
                                 break;
                             case 400:
                                 //保存数据失败
@@ -158,6 +173,7 @@ export default {
                     }],
                 })
             } else {
+                this.passagain = '';
                 this.$Notice.error({
                     title: '密码不匹配',
                     desc: '请重新确认两次输入的密码相同 '
@@ -227,6 +243,8 @@ export default {
                     case 200:
                         //请求信息正常，将数据加载到页面上，同时将新的token放入sessionStorage中
                         _this.formValues = response.data.data.info;
+                        _this.formValues.password = _this.formValues.password.substring(0, 20);
+                        _this.oldPass = _this.formValues.password;
                         _this.$store.commit('set_token', response.data.data.token);
                         _this.$emit('changeAvatar', _this.formValues.avatar);
                         localStorage.setItem("avatar", _this.formValues.avatar);
