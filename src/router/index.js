@@ -11,6 +11,7 @@ import Login from '@/components/Login'
 import EditArticle from '@/components/EditArticle'
 import PasswordFind from '@/components/PasswordFind'
 import PasswordChange from '@/components/PasswordChange'
+import DetailTag from '@/components/DetailTag'
 import store from '../store'
 import axios from 'axios'
 Vue.use(Router)
@@ -107,6 +108,14 @@ const router =  new Router({
       path: '/sysadmin/password_change',
       name: 'changePassword',
       component: PasswordChange
+    },
+    {
+      path: '/sysadmin/detail_tag',
+      name: 'detailTag',
+      component: DetailTag,
+      meta: {
+        requireAuth: true
+      }
     }
   ]
 });
