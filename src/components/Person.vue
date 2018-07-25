@@ -104,8 +104,7 @@ export default {
                     if (this.oldPass !== this.formValues.password) {
                         this.showmodal = true;
                     } else {
-                        this.passagain = this.oldPass;
-                        this.ok();
+                        this.updateEmail();
                     }
                     
                 } else {
@@ -113,6 +112,63 @@ export default {
                 }
             })
         },
+        //仅仅更新邮箱
+        updateEmail() {
+            let params = this.formValues;
+            params.password = '';
+            let _this = this;
+            this.$Spin.show();
+            axios({
+                url: 'http://127.0.0.1:5000/sysadmin/info',
+                method: 'post',
+                data: params,
+                headers: {
+                    Authorization: sessionStorage.getItem('token')
+                },
+                transformRequest: [
+                    function (params) { // 解决传递数组变成对象的问题
+                        Object.keys(params).forEach((key) => {
+                        if ((typeof params[key]) === 'object') {
+                            params[key] = JSON.stringify(params[key]) // 这里必须使用内置JSON对象转换
+                        }
+                        })
+                        params = qs.stringify(params) // 这里必须使用qs库进行转换
+                        return params
+                    }
+                ],
+                transformResponse: [function (data) {
+                    //处理返回数据问题，异步
+                    // Do whatever you want to transform the data
+                    _this.$Spin.hide();
+                    data = JSON.parse(data);
+                    switch(data.code) {
+                        case 200:
+                            //保存数据成功
+                            _this.formValues = data.data.info;
+                            _this.formValues.password = _this.formValues.password.substring(0, 20);
+                            _this.oldPass = _this.formValues.password;
+                            _this.$store.commit('set_token', data.data.token);
+                            _this.$Notice.success({
+                                title: '修改成功',
+                                desc: '基本信息修改成功 '
+                            });
+                            break;
+                        case 400:
+                            //保存数据失败
+                            _this.$Message.error({
+                                content: '保存数据失败！',
+                                duration: 2
+                            })
+                            break;
+                        default:
+                            //token有问题
+                            _this.$store.commit('del_token');
+                            _this.$router.replace({path: '/sysadmin/login'});
+                    }
+                }],
+            })
+        },
+        //更新邮箱和密码
         ok () {
             //传参到后台
             let params = this.formValues;
@@ -143,12 +199,10 @@ export default {
                         // Do whatever you want to transform the data
                         _this.$Spin.hide();
                         data = JSON.parse(data);
-                        console.log(data);
                         switch(data.code) {
                             case 200:
                                 //保存数据成功
                                 _this.formValues = data.data.info;
-                                _this.passagain = '';
                                 _this.formValues.password = _this.formValues.password.substring(0, 20);
                                 _this.oldPass = _this.formValues.password;
                                 _this.$store.commit('set_token', data.data.token);
