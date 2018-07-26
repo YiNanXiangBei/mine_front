@@ -12,6 +12,7 @@ import EditArticle from '@/components/EditArticle'
 import PasswordFind from '@/components/PasswordFind'
 import PasswordChange from '@/components/PasswordChange'
 import DetailTag from '@/components/DetailTag'
+import TagArticles from '@/components/userview/TagArticles'
 import store from '../store'
 import axios from 'axios'
 Vue.use(Router)
@@ -116,6 +117,12 @@ const router =  new Router({
       meta: {
         requireAuth: true
       }
+    },
+    //用户端路由
+    {
+      path: '/tag_articles',
+      name: 'tagArticles',
+      component: TagArticles
     }
   ]
 });
