@@ -40,7 +40,7 @@ var ItemFactory = (function () {
           background: getRandomColor()
         },
         width: 100 + ~~(Math.random() * 50),
-        height: 100 + ~~(Math.random() * 50)
+        height: 200 + ~~(Math.random() * 50)
       }
     }
     return items

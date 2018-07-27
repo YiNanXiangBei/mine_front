@@ -13,6 +13,7 @@ import PasswordFind from '@/components/PasswordFind'
 import PasswordChange from '@/components/PasswordChange'
 import DetailTag from '@/components/DetailTag'
 import TagArticles from '@/components/userview/TagArticles'
+import Home from '@/components/userview/Home'
 import store from '../store'
 import axios from 'axios'
 Vue.use(Router)
@@ -123,6 +124,11 @@ const router =  new Router({
       path: '/tag_articles',
       name: 'tagArticles',
       component: TagArticles
+    },
+    {
+      path: '/',
+      name: 'home',
+      component: Home
     }
   ]
 });
