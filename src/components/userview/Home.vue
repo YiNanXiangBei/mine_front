@@ -1,45 +1,49 @@
 <template>
     <div id="home">
+        <!-- 头部 -->
         <nav class="navbar is-fixed-top home-navbar-header" role="navigation" aria-label="main navigation" v-show="showHeader">
-            <div class="navbar-brand">
-                <a class="navbar-item" href="https://lqzhgood.github.io/bulma-docs-cn">
-                <img src="https://lqzhgood.github.io/bulma-docs-cn/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
-                </a>
-                <div class="navbar-burger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-            <div class="navbar-menu">
-                <div class="navbar-end">
-                    <a href="#" class="navbar-item">首页</a>
-                    <a href="#" class="navbar-item">归档</a>
-                    <a href="#" class="navbar-item">标签</a>
-                    <a href="#" class="navbar-item">关于</a>
-                    <a href="#" class="navbar-item">
-                        
-                        <i class="fa-search"></i>
-                    
+            <div class="container is-fluid">
+                <div class="navbar-brand">
+                    <a class="navbar-item" href="https://lqzhgood.github.io/bulma-docs-cn">
+                    <img src="https://lqzhgood.github.io/bulma-docs-cn/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
                     </a>
+                    <div class="navbar-burger" :class="{'is-active': isActive}" @click="isActive = !isActive">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+                <div class="navbar-menu" :class="{'is-active': isActive}">
+                    <div class="navbar-end">
+                        <a class="navbar-item is-active">首页</a>
+                        <a class="navbar-item">归档</a>
+                        <a class="navbar-item">标签</a>
+                        <a class="navbar-item">关于</a>
+                        <a class="navbar-item">
+                            
+                            <i class="fa-search"></i>
+                        
+                        </a>
+                    </div>
                 </div>
             </div>
         </nav>
-        <section class="hero is-primary is-medium">
+        <!-- 大图片 -->
+        <section class="hero is-primary is-large">
             <div class="hero-head" v-show="showHeroHead">
                 <nav class="navbar">
-                    <div class="container">
+                    <div class="container is-fluid">
                         <div class="navbar-brand">
                             <a class="navbar-item">
                                 <img src="https://lqzhgood.github.io/bulma-docs-cn/images/bulma-type-white.png" alt="Logo">
                             </a>
-                            <span class="navbar-burger burger" data-target="navbarMenuHeroA">
+                            <span class="navbar-burger burger" :class="{'is-active': isActive}" data-target="navbarMenuHeroA" @click="isActive = !isActive">
                                 <span></span>
                                 <span></span>
                                 <span></span>
                             </span>
                         </div>
-                        <div id="navbarMenuHeroA" class="navbar-menu">
+                        <div id="navbarMenuHeroA" class="navbar-menu" :class="{'is-active': isActive}">
                             <div class="navbar-end">
                                 <a class="navbar-item is-active">
                                 首页
@@ -63,16 +67,30 @@
             </div>
 
             <div class="hero-body">
-                <div class="container">
-                <h1 class="title">
-                    Medium title
-                </h1>
-                <h2 class="subtitle">
-                    Medium subtitle
-                </h2>
+                <div class="container is-fluid">
+                    <h1 class="title">
+                        Medium title
+                    </h1>
+                    <h2 class="subtitle">
+                        Medium subtitle
+                    </h2>
                 </div>
             </div>
         </section>
+        <!-- 内容区域 -->
+        <router-view></router-view>
+        <!-- 尾部 -->
+        <footer class="footer">
+            <div class="container">
+                <div class="content has-text-centered">
+                    <p>
+                        <strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>. The source code is licensed
+                        <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
+                        is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+                    </p>
+                </div>
+            </div>
+        </footer>
     </div>
 </template>
 <script>
@@ -81,17 +99,21 @@ export default {
         return {
             showHeader: false,
             showHeroHead: true,
-            scrollTop: 0
+            scrollTop: 0,
+            isActive: false,
         }
     },
     methods: {
-
+        pageJump(path) {
+            this.$router.push({path: path})
+        }
     },
     mounted() {
+        this.$router.push({path: '/articles'})
         let _this = this;
         document.onscroll= ()=> {
             if (document.documentElement.scrollTop > _this.scrollTop) {
-                console.log("向下")
+                _this.showHeader = false;
             } else {
                 if (document.documentElement.scrollTop === 0) {
                     _this.showHeroHead = true;
@@ -100,10 +122,9 @@ export default {
                     _this.showHeroHead = false;
                     _this.showHeader = true;
                 }
-                console.log("向上")
             }
             _this.scrollTop = document.documentElement.scrollTop;
-        }
+        };
     }
 }
 </script>
@@ -113,7 +134,10 @@ export default {
     filter:alpha(opacity=80);
 }
 #home{
-    height: 1000px;
+    height: 2000px;
+}
+.post-meta {
+    font-family: Lora,'Times New Roman',serif
 }
 </style>
 

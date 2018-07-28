@@ -14,6 +14,7 @@ import PasswordChange from '@/components/PasswordChange'
 import DetailTag from '@/components/DetailTag'
 import TagArticles from '@/components/userview/TagArticles'
 import Home from '@/components/userview/Home'
+import Articles from '@/components/userview/Articles'
 import store from '../store'
 import axios from 'axios'
 Vue.use(Router)
@@ -128,7 +129,14 @@ const router =  new Router({
     {
       path: '/',
       name: 'home',
-      component: Home
+      component: Home,
+      children: [
+        {
+          path: '/articles',
+          name: 'articles',
+          component: Articles
+        },
+      ]
     }
   ]
 });
