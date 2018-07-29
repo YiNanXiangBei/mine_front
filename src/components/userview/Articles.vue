@@ -113,6 +113,7 @@ export default {
 
     }, 
     mounted() {
+        let _this = this;
         window.onresize= ()=> {
             let screenWidth = document.documentElement.clientWidth;
             //移动端不显示侧边栏

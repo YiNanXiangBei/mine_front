@@ -15,15 +15,22 @@
                 </div>
                 <div class="navbar-menu" :class="{'is-active': isActive}">
                     <div class="navbar-end">
-                        <a class="navbar-item is-active">首页</a>
-                        <a class="navbar-item">归档</a>
-                        <a class="navbar-item">标签</a>
-                        <a class="navbar-item">关于</a>
-                        <a class="navbar-item">
+                        <router-link to="/index" class="navbar-item">首页</router-link>
+                        <!-- <a class="navbar-item is-active">首页</a> -->
+                        <router-link to="/archive" class="navbar-item">归档</router-link>
+                        <!-- <a class="navbar-item">归档</a> -->
+                        <!-- <a class="navbar-item">标签</a> -->
+                        <router-link to="/tags" class="navbar-item">标签</router-link>
+                        <!-- <a class="navbar-item">关于</a> -->
+                        <router-link to="/about" class="navbar-item">关于</router-link>
+                        <!-- <a class="navbar-item">
                             
                             <i class="fa-search"></i>
                         
-                        </a>
+                        </a> -->
+                        <router-link to="/search" class="navbar-item">
+                            <i class="fa-search"></i>
+                        </router-link>
                     </div>
                 </div>
             </div>
@@ -45,21 +52,13 @@
                         </div>
                         <div id="navbarMenuHeroA" class="navbar-menu" :class="{'is-active': isActive}">
                             <div class="navbar-end">
-                                <a class="navbar-item is-active">
-                                首页
-                                </a>
-                                <a class="navbar-item">
-                                归档
-                                </a>
-                                <a class="navbar-item">
-                                标签
-                                </a>
-                                <a class="navbar-item">
-                                关于
-                                </a>
-                                <span class="navbar-item">
+                                <router-link to="/index" class="navbar-item">首页</router-link>
+                                <router-link to="/archive" class="navbar-item">归档</router-link>
+                                <router-link to="/tags" class="navbar-item">标签</router-link>
+                                <router-link to="/about" class="navbar-item">关于</router-link>
+                                <router-link to="/search" class="navbar-item">
                                     <i class="fa-search"></i>
-                                </span>
+                                </router-link>
                             </div>
                         </div>
                     </div>
@@ -79,6 +78,19 @@
         </section>
         <!-- 内容区域 -->
         <router-view></router-view>
+        <!-- <section class="section">
+            <div class="container is-fluid">
+                <div class="columns">
+                    <div class="column is-three-fifths is-offset-one-fifth">
+
+                    </div>
+                </div>
+            </div>
+        </section> -->
+
+        
+         
+        
         <!-- 尾部 -->
         <footer class="footer">
             <div class="container">
@@ -109,7 +121,11 @@ export default {
         }
     },
     mounted() {
-        this.$router.push({path: '/articles'})
+        //页面为/则直接跳转到/index
+        let path = this.$route.path;
+        if (path === '/') {
+            this.$router.replace({path: '/index'})
+        }
         let _this = this;
         document.onscroll= ()=> {
             if (document.documentElement.scrollTop > _this.scrollTop) {
