@@ -129,8 +129,7 @@ export default {
             this.showSearchPage = val;
         },
         randomClass(index) {
-            console.log(index)
-            let colorArr = ['is-dark', 'is-light', 'is-primary', 'is-link', 'is-info', 'is-success', 'is-warning', 'is-danger']
+            let colorArr = ['is-dark', 'is-light', 'is-primary', 'is-link', 'is-info', 'is-success', 'is-warning', 'is-danger'];
             return colorArr[index % 8];
         }
     },
