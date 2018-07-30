@@ -23,7 +23,7 @@
                         <router-link to="/tags" class="navbar-item">标签</router-link>
                         <!-- <a class="navbar-item">关于</a> -->
                         <router-link to="/about" class="navbar-item">关于</router-link>
-                        <a class="navbar-item" @click="showSearchPage = !showSearchPage">  
+                        <a class="navbar-item" @click="showSearchPage = true">  
                             <span class="icon">
                                     <i class="fa fa-search" aria-hidden="true"></i>
                             </span>
@@ -63,7 +63,7 @@
                                          <i class="fa fa-search" aria-hidden="true"></i>
                                     </span>
                                 </router-link> -->
-                                 <a class="navbar-item" @click="showSearchPage = !showSearchPage">  
+                                 <a class="navbar-item" @click="showSearchPage = true">  
                                     <span class="icon">
                                             <i class="fa fa-search" aria-hidden="true"></i>
                                     </span>
@@ -112,7 +112,7 @@
                 </div>
             </div>
         </footer>
-       <search showPage="showSearchPage"></search>
+       <search :showPage="showSearchPage" @on-result-change="onResultChange"></search>
     </div>
 </template>
 <script>
@@ -128,7 +128,9 @@ export default {
         }
     },
     methods: {
-
+        onResultChange(val) {
+            this.showSearchPage = val;
+        }
     },
     mounted() {
         //页面为/则直接跳转到/index

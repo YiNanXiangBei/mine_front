@@ -30,7 +30,7 @@
                         </div>
                     </div>
                     <div class="column">
-                        <div class="content">
+                        <div class="content is-hidden-mobile">
                             <p>
                                 目录
                             </p>

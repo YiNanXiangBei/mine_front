@@ -1,9 +1,9 @@
 <template>
-     <div class="modal" :class="{'is-active': showPage}">
-            <div class="modal-background" @click="showPage = !showPage"></div>
+     <div class="modal" :class="{'is-active': showSearchPage}">
+            <div class="modal-background" @click="showSearchPage = false"></div>
             
             <div class="modal-card">
-                <button class="delete is-large is-pulled-right is-hidden-tablet" aria-label="close" @click="showPage = !showPage"></button>
+                <button class="delete is-large is-pulled-right is-hidden-tablet" aria-label="close" @click="showSearchPage = false"></button>
                 
                 <section class="modal-card-body">
                     <div class="field is-grouped">
@@ -62,19 +62,27 @@
                 </section>
             </div>
             
-            <button class="modal-close is-large is-hidden-mobile" aria-label="close" @click="showPage = !showPage"></button>
+            <button class="modal-close is-large is-hidden-mobile" aria-label="close" @click="showSearchPage = false"></button>
         </div>
 </template>
 <script>
 export default {
     data() {
         return {
-            showSearchPage: false
+            showSearchPage: this.showPage
         }
     },
     props: [
         'showPage'
-    ]
+    ],
+    watch: {
+        showPage(val) {
+            this.showSearchPage = val;
+        },
+        showSearchPage(val) {
+            this.$emit("on-result-change",val);
+        }
+    }
         
     
 }
