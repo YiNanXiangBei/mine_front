@@ -12,10 +12,12 @@ import 'mavon-editor/dist/css/index.css'
 import axios from 'axios'
 import 'bulma/css/bulma.min.css'
 import 'font-awesome/css/font-awesome.min.css'
+import VueDisqus from 'vue-disqus'
 Vue.config.productionTip = false
 Vue.use(iView)
 Vue.use(mavonEditor)
 Vue.use(Vuex)
+Vue.use(VueDisqus)
 /* eslint-disable no-new */
 
 // http request 拦截器

@@ -39,7 +39,7 @@
         </nav>
         <!-- 大图片 -->
         <section class="hero is-primary is-medium is-bold">
-            <div class="hero-head" v-show="showHeroHead">
+            <div class="hero-head">
                 <nav class="navbar">
                     <div class="container is-fluid">
                         <div class="navbar-brand">
@@ -75,30 +75,22 @@
             </div>
 
             <div class="hero-body">
-                <div class="container is-fluid">
-                    <h1 class="title">
-                        Medium title
+                <div class="container is-fluid has-text-justified">
+                    <h1 class="title is-1 is-spaced">
+                        {{ articles.title }}
                     </h1>
                     <h2 class="subtitle">
-                        Medium subtitle
+                        {{ articles.desc }}
                     </h2>
+                    <h6 class="subtitle is-6 is-italic">{{ articles.auth }}</h6>
+                    <div class="tags">
+                        <span class="tag" :class="[randomClass(index)]" v-for="(item, index) in articles.tags" :key="index">{{item}}</span>
+                    </div>
                 </div>
             </div>
         </section>
         <!-- 内容区域 -->
         <router-view></router-view>
-        <!-- <section class="section">
-            <div class="container is-fluid">
-                <div class="columns">
-                    <div class="column is-three-fifths is-offset-one-fifth">
-
-                    </div>
-                </div>
-            </div>
-        </section> -->
-
-        
-         
         
         <!-- 尾部 -->
         <footer class="footer">
@@ -112,7 +104,7 @@
                 </div>
             </div>
         </footer>
-       <search :showPage="showSearchPage" @on-result-change="onResultChange"></search>
+        <search :showPage="showSearchPage" @on-result-change="onResultChange"></search>
     </div>
 </template>
 <script>
@@ -121,15 +113,25 @@ export default {
     data() {
         return {
             showHeader: false,
-            showHeroHead: true,
             scrollTop: 0,
             isActive: false,
-            showSearchPage: false
+            showSearchPage: false,
+            articles: {
+                title: localStorage.getItem('title') == (''|| undefined)  ? '首页标题': localStorage.getItem('title'),
+                desc: localStorage.getItem('desc') == (''|| undefined)  ? '': localStorage.getItem('desc'),
+                tags: localStorage.getItem('tags') == (''|| undefined)  ? '': JSON.parse(localStorage.getItem('tags')),
+                auth: localStorage.getItem('auth') == (''|| undefined)  ? '': localStorage.getItem('auth')
+            }
         }
     },
     methods: {
         onResultChange(val) {
             this.showSearchPage = val;
+        },
+        randomClass(index) {
+            console.log(index)
+            let colorArr = ['is-dark', 'is-light', 'is-primary', 'is-link', 'is-info', 'is-success', 'is-warning', 'is-danger']
+            return colorArr[index % 8];
         }
     },
     mounted() {
@@ -144,10 +146,8 @@ export default {
                 _this.showHeader = false;
             } else {
                 if (document.documentElement.scrollTop === 0) {
-                    _this.showHeroHead = true;
                     _this.showHeader = false;
                 } else {
-                    _this.showHeroHead = false;
                     _this.showHeader = true;
                 }
             }

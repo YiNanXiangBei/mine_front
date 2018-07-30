@@ -29,6 +29,7 @@
     "qs": "^6.5.2",
     "style-loader": "^0.21.0",
     "vue": "^2.5.2",
+    "vue-disqus": "^3.0.3",
     "vue-image-crop-upload": "^2.3.2",
     "vue-router": "^3.0.1",
     "vue-waterfall": "^1.0.6",
