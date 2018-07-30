@@ -89,7 +89,7 @@
                             </div>
                         </div>    
                     </div>
-                    <div class="column" v-show="showSide">
+                    <div class="column is-hidden-mobile">
                         <section class="section">
                             <div class="box">
                                 最热文章
@@ -106,23 +106,11 @@
 export default {
     data() {
         return {
-            showSide: true
+            
         }
     },
     methods: {
 
-    }, 
-    mounted() {
-        let _this = this;
-        window.onresize= ()=> {
-            let screenWidth = document.documentElement.clientWidth;
-            //移动端不显示侧边栏
-            if (screenWidth <= 768) {
-                _this.showSide = false;
-            } else {
-                _this.showSide = true;
-            }
-        }
     }
 }
 </script>

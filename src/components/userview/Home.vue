@@ -23,20 +23,22 @@
                         <router-link to="/tags" class="navbar-item">标签</router-link>
                         <!-- <a class="navbar-item">关于</a> -->
                         <router-link to="/about" class="navbar-item">关于</router-link>
-                        <!-- <a class="navbar-item">
-                            
-                            <i class="fa-search"></i>
-                        
-                        </a> -->
-                        <router-link to="/search" class="navbar-item">
-                            <i class="fa-search"></i>
-                        </router-link>
+                        <a class="navbar-item" @click="showSearchPage = !showSearchPage">  
+                            <span class="icon">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                            </span>
+                        </a>
+                        <!-- <router-link to="/search" class="navbar-item">
+                            <span class="icon">
+                                    <i class="fa fa-search" aria-hidden="true"></i>
+                            </span>
+                        </router-link> -->
                     </div>
                 </div>
             </div>
         </nav>
         <!-- 大图片 -->
-        <section class="hero is-primary is-large">
+        <section class="hero is-primary is-medium is-bold">
             <div class="hero-head" v-show="showHeroHead">
                 <nav class="navbar">
                     <div class="container is-fluid">
@@ -56,9 +58,16 @@
                                 <router-link to="/archive" class="navbar-item">归档</router-link>
                                 <router-link to="/tags" class="navbar-item">标签</router-link>
                                 <router-link to="/about" class="navbar-item">关于</router-link>
-                                <router-link to="/search" class="navbar-item">
-                                    <i class="fa-search"></i>
-                                </router-link>
+                                <!-- <router-link to="/search" class="navbar-item">
+                                    <span class="icon">
+                                         <i class="fa fa-search" aria-hidden="true"></i>
+                                    </span>
+                                </router-link> -->
+                                 <a class="navbar-item" @click="showSearchPage = !showSearchPage">  
+                                    <span class="icon">
+                                            <i class="fa fa-search" aria-hidden="true"></i>
+                                    </span>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -103,9 +112,11 @@
                 </div>
             </div>
         </footer>
+       <search showPage="showSearchPage"></search>
     </div>
 </template>
 <script>
+import Search from './Search'
 export default {
     data() {
         return {
@@ -113,12 +124,11 @@ export default {
             showHeroHead: true,
             scrollTop: 0,
             isActive: false,
+            showSearchPage: false
         }
     },
     methods: {
-        pageJump(path) {
-            this.$router.push({path: path})
-        }
+
     },
     mounted() {
         //页面为/则直接跳转到/index
@@ -141,6 +151,9 @@ export default {
             }
             _this.scrollTop = document.documentElement.scrollTop;
         };
+    },
+    components: {
+        search: Search
     }
 }
 </script>
@@ -149,9 +162,9 @@ export default {
     opacity:0.8;
     filter:alpha(opacity=80);
 }
-#home{
+/* #home{
     height: 2000px;
-}
+} */
 .post-meta {
     font-family: Lora,'Times New Roman',serif
 }
