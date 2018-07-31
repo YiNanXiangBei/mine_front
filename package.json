@@ -32,8 +32,6 @@
     "vue-disqus": "^3.0.3",
     "vue-image-crop-upload": "^2.3.2",
     "vue-router": "^3.0.1",
-    "vue-waterfall": "^1.0.6",
-    "vue-waterfall-easy": "^2.3.0",
     "vuex": "^3.0.1"
   },
   "devDependencies": {

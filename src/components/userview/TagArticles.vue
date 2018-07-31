@@ -1,139 +1,74 @@
 <template>
-    <div>
-        <vue-waterfall-easy :imgsArr="imgsArr" height="100px"></vue-waterfall-easy>
-    </div>
-    
+  <div id="tag_articles">
+    <section class="section">
+      <div class="container is-fullhd">
+        <div class="columns">
+          <div class="column is-three-fifths is-offset-one-fifth" :class="{'column-style': isShow}" @mouseover="isShow = !isShow" @mouseout="isShow = !isShow">
+              <article class="media">
+                <figure class="media-left is-hidden-mobile">
+                  <p class="image is-128x128">
+                    <img src="https://lqzhgood.github.io/bulma-docs-cn/images/placeholders/128x128.png">
+                  </p>
+                </figure>
+                <div class="media-content">
+                  <div class="content">
+                    <strong>标题</strong>
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
+                    </p>
+                  </div>
+                </div>
+              </article>
+          </div>
+        </div>
+        
+        <div class="columns">
+          <div class="column is-three-fifths is-offset-one-fifth" :class="{'column-style': isShow}" @mouseover="isShow = !isShow" @mouseout="isShow = !isShow">
+              <article class="media">
+                <figure class="media-left is-hidden-mobile">
+                  <p class="image is-128x128">
+                    <img src="https://lqzhgood.github.io/bulma-docs-cn/images/placeholders/128x128.png">
+                  </p>
+                </figure>
+                <div class="media-content">
+                  <div class="content">
+                    <strong>标题</strong>
+                    <p>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
+                    </p>
+                  </div>
+                </div>
+              </article>
+          </div>
+        </div>
+
+      </div>
+    </section>
+  </div>
 </template>
 
 <script>
-import vueWaterfallEasy from 'vue-waterfall-easy'
-import axios from 'axios'
-const qs = require('qs')
 export default {
-    data() {
-        return {
-            imgsArr: [
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/1.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
-  },
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/2.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
-  },
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/3.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
-  },
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/4.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
-  },
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/5.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
-  },
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/6.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
-  },
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/7.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
-  },
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/8.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
-  },
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/9.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
-  },
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/10.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
-  },
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/11.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
-  },
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/12.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
-  },
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/13.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
-  },
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/14.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
-  },
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/15.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
-  },
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/16.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
-  },
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/17.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
-  },
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/18.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
-  },
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/19.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
-  },
-  {
-    "src": "https://lfyfly.github.io/vue-waterfall-easy/demo/static/img/20.jpg",
-    "href": "https://www.baidu.com",
-    "info": "一些图片描述文字"
+  data() {
+    return {
+      isShow: false
+    }
   }
-],
-            group: 0, // request param
-        }
-    },
-    methods: {
-        getData() {
-            axios.get('https://lfyfly.github.io/vue-waterfall-easy/demo/static/mock/data.json?group=' + this.group) // 真实环境中，后端会根据参数group返回新的图片数组，这里我用一个惊呆json文件模拟
-                .then(res => {
-                    console.log(res)
-                // this.imgsArr = this.imgsArr.concat(res.data)
-                this.group++
-            })
-        }
-    },
-    components: {
-        vueWaterfallEasy
-    },
-
 }
 </script>
 
 <style scoped>
-
+.column {
+  margin-bottom: 20px;
+}
+.column-style {
+  box-shadow: 2px 2px 2px #cccccc;
+  border-radius: 3px
+}
+.image{
+  cursor: pointer
+}
+strong {
+  cursor: pointer
+}
 </style>

@@ -5,7 +5,7 @@
                 <div class="columns">
                     <div class="column is-three-fifths is-offset-one-fifth">
                         <div class="content">
-                            <h2 class="title is-2">段落小标题(都是使用markdown进行渲染)</h2>
+                            <h2 class="title is-2 ">段落小标题(都是使用markdown进行渲染)</h2>
                             <p>段落内容</p>
                         </div>
                     </div>
