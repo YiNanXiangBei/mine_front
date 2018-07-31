@@ -7,7 +7,7 @@
                         <h1 class="title">标签</h1>
                         <hr>
                         <div class="tags">
-                            <span class="tag is-medium">One</span>
+                            <span class="tag is-medium" @click="redirect2TagArticle('One')">One</span>
                             <span class="tag is-medium">Two</span>
                             <span class="tag is-medium">Three</span>
                             <span class="tag is-medium">Four</span>
@@ -37,11 +37,26 @@
 </template>
 <script>
 export default {
-    
+    data() {
+        return {
+
+        }
+    },
+    methods: {
+        //点击标签跳转到tag_articles页面
+        redirect2TagArticle(val) {
+            this.$router.push({path: 'tag_articles', query: {tag: val}});
+        }
+    }
 }
 </script>
 <style scoped>
-
+.tag {
+    cursor: pointer;
+}
+#tags {
+    min-height: 740px;
+}
 </style>
 
 

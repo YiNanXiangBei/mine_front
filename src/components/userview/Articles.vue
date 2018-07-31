@@ -122,6 +122,9 @@ export default {
 .detail-article{
     cursor: pointer;
 }
+articles {
+    min-height: 740px;
+}
 </style>
 
 

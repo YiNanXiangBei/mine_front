@@ -1,5 +1,5 @@
 <template>
-    <div class="about">
+    <div id="about">
         <section class="section">
             <div class="container is-fluid">
                 <div class="columns">
@@ -21,7 +21,9 @@ export default {
 }
 </script>
 <style scoped>
-
+#about {
+    min-height: 740px;
+}
 </style>
 
 

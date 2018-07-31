@@ -12,17 +12,17 @@
                             <span class="icon is-left">
                                 <i class="fa fa-search" aria-hidden="true"></i>
                             </span>
-                            <span class="icon is-right">
-                                <i class="fa fa-times" aria-hidden="true"></i>
-                            </span>
                         </div>
                         <div class="control">
                             <button class="button is-primary">提交</button>
                         </div>
                     </div>
-                    <div class="box">
-                        <div class="content">
-                            <div>
+                    <div class="box" :class="{height:resultHeight}">
+                        <div class="content" height="1000px">
+                            <p class="image">
+                                <img src="../../assets/back.png">
+                            </p>
+                            <!-- <div @click="redirect2DetailArticle(1)" class="detail-article">
                                 <h1 class="title">文章标题</h1>
                                 <p>文章内容</p>
                                 <hr>
@@ -56,7 +56,7 @@
                                 <h1 class="title">文章标题</h1>
                                 <p>文章内容</p>
                                 <hr>
-                            </div>
+                            </div> -->
                         </div>
                     </div>
                 </section>
@@ -69,7 +69,14 @@
 export default {
     data() {
         return {
-            showSearchPage: this.showPage
+            showSearchPage: this.showPage,
+            resultHeight: ''
+        }
+    },
+    methods: {
+        redirect2DetailArticle(val) {
+            this.showSearchPage = false;
+            this.$router.push({path: '/detail_article', query: {tag: 1}});
         }
     },
     props: [
@@ -82,13 +89,23 @@ export default {
         showSearchPage(val) {
             this.$emit("on-result-change",val);
         }
+    },
+    mounted() {
+        this.resultHeight = document.documentElement.scrollHeight;
+        console.log(this.resultHeight);
     }
         
     
 }
 </script>
 <style scoped>
+.modal-card {
+    border-radius: 10px
+}
 
+.detail-article{
+  cursor: pointer
+}
 </style>
 
 

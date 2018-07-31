@@ -50,6 +50,9 @@ export default {
 }
 </script>
 <style scoped>
+#detail_article {
+    min-height: 740px;
+}
 
 </style>
 

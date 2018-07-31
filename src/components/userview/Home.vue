@@ -104,6 +104,7 @@
                 </div>
             </div>
         </footer>
+        <!-- 子组件事件 -->
         <search :showPage="showSearchPage" @on-result-change="onResultChange"></search>
     </div>
 </template>

@@ -54,7 +54,9 @@ export default {
 }
 </script>
 <style scoped>
-
+#archive {
+    min-height: 740px;
+}
 </style>
 
 
