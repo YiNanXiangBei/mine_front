@@ -125,12 +125,6 @@ const router =  new Router({
         requireAuth: true
       }
     },
-    //用户端路由
-    {
-      path: '/tag_articles',
-      name: 'tagArticles',
-      component: TagArticles
-    },
     {
       path: '/',
       name: 'home',
@@ -165,7 +159,12 @@ const router =  new Router({
           path: '/tags',
           name: 'tags',
           component: Tags
-        }
+        },
+        {
+          path: '/tag_articles',
+          name: 'tagArticles',
+          component: TagArticles
+        },
       ]
     }
   ]

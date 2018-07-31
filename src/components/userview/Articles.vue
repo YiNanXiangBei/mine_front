@@ -8,12 +8,16 @@
                             <div class="column is-offset-one-fifth is-four-fifths">
                                 <section class="section">
                                     <div class="content">
-                                        <h3 class="title is-spaced">主标题</h3>
-                                        <h5 class="subtitle">副标题</h5>
-                                        <p>
-                                            Curabitur accumsan turpis pharetra augue tincidunt blandit. Quisque condimentum maximus mi, sit amet commodo arcu rutrum id. Proin pretium urna vel cursus venenatis. Suspendisse potenti. Etiam mattis sem rhoncus lacus dapibus facilisis. Donec at dignissim dui. Ut et neque nisl.
-                                        </p>
-                                        <p class="post-meta">Posted by Les1ie on June 6, 2018</p>
+                                        <router-link :to="{path: '/detail_article', query: {tag: 1}}" class="detail-article" tag="div">
+                                            <h3 class="title is-spaced">主标题</h3>
+                                            <h5 class="subtitle">副标题</h5>
+                                            <p>
+                                                Curabitur accumsan turpis pharetra augue tincidunt blandit. Quisque condimentum maximus mi, sit amet commodo arcu rutrum id. Proin pretium urna vel cursus venenatis. Suspendisse potenti. Etiam mattis sem rhoncus lacus dapibus facilisis. Donec at dignissim dui. Ut et neque nisl.
+                                            </p>
+                                           
+                                        </router-link>
+                                        <p></p>
+                                         <p class="post-meta">Posted by Les1ie on June 6, 2018</p>
                                         <hr>
                                     </div>
                                     <div class="content">
@@ -115,7 +119,9 @@ export default {
 }
 </script>
 <style scoped>
-
+.detail-article{
+    cursor: pointer;
+}
 </style>
 
 

@@ -53,10 +53,18 @@ export default {
     return {
       isShow: false
     }
+  },
+  methods: {
+    //依靠标签名称获取该标签下所有数据
+    getArticlesByTag() {
+      console.log(this.$route.params.tag)
+    }
+  },
+  mounted() {
+    console.log(this.$route.query.tag)
   }
 }
 </script>
-
 <style scoped>
 .column {
   margin-bottom: 20px;

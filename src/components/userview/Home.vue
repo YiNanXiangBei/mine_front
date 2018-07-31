@@ -84,7 +84,7 @@
                     </h2>
                     <h6 class="subtitle is-6 is-italic">{{ articles.auth }}</h6>
                     <div class="tags">
-                        <span class="tag" :class="[randomClass(index)]" v-for="(item, index) in articles.tags" :key="index">{{item}}</span>
+                        <span class="tag" :class="[randomClass(index)]" v-for="(item, index) in articles.tags" :key="index" @click="redirect2TagArticle(item)">{{item}}</span>
                     </div>
                 </div>
             </div>
@@ -125,12 +125,18 @@ export default {
         }
     },
     methods: {
+        //展示搜索页面
         onResultChange(val) {
             this.showSearchPage = val;
         },
+        //随机生成标签样式
         randomClass(index) {
             let colorArr = ['is-dark', 'is-light', 'is-primary', 'is-link', 'is-info', 'is-success', 'is-warning', 'is-danger'];
             return colorArr[index % 8];
+        },
+        //点击标签跳转到tag_articles页面
+        redirect2TagArticle(val) {
+            this.$router.push({path: 'tag_articles', query: {tag: val}});
         }
     },
     mounted() {
@@ -168,6 +174,9 @@ export default {
 } */
 .post-meta {
     font-family: Lora,'Times New Roman',serif
+}
+.tag {
+    cursor: pointer;
 }
 </style>
 
