@@ -1,9 +1,9 @@
 <template>
      <div class="modal" :class="{'is-active': showSearchPage}">
-            <div class="modal-background" @click="showSearchPage = false"></div>
+            <div class="modal-background" @click="hideSearchPage"></div>
             
             <div class="modal-card">
-                <button class="delete is-large is-pulled-right is-hidden-tablet" aria-label="close" @click="showSearchPage = false"></button>
+                <button class="delete is-large is-pulled-right is-hidden-tablet" aria-label="close" @click="hideSearchPage"></button>
                 
                 <section class="modal-card-body">
                     <div class="field is-grouped">
@@ -18,9 +18,9 @@
                         </div>
                     </div>
                     <div class="box" :class="{height:resultHeight}">
-                        <div class="content" height="1000px">
+                        <div class="content">
                             <p class="image">
-                                <img src="../../assets/back.png">
+                                <img src="../../assets/back.jpg">
                             </p>
                             <!-- <div @click="redirect2DetailArticle(1)" class="detail-article">
                                 <h1 class="title">文章标题</h1>
@@ -62,7 +62,7 @@
                 </section>
             </div>
             
-            <button class="modal-close is-large is-hidden-mobile" aria-label="close" @click="showSearchPage = false"></button>
+            <button class="modal-close is-large is-hidden-mobile" aria-label="close" @click="hideSearchPage"></button>
         </div>
 </template>
 <script>
@@ -70,13 +70,18 @@ export default {
     data() {
         return {
             showSearchPage: this.showPage,
-            resultHeight: ''
+            resultHeight: '',
+            showClip: false
         }
     },
     methods: {
         redirect2DetailArticle(val) {
             this.showSearchPage = false;
             this.$router.push({path: '/detail_article', query: {tag: 1}});
+        },
+        hideSearchPage() {
+            this.showClip = false;
+            this.showSearchPage = false;
         }
     },
     props: [
@@ -84,18 +89,27 @@ export default {
     ],
     watch: {
         showPage(val) {
+            if (val == true) {
+                this.showClip = true;
+            }
             this.showSearchPage = val;
         },
         showSearchPage(val) {
             this.$emit("on-result-change",val);
+        },
+        showClip: {
+            handler: function (newVal, oldVal) {
+                if (newVal == true) {
+                    document.body.classList.add('is-clipped');
+                } else {
+                    document.body.classList.remove('is-clipped');
+                }
+            },
+            // deep: true,
+            // immediate: true
+            
         }
-    },
-    mounted() {
-        this.resultHeight = document.documentElement.scrollHeight;
-        console.log(this.resultHeight);
     }
-        
-    
 }
 </script>
 <style scoped>

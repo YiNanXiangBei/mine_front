@@ -91,7 +91,6 @@
         </section>
         <!-- 内容区域 -->
         <router-view></router-view>
-        
         <!-- 尾部 -->
         <footer class="footer">
             <div class="container">
