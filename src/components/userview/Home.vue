@@ -148,16 +148,17 @@ export default {
         }
         let _this = this;
         document.onscroll= ()=> {
-            if (document.documentElement.scrollTop > _this.scrollTop) {
+            let pageOffset = document.documentElement.scrollTop || window.pageYOffset || document.body.scrollTop;
+            if (pageOffset > _this.scrollTop) {
                 _this.showHeader = false;
             } else {
-                if (document.documentElement.scrollTop === 0) {
+                if (pageOffset === 0) {
                     _this.showHeader = false;
                 } else {
                     _this.showHeader = true;
                 }
             }
-            _this.scrollTop = document.documentElement.scrollTop;
+            _this.scrollTop = pageOffset;
         };
     },
     components: {
