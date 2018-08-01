@@ -4,8 +4,8 @@
         <nav class="navbar is-fixed-top home-navbar-header" role="navigation" aria-label="main navigation" v-show="showHeader">
             <div class="container is-fluid">
                 <div class="navbar-brand">
-                    <a class="navbar-item" href="https://lqzhgood.github.io/bulma-docs-cn">
-                    <img src="https://lqzhgood.github.io/bulma-docs-cn/images/bulma-logo.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
+                    <a class="navbar-item" href="http://127.0.0.1:8080/index">
+                    <img src="../../../static/black_title.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
                     </a>
                     <div class="navbar-burger" :class="{'is-active': isActive}" @click="isActive = !isActive">
                         <span></span>
@@ -44,7 +44,7 @@
                     <div class="container is-fluid">
                         <div class="navbar-brand">
                             <a class="navbar-item">
-                                <img src="https://lqzhgood.github.io/bulma-docs-cn/images/bulma-type-white.png" alt="Logo">
+                                <img src="../../../static/white_title.png" alt="Logo">
                             </a>
                             <span class="navbar-burger burger" :class="{'is-active': isActive}" data-target="navbarMenuHeroA" @click="isActive = !isActive">
                                 <span></span>
@@ -105,6 +105,7 @@
         </footer>
         <!-- 子组件事件 -->
         <search :showPage="showSearchPage" @on-result-change="onResultChange"></search>
+        <BackTop></BackTop>
     </div>
 </template>
 <script>
