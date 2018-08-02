@@ -1,6 +1,8 @@
 <template>
-    <div id="password">
-        <h1>password</h1>
+    <div id="find_password">
+        <Row>
+            <Col span="6" offset></Col>
+        </Row>
     </div>
 </template>
 <script>
