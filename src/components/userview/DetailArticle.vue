@@ -42,10 +42,10 @@ export default {
         this.articles.desc = '';
         this.articles.tags = '';
         this.articles.time = '';
-        localStorage.setItem('title', '钢铁是怎样炼成的');
-        localStorage.setItem('desc', '钢铁冶炼技术指南');
-        localStorage.setItem('tags', JSON.stringify(['冶金', '炼铁', '挖矿', '淘沙', '烧火', '真的想不出了', '还有两个', '还有一个', '还有0个']));
-        localStorage.setItem('auth', 'Posted by Les1ie on June 6, 2018')
+        localStorage.setItem('client_title', '钢铁是怎样炼成的');
+        localStorage.setItem('client_desc', '钢铁冶炼技术指南');
+        localStorage.setItem('client_tags', JSON.stringify(['冶金', '炼铁', '挖矿', '淘沙', '烧火', '真的想不出了', '还有两个', '还有一个', '还有0个']));
+        localStorage.setItem('client_auth', 'Posted by Les1ie on June 6, 2018')
     }
 }
 </script>

@@ -81,7 +81,9 @@ export default {
         select(name) {
             if (name === 'editor' && localStorage.getItem('article_id')) {
                 this.$router.push({path: 'editArticle'})
-            } else {
+            } else if(name == 'home') {
+                this.$router.push({path: '/index'})
+            } else { 
                 this.$router.push({path: name})  
             }
             

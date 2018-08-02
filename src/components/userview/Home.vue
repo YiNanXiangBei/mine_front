@@ -118,10 +118,10 @@ export default {
             isActive: false,
             showSearchPage: false,
             articles: {
-                title: localStorage.getItem('title') == (''|| undefined)  ? '首页标题': localStorage.getItem('title'),
-                desc: localStorage.getItem('desc') == (''|| undefined)  ? '': localStorage.getItem('desc'),
-                tags: localStorage.getItem('tags') == (''|| undefined)  ? '': JSON.parse(localStorage.getItem('tags')),
-                auth: localStorage.getItem('auth') == (''|| undefined)  ? '': localStorage.getItem('auth')
+                title: localStorage.getItem('client_title') == (''|| undefined)  ? '首页标题': localStorage.getItem('client_title'),
+                desc: localStorage.getItem('client_desc') == (''|| undefined)  ? '': localStorage.getItem('client_desc'),
+                tags: localStorage.getItem('client_tags') == (''|| undefined)  ? '': JSON.parse(localStorage.getItem('client_tags')),
+                auth: localStorage.getItem('client_auth') == (''|| undefined)  ? '': localStorage.getItem('client_auth')
             }
         }
     },
