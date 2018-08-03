@@ -131,7 +131,7 @@ export default {
         // console.log(array)
         let username = params;
         let time = Date.parse(new Date()) /1000;
-        if (sys_timstamp + 30000 < time) {
+        if (sys_timstamp + 60 < time) {
             //超时，所有输入框和按钮都为disabled
             this.showMessage = true;
         } 
