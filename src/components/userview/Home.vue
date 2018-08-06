@@ -110,6 +110,7 @@
 </template>
 <script>
 import Search from './Search'
+import Encrypt from '../../util/encrypt.js'
 export default {
     data() {
         return {
@@ -160,6 +161,12 @@ export default {
             }
             _this.scrollTop = pageOffset;
         };
+
+        let data = {
+            article_id: '24234224dffsdf',
+            tag_id: '2132321'
+        }
+        console.log(Encrypt.encrypt(JSON.stringify(data)));
     },
     components: {
         search: Search
