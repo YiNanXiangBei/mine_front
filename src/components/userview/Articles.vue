@@ -8,7 +8,7 @@
                             <div class="column is-offset-one-fifth is-four-fifths">
                                 <section class="section">
                                     <div class="content">
-                                        <router-link :to="{path: '/detail_article', query: {tag: 1}}" class="detail-article" tag="div">
+                                        <router-link :to="{path: '/detail_article', query: {article_id: 17}}" class="detail-article" tag="div">
                                             <h3 class="title is-spaced">主标题</h3>
                                             <h5 class="subtitle">副标题</h5>
                                             <p>

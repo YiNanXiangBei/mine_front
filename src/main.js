@@ -13,13 +13,14 @@ import axios from 'axios'
 import 'bulma/css/bulma.min.css'
 import 'font-awesome/css/font-awesome.min.css'
 import VueDisqus from 'vue-disqus'
+import Highlight from './util/highlight.js'
+Vue.use(Highlight)
 Vue.config.productionTip = false
 Vue.use(iView)
 Vue.use(mavonEditor)
 Vue.use(Vuex)
 Vue.use(VueDisqus)
 /* eslint-disable no-new */
-
 // http request 拦截器
 axios.interceptors.request.use(
   config => {

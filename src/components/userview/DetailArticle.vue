@@ -1,13 +1,11 @@
 <template>
     <div id="detail_article">
         <section class="section">
-            <div class="container is-fullhd">
+            <div class="container is-fluid">
                 <div class="columns">
                     <div class="column is-three-fifths is-offset-one-fifth">
                         <div class="content">
-                            <!-- <h2 class="title is-2 ">段落小标题(都是使用markdown进行渲染)</h2>
-                            <p>段落内容</p> -->
-                            <div v-html="compiledMarkdown">
+                            <div v-html="compiledMarkdown" v-highlight>
 
                             </div>
                         </div>
@@ -16,7 +14,19 @@
             </div>
         </section>
         <section class="section">
-            <div class="container is-fullhd">
+            <div class="container is-fluid">
+                <div class="column is-three-fifths is-offset-one-fifth">
+                    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+                        <!-- <router-link :to="{path: 'detail_article', query: {article_id: previous}}" class="pagination-previous" :disabled="previousDisabled">Previous</router-link>
+                        <router-link :to="{path: 'detail_article', query: {article_id: next}}" class="pagination-next" :disabled="nextDisabled">Next page</router-link> -->
+                        <a class="pagination-previous" :disabled="previousDisabled" @click="redirect2Deatil(previous)">Previous</a>
+                        <a class="pagination-next" :disabled="nextDisabled" @click="redirect2Deatil(next)">Next page</a>
+                    </nav>
+                </div> 
+            </div>   
+        </section>
+        <section class="section">
+            <div class="container is-fluid">
                 <div class="column is-three-fifths is-offset-one-fifth">
                     <vue-disqus shortname="min-blog-1" identifier="1"  language="zh"></vue-disqus>
                 </div>
@@ -43,49 +53,70 @@ marked.setOptions({
 export default {
     data() {
         return {
-            articles: {
-                title: '',
-                desc: '',
-                tags: '',
-                auth: ''
-            },
-            content: ''
+            content: '',
+            next: '',
+            previous: '',
+            previousDisabled: true,
+            nextDisabled: true
         }
     },
     methods: {
-        
+        //获取详细文章数据
+        getDetailArticle(article_id) {
+            let data = {
+                article_id: article_id
+            }
+            let params = {
+                params: Encrypt.encrypt(JSON.stringify(data))
+            }
+            let _this = this;
+            //ajax请求获取数据
+            axios.get('http://127.0.0.1:5000/detail_article',{
+                params: params
+            }).then((response) => {
+                let data = response.data;
+                switch(data.code) {
+                    case 200:
+                        let result = data.data.article;
+                        this.$emit('loadArticle', result);
+                        this.content = result.content;
+                        this.previous = result.previous == null ? null:result.previous;
+                        this.previousDisabled = result.previous == null ? true:false;
+                        this.next = result.next == null ? null:result.next;
+                        this.nextDisabled = result.next == null ? true : false;
+
+                            
+                        break;
+                    default:
+                }
+            }).catch((error) => {
+                // _this.$Message.eror({
+                //     content:  "处理数据出现问题： " + error,
+                //     duration: 2
+                // });
+                console.log(error)
+            })
+        },
+        redirect2Deatil(article_id) {
+            this.$router.push({path: 'detail_article', query: {article_id: article_id}});
+            this.getDetailArticle(article_id);
+            // document.body.scrollTop = 0
+            // document.documentElement.scrollTop = 0
+            let timer = setInterval(function(){
+                var osTop = document.documentElement.scrollTop || document.body.scrollTop;
+                var ispeed = Math.floor(-osTop / 5);
+                document.documentElement.scrollTop = document.body.scrollTop = osTop + ispeed;
+                let isTop = true
+                if(osTop == 0){
+                    clearInterval(timer)
+                }
+            },30)
+        }
     },
     mounted() {
         //页面初始化时向后端请求数据
-        // let article_id = this.$route.query.article_id;
-        let article_id = 18;
-        let data = {
-            article_id: article_id
-        }
-        let params = {
-            params: Encrypt.encrypt(JSON.stringify(data))
-        }
-        let _this = this;
-        //ajax请求获取数据
-        axios.get('http://127.0.0.1:5000/detail_article',{
-            params: params
-        }).then((response) => {
-            let data = response.data;
-            switch(data.code) {
-                case 200:
-                    let result = data.data.article;
-                    _this.$emit('loadArticle', result);
-                    _this.content = result.content;
-                    break;
-                default:
-            }
-        }).catch((error) => {
-            // _this.$Message.eror({
-            //     content:  "处理数据出现问题： " + error,
-            //     duration: 2
-            // });
-            console.log(error)
-        })
+        let article_id = this.$route.query.article_id;
+        this.getDetailArticle(article_id);
     },
     destroyed() {
         let result = {
@@ -107,7 +138,10 @@ export default {
 #detail_article {
     min-height: 740px;
 }
-
+code {
+    font-family: Monaco, Andale Mono, Courier New, monospace;
+    font-size: 28px
+}
 </style>
 
 

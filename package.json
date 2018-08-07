@@ -29,7 +29,6 @@
     "jsencrypt": "^3.0.0-rc.1",
     "less": "^3.8.0",
     "less-loader": "^4.1.0",
-    "markdown-it": "^8.4.2",
     "marked": "^0.4.0",
     "mavon-editor": "^2.6.15",
     "npm": "^6.3.0",

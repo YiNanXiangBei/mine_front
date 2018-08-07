@@ -1,10 +1,10 @@
 <template>
   <div id="tag_articles">
     <section class="section">
-      <div class="container is-fullhd">
+      <div class="container is-fluid">
         <div class="columns">
           <div class="column is-three-fifths is-offset-one-fifth" :class="{'column-style': isShow}" @mouseover="isShow = !isShow" @mouseout="isShow = !isShow">
-              <router-link :to="{path: '/detail_article', query: {tag: 1}}" tag="div" class="detail-article">
+              <router-link :to="{path: '/detail_article', query: {article_id: 17}}" tag="div" class="detail-article">
                 <article class="media">
                   <figure class="media-left is-hidden-mobile">
                     <p class="image is-128x128">
