@@ -58,12 +58,7 @@
                                 <router-link to="/archive" class="navbar-item">归档</router-link>
                                 <router-link to="/tags" class="navbar-item">标签</router-link>
                                 <router-link to="/about" class="navbar-item">关于</router-link>
-                                <!-- <router-link to="/search" class="navbar-item">
-                                    <span class="icon">
-                                         <i class="fa fa-search" aria-hidden="true"></i>
-                                    </span>
-                                </router-link> -->
-                                 <a class="navbar-item" @click="showSearchPage = true">  
+                                <a class="navbar-item" @click="showSearchPage = true">  
                                     <span class="icon">
                                             <i class="fa fa-search" aria-hidden="true"></i>
                                     </span>
@@ -84,13 +79,13 @@
                     </h2>
                     <h6 class="subtitle is-6 is-italic">{{ articles.auth }}</h6>
                     <div class="tags">
-                        <span class="tag" :class="[randomClass(index)]" v-for="(item, index) in articles.tags" :key="index" @click="redirect2TagArticle(item)">{{item}}</span>
+                        <span class="tag" :class="[randomClass(index)]" v-for="(item, index) in articles.tags" :key="index" @click="redirect2TagArticle(item.tag)">{{item.tag}}</span>
                     </div>
                 </div>
             </div>
         </section>
         <!-- 内容区域 -->
-        <router-view></router-view>
+        <router-view @loadArticle="loadArticle"></router-view>
         <!-- 尾部 -->
         <footer class="footer">
             <div class="container">
@@ -119,10 +114,10 @@ export default {
             isActive: false,
             showSearchPage: false,
             articles: {
-                title: localStorage.getItem('client_title') == (''|| undefined)  ? '首页标题': localStorage.getItem('client_title'),
-                desc: localStorage.getItem('client_desc') == (''|| undefined)  ? '': localStorage.getItem('client_desc'),
-                tags: localStorage.getItem('client_tags') == (''|| undefined)  ? '': JSON.parse(localStorage.getItem('client_tags')),
-                auth: localStorage.getItem('client_auth') == (''|| undefined)  ? '': localStorage.getItem('client_auth')
+                title: '首页标题',
+                desc: '',
+                tags: '',
+                auth: ''
             }
         }
     },
@@ -139,6 +134,14 @@ export default {
         //点击标签跳转到tag_articles页面
         redirect2TagArticle(val) {
             this.$router.push({path: 'tag_articles', query: {tag: val}});
+        },
+        //从子页面获取数据
+        loadArticle(article) {
+            console.log(article)
+            this.articles.title = article.title;
+            this.articles.desc = article.desc;
+            this.articles.tags = article.tags;
+            this.articles.auth = article.publish_time
         }
     },
     mounted() {
@@ -161,12 +164,6 @@ export default {
             }
             _this.scrollTop = pageOffset;
         };
-
-        let data = {
-            article_id: '24234224dffsdf',
-            tag_id: '2132321'
-        }
-        console.log(Encrypt.encrypt(JSON.stringify(data)));
     },
     components: {
         search: Search

@@ -65,6 +65,10 @@ function stringToByte(str) {
 
 }
 
+/**
+ * 字符串转十六进制
+ * @param {字符串} str 
+ */
 function strToHexCharCode(str) {
 　　if(str === "")
 　　　　return "";
@@ -90,10 +94,6 @@ function aesEncrypt(key, iv, word) {
     let srcs = CryptoJS.enc.Utf8.parse(word);
     let encrypted = CryptoJS.AES.encrypt(srcs, key, { iv: iv, mode: CryptoJS.mode.CBC, padding: CryptoJS.pad.Pkcs7 });
     let base64Cipher = encrypted.ciphertext.toString(CryptoJS.enc.Hex);
-    // console.log(hiv);
-    // console.log(base64Cipher)
-    // console.log(hiv + base64Cipher)
-    // console.log(iv + base64Cipher)
     return hiv + base64Cipher;
 }
 
@@ -114,26 +114,15 @@ function rsaEncrypt(data) {
     const defaultLength = 117;
     const encryptWordLength = data.length;
     if (encryptWordLength <= defaultLength) {
-        let res = jsEncryptor.encrypt(data)
-
-        console.log(strToHexCharCode(res))
-
-        let result = stringToByte(res);
-        let hexRes = bytesToHex(result)
-        console.log(hexRes)
-        console.log(Base64.encode(hexRes))
-        console.log(res);
-        
-        return Base64.encode(bytesToHex(jsEncryptor.encrypt(data)));
+        return Base64.encode(strToHexCharCode(jsEncryptor.encrypt(data)));
     }
     let offset = 0;
     let paramsList = [];
     while (encryptWordLength - offset > 0) {
         if (encryptWordLength - offset > defaultLength) {
-            console.log(bytesToHex(stringToByte(jsEncryptor.encrypt(data.slice(offset, offset + defaultLength)))))
-            paramsList.push(bytesToHex(stringToByte(jsEncryptor.encrypt(data.slice(offset, offset + defaultLength)))));
+            paramsList.push(strToHexCharCode(jsEncryptor.encrypt(data.slice(offset, offset + defaultLength))));
         } else {
-            paramsList.push(bytesToHex(stringToByte(jsEncryptor.encrypt(data.slice(offset)))));
+            paramsList.push(strToHexCharCode(jsEncryptor.encrypt(data.slice(offset))));
         }
         offset += defaultLength;
     }
@@ -148,11 +137,7 @@ function rsaEncrypt(data) {
  */
 function encrypt(word) {
     let key = randomWord(false, 16)
-    // key = CryptoJS.enc.Utf8.parse(key);
     let iv = CryptoJS.lib.WordArray.random(128/16).toString(CryptoJS.enc.Hex);
-    // let iv = '0123456789abcdef';
-    // let iv = CryptoJS.enc.Utf8.parse(randomWord(false, 16));
-    // aesEncrypt(key, iv, word);
     let encryptWord = aesEncrypt(key, iv, word);
     let data = {
         key: key,

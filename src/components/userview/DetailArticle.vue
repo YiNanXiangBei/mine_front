@@ -5,8 +5,11 @@
                 <div class="columns">
                     <div class="column is-three-fifths is-offset-one-fifth">
                         <div class="content">
-                            <h2 class="title is-2 ">段落小标题(都是使用markdown进行渲染)</h2>
-                            <p>段落内容</p>
+                            <!-- <h2 class="title is-2 ">段落小标题(都是使用markdown进行渲染)</h2>
+                            <p>段落内容</p> -->
+                            <div v-html="compiledMarkdown">
+
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -23,6 +26,20 @@
     </div>
 </template>
 <script>
+import Encrypt from '../../util/encrypt.js'
+import axios from 'axios'
+import marked from 'marked'
+var rendererMD = new marked.Renderer()
+marked.setOptions({
+    renderer: rendererMD,
+    gfm: true,
+    tables: true,
+    breaks: false,
+    pedantic: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false
+})
 export default {
     data() {
         return {
@@ -31,21 +48,58 @@ export default {
                 desc: '',
                 tags: '',
                 auth: ''
-            }
+            },
+            content: ''
         }
     },
     methods: {
-
+        
     },
     mounted() {
-        this.articles.title = '';
-        this.articles.desc = '';
-        this.articles.tags = '';
-        this.articles.time = '';
-        localStorage.setItem('client_title', '钢铁是怎样炼成的');
-        localStorage.setItem('client_desc', '钢铁冶炼技术指南');
-        localStorage.setItem('client_tags', JSON.stringify(['冶金', '炼铁', '挖矿', '淘沙', '烧火', '真的想不出了', '还有两个', '还有一个', '还有0个']));
-        localStorage.setItem('client_auth', 'Posted by Les1ie on June 6, 2018')
+        //页面初始化时向后端请求数据
+        // let article_id = this.$route.query.article_id;
+        let article_id = 18;
+        let data = {
+            article_id: article_id
+        }
+        let params = {
+            params: Encrypt.encrypt(JSON.stringify(data))
+        }
+        let _this = this;
+        //ajax请求获取数据
+        axios.get('http://127.0.0.1:5000/detail_article',{
+            params: params
+        }).then((response) => {
+            let data = response.data;
+            switch(data.code) {
+                case 200:
+                    let result = data.data.article;
+                    _this.$emit('loadArticle', result);
+                    _this.content = result.content;
+                    break;
+                default:
+            }
+        }).catch((error) => {
+            // _this.$Message.eror({
+            //     content:  "处理数据出现问题： " + error,
+            //     duration: 2
+            // });
+            console.log(error)
+        })
+    },
+    destroyed() {
+        let result = {
+            title: '首页标题',
+            desc: '',
+            tags: [],
+            publish_time: ''
+        }
+        this.$emit('loadArticle', result);
+    },
+    computed: {
+        compiledMarkdown: function () {
+            return marked(this.content, { sanitize: true })
+        }
     }
 }
 </script>
