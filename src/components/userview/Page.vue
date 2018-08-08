@@ -1,12 +1,14 @@
 <template>
     <div id="page">
         <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-            <a class="pagination-previous">Previous</a>
+            <a class="pagination-previous" :disabled='true' @click="">Previous</a>
             <a class="pagination-next">Next page</a>
             <ul class="pagination-list">
                 <li><a class="pagination-link" aria-label="Goto page" 
                 v-for="(item, index) in pages" 
-                :key="index">{{item}}</a></li>
+                :key="index" 
+                :class="{'is-current': item == current}"
+                @click="onChange(item)">{{item}}</a></li>
                 <!-- <li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
                 <li><a class="pagination-link" aria-label="Goto page 2">2</a></li>
                 <li><a class="pagination-link" aria-label="Goto page 3">3</a></li>
@@ -25,18 +27,70 @@
 export default {
     data() {
         return {
-            pages: 10,
-            currentPage: 1
+            pages: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            current: 1,
+            beginPage: 1,
+            endPage: 10,
+            totalPags: 16
         }
     },
     props: ['total'],
     methods: {
-        onChange() {
+        //点击页面触发事件
+        onChange(currentPage) {
+            /**总页数小于11，首页为1，尾页为总页数 */
+            if (this.totalPags < 11) {
+                this.beginPage = 1;
+                this.endPage = this.totalPags;
+                //如果总页数小于11，直接返回该页数
+                this.pages = this.circleAppend(1, this.totalPags);
+                return currentPage;
+            } else {
+                let begin = currentPage - 5;
+                let end = currentPage + 4;
+                if (begin > 1 && end < this.totalPags) {
+                    //看不到首尾页数阶段
+                    this.pages = this.circleAppend(begin, end);
+                } else if(begin <= 1 && end < this.totalPags) {
+                    //看得到开始值，看不到结束值
+                    this.beginPage = 1;
+                    this.endPage = 10;
+                    this.pages = this.circleAppend(1, 10);
+                } else if(begin > 1 && end >= this.totalPags) {
+                    //看不到开始值，看得到结束值
+                    this.endPage = this.totalPags;
+                    this.beginPage = this.totalPags - 9;
+                    this.pages = this.circleAppend(this.totalPags - 9, this.totalPags);
+                } else {
+                    //看得到开始值，看得到结束值
+                    this.beginPage = 1;
+                    this.endPage = this.totalPags;
+                    this.pages = this.circleAppend(1, this.totalPags);
+                }
+            }
+            
+
+            this.current = currentPage;
             this.$emit('onChange', currentPage)
+        },
+        //点击前一页按钮触发事件
+        previous() {
+            
+        },
+        //点击下一页按钮触发事件
+        next() {
+
+        },
+        circleAppend(start, end) {
+            let pageList = []
+            for (let i = start; i <= end; i++) {
+                pageList.push(i);
+            }
+            return pageList;
         }
     },
     mounted() {
-        console.log('page')
+        
     }
 }
 </script>
