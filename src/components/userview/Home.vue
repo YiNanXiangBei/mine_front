@@ -137,7 +137,6 @@ export default {
         },
         //从子页面获取数据
         loadArticle(article) {
-            console.log(article)
             this.articles.title = article.title;
             this.articles.desc = article.desc;
             this.articles.tags = article.tags;

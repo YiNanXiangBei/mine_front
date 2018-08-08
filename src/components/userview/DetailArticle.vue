@@ -17,8 +17,6 @@
             <div class="container is-fluid">
                 <div class="column is-three-fifths is-offset-one-fifth">
                     <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-                        <!-- <router-link :to="{path: 'detail_article', query: {article_id: previous}}" class="pagination-previous" :disabled="previousDisabled">Previous</router-link>
-                        <router-link :to="{path: 'detail_article', query: {article_id: next}}" class="pagination-next" :disabled="nextDisabled">Next page</router-link> -->
                         <a class="pagination-previous" :disabled="previousDisabled" @click="redirect2Deatil(previous)">Previous</a>
                         <a class="pagination-next" :disabled="nextDisabled" @click="redirect2Deatil(next)">Next page</a>
                     </nav>
@@ -57,7 +55,9 @@ export default {
             next: '',
             previous: '',
             previousDisabled: true,
-            nextDisabled: true
+            nextDisabled: true,
+            isTop: true,
+            timer: null
         }
     },
     methods: {
@@ -102,14 +102,15 @@ export default {
             this.getDetailArticle(article_id);
             // document.body.scrollTop = 0
             // document.documentElement.scrollTop = 0
-            let timer = setInterval(function(){
+            this.timer = setInterval(() =>{
+                console.log(1)
                 var osTop = document.documentElement.scrollTop || document.body.scrollTop;
                 var ispeed = Math.floor(-osTop / 5);
                 document.documentElement.scrollTop = document.body.scrollTop = osTop + ispeed;
-                let isTop = true
-                if(osTop == 0){
-                    clearInterval(timer)
+                if(osTop == 0 ){
+                    clearInterval(this.timer)
                 }
+                this.isTop = true
             },30)
         }
     },
@@ -117,6 +118,15 @@ export default {
         //页面初始化时向后端请求数据
         let article_id = this.$route.query.article_id;
         this.getDetailArticle(article_id);
+
+        document.onscroll = ()=> {
+            console.log(2)
+            if (!this.isTop) {
+                console.log(false)
+                clearInterval(this.timer)
+            }
+            this.isTop = false
+        }
     },
     destroyed() {
         let result = {

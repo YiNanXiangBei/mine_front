@@ -51,6 +51,8 @@
 </template>
 
 <script>
+import Encrypt from '../../util/encrypt.js'
+import axios from 'axios'
 export default {
   data() {
     return {
@@ -58,13 +60,31 @@ export default {
     }
   },
   methods: {
-    //依靠标签名称获取该标签下所有数据
-    getArticlesByTag() {
-      console.log(this.$route.params.tag)
+    //依靠标签id称获取该标签下所有数据
+    getArticlesByTagId(tag_id) {
+      let data = {
+          tag_id: tag_id
+      }
+      console.log(data)
+      let params = {
+          params: Encrypt.encrypt(JSON.stringify(data))
+      }
+      axios.get('http://127.0.0.1:5000/tag_articles', {
+        params: params
+      })
+      .then((response) => {
+        console.log(response)
+      })
+      .catch((error) => {
+        console.log(error)
+      })
+
     }
   },
   mounted() {
-    console.log(this.$route.query.tag)
+    console.log(this.$route.query.tag_id)
+    let tag_id = this.$route.query.tag_id;
+    this.getArticlesByTagId(tag_id);
   }
 }
 </script>
