@@ -51,7 +51,7 @@
       <div class="container is-fluid">
         <div class="columns">
           <div class="column is-three-fifths is-offset-one-fifth">
-            <page></page>
+            <page @onChange="getArticles"></page>
           </div>
         </div>
       </div>
@@ -72,10 +72,10 @@ export default {
   },
   methods: {
     //依靠标签id称获取该标签下所有数据
-    getArticlesByTagId(tag_id) {
+    getArticlesByTagId(tag_id, page_no) {
       let data = {
           tag_id: tag_id,
-          page_no: this.page
+          page_no: page_no
       }
       console.log(data)
       let params = {
@@ -91,12 +91,15 @@ export default {
         console.log(error)
       })
 
+    },
+    //获取当前点击页面pageno
+    getArticles(currentPage) {
+      this.getArticlesByTagId(this.$route.query.tag_id, currentPage)
     }
   },
   mounted() {
-    console.log(this.$route.query.tag_id)
     let tag_id = this.$route.query.tag_id;
-    this.getArticlesByTagId(tag_id);
+    this.getArticlesByTagId(tag_id, this.page);
   },
   components: {
       page: Page
