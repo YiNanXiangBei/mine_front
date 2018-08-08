@@ -100,10 +100,7 @@ export default {
         redirect2Deatil(article_id) {
             this.$router.push({path: 'detail_article', query: {article_id: article_id}});
             this.getDetailArticle(article_id);
-            // document.body.scrollTop = 0
-            // document.documentElement.scrollTop = 0
             this.timer = setInterval(() =>{
-                console.log(1)
                 var osTop = document.documentElement.scrollTop || document.body.scrollTop;
                 var ispeed = Math.floor(-osTop / 5);
                 document.documentElement.scrollTop = document.body.scrollTop = osTop + ispeed;
@@ -118,11 +115,8 @@ export default {
         //页面初始化时向后端请求数据
         let article_id = this.$route.query.article_id;
         this.getDetailArticle(article_id);
-
-        document.onscroll = ()=> {
-            console.log(2)
+        window.onscroll = ()=> {
             if (!this.isTop) {
-                console.log(false)
                 clearInterval(this.timer)
             }
             this.isTop = false
