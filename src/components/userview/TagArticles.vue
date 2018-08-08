@@ -47,23 +47,35 @@
 
       </div>
     </section>
+    <section class="section">
+      <div class="container is-fluid">
+        <div class="columns">
+          <div class="column is-three-fifths is-offset-one-fifth">
+            <page></page>
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
 import Encrypt from '../../util/encrypt.js'
 import axios from 'axios'
+import Page from './Page.vue'
 export default {
   data() {
     return {
-      isShow: false
+      isShow: false,
+      page: 1
     }
   },
   methods: {
     //依靠标签id称获取该标签下所有数据
     getArticlesByTagId(tag_id) {
       let data = {
-          tag_id: tag_id
+          tag_id: tag_id,
+          page_no: this.page
       }
       console.log(data)
       let params = {
@@ -85,6 +97,9 @@ export default {
     console.log(this.$route.query.tag_id)
     let tag_id = this.$route.query.tag_id;
     this.getArticlesByTagId(tag_id);
+  },
+  components: {
+      page: Page
   }
 }
 </script>
