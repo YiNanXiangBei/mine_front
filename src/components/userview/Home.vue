@@ -91,9 +91,8 @@
             <div class="container">
                 <div class="content has-text-centered">
                     <p>
-                        <strong>Bulma</strong> by <a href="https://jgthms.com">Jeremy Thomas</a>. The source code is licensed
-                        <a href="http://opensource.org/licenses/mit-license.php">MIT</a>. The website content
-                        is licensed <a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY NC SA 4.0</a>.
+                        <strong>Mine Blog</strong> by <a href="https://github.com/YiNanXiangBei">YiNanXiangBei</a> and <a href="https://github.com/Jasbeauty">Jasmine</a>. The source code is licensed
+                        <a href="https://github.com/YiNanXiangBei/mine_front/blob/master/LICENSE">Apache-2.0</a>.
                     </p>
                 </div>
             </div>
@@ -105,7 +104,6 @@
 </template>
 <script>
 import Search from './Search'
-import Encrypt from '../../util/encrypt.js'
 export default {
     data() {
         return {
@@ -142,6 +140,7 @@ export default {
             this.articles.tags = article.tags;
             this.articles.auth = article.publish_time
         }
+        
     },
     mounted() {
         //页面为/则直接跳转到/index
@@ -174,9 +173,6 @@ export default {
     opacity:0.8;
     filter:alpha(opacity=80);
 }
-/* #home{
-    height: 2000px;
-} */
 .post-meta {
     font-family: Lora,'Times New Roman',serif
 }

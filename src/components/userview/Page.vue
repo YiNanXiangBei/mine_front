@@ -1,6 +1,6 @@
 <template>
     <div id="page">
-        <nav class="pagination is-centered" role="navigation" aria-label="pagination">
+        <nav class="pagination is-centered" role="navigation" aria-label="pagination" v-if="showPages">
             <a class="pagination-previous" :disabled='previousDisabled' @click="previous">Previous</a>
             <a class="pagination-next" :disabled='nextDisabled' @click="next">Next page</a>
             <ul class="pagination-list">
@@ -19,9 +19,12 @@ export default {
         return {
             pages: [],
             current: 1,
-            totalPags: 16,
+            totalPags: 0,
             previousDisabled: true,
-            nextDisabled: false
+            nextDisabled: false,
+            isTop: true,
+            timer: null,
+            showPages: true
         }
     },
     props: ['total'],
@@ -30,8 +33,15 @@ export default {
             this.totalPags = Math.ceil(val / 7);
             if (this.totalPags == 1) {
                 this.nextDisabled = true;
+                this.showPages = false;
+            }else if (this.totalPags > 10) {
+                this.showPages = true;
+                this.pages = this.circleAppend(1, 10);
+            } else {
+                this.showPages = true;
+                this.pages = this.circleAppend(1, this.totalPags);
             }
-            this.pages = this.circleAppend(1, this.totalPags);
+            
             
         }
     },
@@ -74,6 +84,7 @@ export default {
             }
             this.current = currentPage;
             this.$emit('onChange', currentPage);
+            this.scrollToTop();
         },
         //点击前一页按钮触发事件
         previous() {
@@ -83,16 +94,33 @@ export default {
         next() {
             this.onChange(this.current += 1)
         },
+        //向数组中添加页数范围
         circleAppend(start, end) {
             let pageList = []
             for (let i = start; i <= end; i++) {
                 pageList.push(i);
             }
             return pageList;
+        },
+        scrollToTop() {
+            this.timer = setInterval(() =>{
+                var osTop = document.documentElement.scrollTop || document.body.scrollTop;
+                var ispeed = Math.floor(-osTop / 5);
+                document.documentElement.scrollTop = document.body.scrollTop = osTop + ispeed;
+                if(osTop == 0 ){
+                    clearInterval(this.timer)
+                }
+                this.isTop = true
+            },30)
         }
     },
     mounted() {
-        
+        window.onscroll = ()=> {
+            if (!this.isTop) {
+                clearInterval(this.timer)
+            }
+            this.isTop = false
+        }
     }
 }
 </script>

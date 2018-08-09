@@ -13,7 +13,7 @@
                 </div>
             </div>
         </section>
-        <section class="section">
+        <section class="section" v-if="showPagination">
             <div class="container is-fluid">
                 <div class="column is-three-fifths is-offset-one-fifth">
                     <nav class="pagination is-centered" role="navigation" aria-label="pagination">
@@ -57,7 +57,8 @@ export default {
             previousDisabled: true,
             nextDisabled: true,
             isTop: true,
-            timer: null
+            timer: null,
+            showPagination: true
         }
     },
     methods: {
@@ -69,7 +70,6 @@ export default {
             let params = {
                 params: Encrypt.encrypt(JSON.stringify(data))
             }
-            let _this = this;
             //ajax请求获取数据
             axios.get('http://127.0.0.1:5000/detail_article',{
                 params: params
@@ -83,18 +83,17 @@ export default {
                         this.previous = result.previous == null ? null:result.previous;
                         this.previousDisabled = result.previous == null ? true:false;
                         this.next = result.next == null ? null:result.next;
-                        this.nextDisabled = result.next == null ? true : false;
-
-                            
+                        this.nextDisabled = result.next == null ? true : false; 
+                        this.showPagination = true;
                         break;
                     default:
+                        this.showPagination = false;
                 }
             }).catch((error) => {
-                // _this.$Message.eror({
-                //     content:  "处理数据出现问题： " + error,
-                //     duration: 2
-                // });
-                console.log(error)
+                this.$Message.error({
+                    content: '出现异常！异常原因： ' + error,
+                    duration: 2
+                });
             })
         },
         redirect2Deatil(article_id) {

@@ -16,9 +16,8 @@
                   </figure>
                   <div class="media-content">
                     <div class="content">
-                      <strong>{{article.title}}</strong>
-                      <p class="hide-content">
-                        {{article.content}}
+                      <strong class="title is-5">{{article.title}}</strong>
+                      <p class="hide-content is-italic" v-html="htmlToText(compiledMarkdown(article.content))">
                       </p>
                     </div>
                   </div>
@@ -33,7 +32,8 @@
       <div class="container is-fluid">
         <div class="columns">
           <div class="column is-three-fifths is-offset-one-fifth">
-            <page @onChange="getArticles" :total="total"></page>
+            <page @onChange="getArticles" :total="total" v-if="showPage"></page>
+            <h4 class="subtitle is-4" v-if="showTip">没有找到相关文章！</h4>
           </div>
         </div>
       </div>
@@ -45,13 +45,27 @@
 import Encrypt from '../../util/encrypt.js'
 import axios from 'axios'
 import Page from './Page.vue'
+import marked from 'marked'
+var rendererMD = new marked.Renderer()
+marked.setOptions({
+    renderer: rendererMD,
+    gfm: true,
+    tables: true,
+    breaks: false,
+    pedantic: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false
+})
 export default {
   data() {
     return {
       showNo: -1,
       page: 1,
       total: 0,
-      articles: []
+      articles: [],
+      showTip: false,
+      showPage: true
     }
   },
   methods: {
@@ -69,11 +83,22 @@ export default {
       })
       .then((response) => {
         console.log(response)
-        this.articles = response.data.data.articles;
-        this.total = response.data.data.total;
+        let data = response.data.data;
+        if (data.total == 0) {
+          this.showTip = true;
+          this.showPage = false;
+        } else {
+          this.articles = data.articles;
+          this.total = data.total;
+          this.showTip = false;
+          this.showPage = true;
+        }
       })
       .catch((error) => {
-        console.log(error)
+        this.$Message.error({
+            content: '出现异常！异常原因： ' + error,
+            duration: 2
+        });
       })
 
     },
@@ -88,6 +113,14 @@ export default {
     //鼠标离开恢复原样
     onMouseout() {
       this.showNo = -1;
+    },
+    //markdown to html
+    compiledMarkdown: function (content) {
+        return marked(content, { sanitize: true })
+    },
+    //html to txt
+    htmlToText(html) {
+      return html.replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi,'').replace(/<[^>]+?>/g,'').replace(/\s+/g,' ').replace(/ /g,' ').replace(/>/g,' ');  
     }
   },
   mounted() {

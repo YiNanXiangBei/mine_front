@@ -3,100 +3,45 @@
         <section class="section">
             <div class="container is-fluid">
                 <div class="columns is-multiline">
-                    <div class="column is-three-quarters">               
+                    <div class="column is-four-fifths">               
                         <div class="columns">
                             <div class="column is-offset-one-fifth is-four-fifths">
                                 <section class="section">
-                                    <div class="content">
-                                        <router-link :to="{path: '/detail_article', query: {article_id: 17}}" class="detail-article" tag="div">
-                                            <h3 class="title is-spaced">主标题</h3>
-                                            <h5 class="subtitle">副标题</h5>
-                                            <p>
-                                                Curabitur accumsan turpis pharetra augue tincidunt blandit. Quisque condimentum maximus mi, sit amet commodo arcu rutrum id. Proin pretium urna vel cursus venenatis. Suspendisse potenti. Etiam mattis sem rhoncus lacus dapibus facilisis. Donec at dignissim dui. Ut et neque nisl.
+                                    <div class="content" v-for="(article, index) in articles" :key="index">
+                                        <router-link 
+                                            :to="{path: '/detail_article', query: {article_id: article.id}}" 
+                                            class="detail-article" 
+                                            tag="div">
+                                            <h3 class="title is-spaced">{{article.title}}</h3>
+                                            <h5 class="subtitle">{{article.desc}}</h5>
+                                            <p class="hide-content" v-html="htmlToText(compiledMarkdown(article.content))">
+                                                
                                             </p>
                                            
                                         </router-link>
                                         <p></p>
-                                         <p class="post-meta">Posted by Les1ie on June 6, 2018</p>
-                                        <hr>
-                                    </div>
-                                    <div class="content">
-                                        <h3 class="title is-spaced">主标题</h3>
-                                        <h5 class="subtitle">副标题</h5>
-                                        <p>
-                                            Curabitur accumsan turpis pharetra augue tincidunt blandit. Quisque condimentum maximus mi, sit amet commodo arcu rutrum id. Proin pretium urna vel cursus venenatis. Suspendisse potenti. Etiam mattis sem rhoncus lacus dapibus facilisis. Donec at dignissim dui. Ut et neque nisl.
-                                        </p>
-                                        <p class="post-meta">Posted by Les1ie on June 6, 2018</p>
-                                        <hr>
-                                    </div>
-                                    <div class="content">
-                                        <h3 class="title is-spaced">主标题</h3>
-                                        <h5 class="subtitle">副标题</h5>
-                                        <p>
-                                            Curabitur accumsan turpis pharetra augue tincidunt blandit. Quisque condimentum maximus mi, sit amet commodo arcu rutrum id. Proin pretium urna vel cursus venenatis. Suspendisse potenti. Etiam mattis sem rhoncus lacus dapibus facilisis. Donec at dignissim dui. Ut et neque nisl.
-                                        </p>
-                                        <p class="post-meta">Posted by Les1ie on June 6, 2018</p>
-                                        <hr>
-                                    </div>
-                                    <div class="content">
-                                        <h3 class="title is-spaced">主标题</h3>
-                                        <h5 class="subtitle">副标题</h5>
-                                        <p>
-                                            Curabitur accumsan turpis pharetra augue tincidunt blandit. Quisque condimentum maximus mi, sit amet commodo arcu rutrum id. Proin pretium urna vel cursus venenatis. Suspendisse potenti. Etiam mattis sem rhoncus lacus dapibus facilisis. Donec at dignissim dui. Ut et neque nisl.
-                                        </p>
-                                        <p class="post-meta">Posted by Les1ie on June 6, 2018</p>
-                                        <hr>
-                                    </div>
-                                    <div class="content">
-                                        <h3 class="title is-spaced">主标题</h3>
-                                        <h5 class="subtitle">副标题</h5>
-                                        <p>
-                                            Curabitur accumsan turpis pharetra augue tincidunt blandit. Quisque condimentum maximus mi, sit amet commodo arcu rutrum id. Proin pretium urna vel cursus venenatis. Suspendisse potenti. Etiam mattis sem rhoncus lacus dapibus facilisis. Donec at dignissim dui. Ut et neque nisl.
-                                        </p>
-                                        <p class="post-meta">Posted by Les1ie on June 6, 2018</p>
-                                        <hr>
-                                    </div>
-                                    <div class="content">
-                                        <h3 class="title is-spaced">主标题</h3>
-                                        <h5 class="subtitle">副标题</h5>
-                                        <p>
-                                            Curabitur accumsan turpis pharetra augue tincidunt blandit. Quisque condimentum maximus mi, sit amet commodo arcu rutrum id. Proin pretium urna vel cursus venenatis. Suspendisse potenti. Etiam mattis sem rhoncus lacus dapibus facilisis. Donec at dignissim dui. Ut et neque nisl.
-                                        </p>
-                                        <p class="post-meta">Posted by Les1ie on June 6, 2018</p>
-                                        <hr>
-                                    </div>
-                                    <div class="content">
-                                        <h3 class="title is-spaced">主标题</h3>
-                                        <h5 class="subtitle">副标题</h5>
-                                        <p>
-                                            Curabitur accumsan turpis pharetra augue tincidunt blandit. Quisque condimentum maximus mi, sit amet commodo arcu rutrum id. Proin pretium urna vel cursus venenatis. Suspendisse potenti. Etiam mattis sem rhoncus lacus dapibus facilisis. Donec at dignissim dui. Ut et neque nisl.
-                                        </p>
-                                        <p class="post-meta">Posted by Les1ie on June 6, 2018</p>
+                                         <p class="post-meta is-italic">{{article.publish_time}}</p>
                                         <hr>
                                     </div>
                                 </section>
                                 <section class="section">
-                                    <nav class="pagination is-centered" role="navigation" aria-label="pagination">
-                                    <a class="pagination-previous">Previous</a>
-                                    <a class="pagination-next">Next page</a>
-                                    <ul class="pagination-list">
-                                        <li><a class="pagination-link" aria-label="Goto page 1">1</a></li>
-                                        <li><span class="pagination-ellipsis">&hellip;</span></li>
-                                        <li><a class="pagination-link" aria-label="Goto page 45">45</a></li>
-                                        <li><a class="pagination-link is-current" aria-label="Page 46" aria-current="page">46</a></li>
-                                        <li><a class="pagination-link" aria-label="Goto page 47">47</a></li>
-                                        <li><span class="pagination-ellipsis">&hellip;</span></li>
-                                        <li><a class="pagination-link" aria-label="Goto page 86">86</a></li>
-                                    </ul>
-                                    </nav>
+                                    <page @onChange="getAllArticles" :total="total" v-if="showPage"></page>
+                                    <h4 class="title is-4" v-if="showTip">这个人很懒没有写过文章！</h4>
                                 </section>
                             </div>
                         </div>    
                     </div>
                     <div class="column is-hidden-mobile">
-                        <section class="section">
+                        <section class="section hot-content">
                             <div class="box">
-                                最热文章
+                                <h3 class="title is-6">最热文章</h3>
+                                <p v-for="(article, index) in topArticles"
+                                :key="index">
+                                    <router-link 
+                                    :to="{path: '/detail_article', query: {article_id: article.id}}"
+                                    >{{article.title}}</router-link>
+                                </p>
+                                
                             </div>
                         </section>
                     </div>
@@ -107,14 +52,78 @@
     </div>
 </template>
 <script>
+import Page from './Page.vue'
+import Encrypt from '../../util/encrypt.js'
+import axios from 'axios'
+import marked from 'marked'
+var rendererMD = new marked.Renderer()
+marked.setOptions({
+    renderer: rendererMD,
+    gfm: true,
+    tables: true,
+    breaks: false,
+    pedantic: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false
+})
 export default {
     data() {
         return {
-            
+            total: 0,
+            articles: [],
+            showPage: true,
+            showTip: false,
+            topArticles: []
         }
     },
     methods: {
-
+        //获取文章数据
+        getAllArticles(page_no) {
+            let data = {
+                page: page_no
+            }
+            let params = {
+                params: Encrypt.encrypt(JSON.stringify(data))
+            }
+            axios.get('http://127.0.0.1:5000/index', {
+                params: params
+            })
+            .then((response) => {
+                console.log(response);
+                let data = response.data.data;
+                if (data == null) {
+                    this.showPage = false;
+                    this.showTip = true;
+                } else {
+                    this.showPage = true;
+                    this.showTip = false;
+                    this.total = data.total;
+                    this.articles = data.articles;
+                    this.topArticles = data.top_articles
+                }
+            })
+            .catch((error) => {
+                this.$Message.error({
+                    content: '出现异常！异常原因： ' + error,
+                    duration: 2
+                });
+            })
+        },
+        //markdown to html
+        compiledMarkdown: function (content) {
+            return marked(content, { sanitize: true })
+        },
+        //html to txt
+        htmlToText(html) {
+        return html.replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi,'').replace(/<[^>]+?>/g,'').replace(/\s+/g,' ').replace(/ /g,' ').replace(/>/g,' ');  
+        }
+    },
+    components: {
+        page: Page
+    },
+    mounted() {
+        this.getAllArticles(1);
     }
 }
 </script>
@@ -124,6 +133,16 @@ export default {
 }
 articles {
     min-height: 740px;
+}
+.hide-content {
+  overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;	
+  -webkit-line-clamp: 4;	
+  -webkit-box-orient: vertical;
+}
+.hot-content {
+    padding: 3rem 0;
 }
 </style>
 
