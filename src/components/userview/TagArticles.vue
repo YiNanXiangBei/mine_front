@@ -2,46 +2,28 @@
   <div id="tag_articles">
     <section class="section">
       <div class="container is-fluid">
-        <div class="columns">
-          <div class="column is-three-fifths is-offset-one-fifth" :class="{'column-style': isShow}" @mouseover="isShow = !isShow" @mouseout="isShow = !isShow">
-              <router-link :to="{path: '/detail_article', query: {article_id: 17}}" tag="div" class="detail-article">
+        <div class="columns" v-for="(article, index) in articles" :v-for="index">
+          <div class="column is-three-fifths is-offset-one-fifth" 
+          :class="{'column-style': showNo == index}" 
+          @mouseover="onMouseover(index)" 
+          @mouseout="onMouseout()">
+              <router-link :to="{path: '/detail_article', query: {article_id: article.id}}" tag="div" class="detail-article">
                 <article class="media">
                   <figure class="media-left is-hidden-mobile">
                     <p class="image is-128x128">
-                      <img src="https://lqzhgood.github.io/bulma-docs-cn/images/placeholders/128x128.png">
+                      <img :src="article.back_url" src="https://avatars2.githubusercontent.com/u/39959737?s=460&v=4">
                     </p>
                   </figure>
                   <div class="media-content">
                     <div class="content">
-                      <strong>标题</strong>
-                      <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
+                      <strong>{{article.title}}</strong>
+                      <p class="hide-content">
+                        {{article.content}}
                       </p>
                     </div>
                   </div>
                 </article>
-              </router-link>
-              
-          </div>
-        </div>
-        
-        <div class="columns">
-          <div class="column is-three-fifths is-offset-one-fifth" :class="{'column-style': isShow}" @mouseover="isShow = !isShow" @mouseout="isShow = !isShow">
-              <article class="media">
-                <figure class="media-left is-hidden-mobile">
-                  <p class="image is-128x128">
-                    <img src="https://lqzhgood.github.io/bulma-docs-cn/images/placeholders/128x128.png">
-                  </p>
-                </figure>
-                <div class="media-content">
-                  <div class="content">
-                    <strong>标题</strong>
-                    <p>
-                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin ornare magna eros, eu pellentesque tortor vestibulum ut. Maecenas non massa sem. Etiam finibus odio quis feugiat facilisis.
-                    </p>
-                  </div>
-                </div>
-              </article>
+              </router-link> 
           </div>
         </div>
 
@@ -51,7 +33,7 @@
       <div class="container is-fluid">
         <div class="columns">
           <div class="column is-three-fifths is-offset-one-fifth">
-            <page @onChange="getArticles"></page>
+            <page @onChange="getArticles" :total="total"></page>
           </div>
         </div>
       </div>
@@ -66,8 +48,10 @@ import Page from './Page.vue'
 export default {
   data() {
     return {
-      isShow: false,
-      page: 1
+      showNo: -1,
+      page: 1,
+      total: 0,
+      articles: []
     }
   },
   methods: {
@@ -77,7 +61,6 @@ export default {
           tag_id: tag_id,
           page_no: page_no
       }
-      console.log(data)
       let params = {
           params: Encrypt.encrypt(JSON.stringify(data))
       }
@@ -86,6 +69,8 @@ export default {
       })
       .then((response) => {
         console.log(response)
+        this.articles = response.data.data.articles;
+        this.total = response.data.data.total;
       })
       .catch((error) => {
         console.log(error)
@@ -95,6 +80,14 @@ export default {
     //获取当前点击页面pageno
     getArticles(currentPage) {
       this.getArticlesByTagId(this.$route.query.tag_id, currentPage)
+    },
+    //鼠标放上去显示阴影
+    onMouseover(index) {
+      this.showNo = index;
+    },
+    //鼠标离开恢复原样
+    onMouseout() {
+      this.showNo = -1;
     }
   },
   mounted() {
@@ -120,5 +113,13 @@ export default {
 
 #tag_articles {
   min-height: 740px;
+}
+/* 隐藏多余文字 */
+.hide-content {
+  overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;	
+  -webkit-line-clamp: 4;	
+  -webkit-box-orient: vertical;
 }
 </style>

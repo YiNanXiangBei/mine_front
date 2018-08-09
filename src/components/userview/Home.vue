@@ -79,7 +79,7 @@
                     </h2>
                     <h6 class="subtitle is-6 is-italic">{{ articles.auth }}</h6>
                     <div class="tags">
-                        <span class="tag" :class="[randomClass(index)]" v-for="(item, index) in articles.tags" :key="index" @click="redirect2TagArticle(item.tag)">{{item.tag}}</span>
+                        <span class="tag" :class="[randomClass(index)]" v-for="(item, index) in articles.tags" :key="index" @click="redirect2TagArticle(item.id)">{{item.tag}}</span>
                     </div>
                 </div>
             </div>
@@ -133,7 +133,7 @@ export default {
         },
         //点击标签跳转到tag_articles页面
         redirect2TagArticle(val) {
-            this.$router.push({path: 'tag_articles', query: {tag: val}});
+            this.$router.push({path: 'tag_articles', query: {tag_id: val}});
         },
         //从子页面获取数据
         loadArticle(article) {
