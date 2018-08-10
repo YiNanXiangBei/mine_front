@@ -21,22 +21,10 @@
                             <p class="image" v-if="showResultImg">
                                 <img src="../../assets/back.jpg">
                             </p>
-
-                            <!-- <router-link 
-                            v-for="(article, index) in articles" 
-                            :key="index"
-                            :to="{path: '/detail_article', query: {article_id: article.id}}" 
-                            tag="div"
-                            class="detail-article">
-                                <h1 class="title">{{article.title}}</h1>
-                                <p class="hide-content" v-html="htmlToText(compiledMarkdown(article.content))"></p>
-                                <hr>
-                            </router-link> -->
-
                             <div
                                 v-for="(article, index) in articles" :key="index"
                                 @click="redirect2DetailArticle(article.id)" class="detail-article">
-                                <h1 class="title">{{article.title}}</h1>
+                                <h1 class="title is-5">{{article.title}}</h1>
                                 <p class="hide-content" v-html="htmlToText(compiledMarkdown(article.content))"></p>
                                 <hr>
                             </div>
@@ -45,7 +33,10 @@
                 </section>
             </div>
             
-            <button class="modal-close is-large is-hidden-mobile" aria-label="close" @click="hideSearchPage"></button>
+            <button class="modal-close is-large is-hidden-mobile" 
+            aria-label="close" 
+            @click="hideSearchPage"
+            ></button>
         </div>
 </template>
 <script>
@@ -97,7 +88,6 @@ export default {
                 params: params
             })
             .then((response) => {
-                // console.log(response);
                 let data = response.data.data;
                 if (data == null) {
                     this.showPage = true;
@@ -106,12 +96,14 @@ export default {
                 } else {
                     this.showResultImg = false;
                     this.articles = data.articles;
-                    console.log(this.articles)
                 }
                 
             })
             .catch((error) => {
-                console.log(error);
+                this.$Message.error({
+                    content: '出现异常！异常原因： ' + error,
+                    duration: 2
+                });
             })
 
         },

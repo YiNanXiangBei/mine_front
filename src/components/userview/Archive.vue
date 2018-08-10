@@ -6,25 +6,16 @@
                     <div class="column is-three-fifths is-offset-one-fifth">
                         <h1 class="title">归档</h1>
                         <hr>
-                        <div class="content">
-                            <p>
-                                介绍一些说明内容，这里考虑使用markdown 进行渲染
-                            </p>
-                            <div>
-                                <h4>2016</h4>
-                                <ul>
-                                    <li>1</li>
-                                    <li>2</li>
-                                    <li>3</li>
-                                    <li>4</li>
-                                </ul>
-                                
-                                <h4>2015</h4>
-                                <ul>
-                                    <li>1</li>
-                                    <li>2</li>
-                                    <li>3</li>
-                                    <li>4</li>
+                        <div>
+                            <div v-for="(archive, index) in archives" :key="index" class="content" :id="'archive-'+index">
+                                <h4>{{archive.publish_date}}</h4>
+                                <ul v-for="(article, ind) in archive.articles" :key="ind">
+                                    <li>
+                                        <router-link 
+                                        :to="{path: '/detail_article', query: {article_id: article.id}}"
+                                        >{{article.title}}</router-link>
+                                        ({{article.publish_time}})
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -32,14 +23,12 @@
                     <div class="column">
                         <div class="content is-hidden-mobile">
                             <p>
-                                目录
+                                年份列表
                             </p>
                             <ul>
-                                <li>2018</li>
-                                <li>2017</li>
-                                <li>2016</li>
-                                <li>2015</li>
-                                <li>2014</li>
+                                <li v-for="(archive, index) in archives" :key="index">
+                                    <a href="javascript:void(0)" @click="goAnchor('#archive-'+index)">{{archive.publish_date}}</a>
+                                </li>                            
                             </ul>
                         </div> 
                     </div>
@@ -49,8 +38,37 @@
     </div>
 </template>
 <script>
+import axios from 'axios'
 export default {
-    
+    data() {
+        return {
+            archives: []
+        }
+    },
+    mounted() {
+        axios.get('http://127.0.0.1:5000/archive')
+        .then((response) => {
+            let data = response.data.data;
+            if (data == null) {
+
+            } else {
+                this.archives = data;
+            }
+
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+    },
+    methods: {
+        goAnchor(selector) {
+            console.log(selector)
+            // var anchor = this.$el.querySelector(selector);
+            // console.log(anchor)
+            // document.body.scrollTop = anchor.offsetTop;
+            document.querySelector(selector).scrollIntoView();  
+        }
+    }
 }
 </script>
 <style scoped>
