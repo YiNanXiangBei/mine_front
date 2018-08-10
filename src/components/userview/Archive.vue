@@ -33,6 +33,7 @@
                         </div> 
                     </div>
                 </div>
+                <h4 class="subtitle is-4" v-if="showTip">没有找到相关文章！</h4>
             </div>
         </section>
     </div>
@@ -42,7 +43,8 @@ import axios from 'axios'
 export default {
     data() {
         return {
-            archives: []
+            archives: [],
+            showTip: false
         }
     },
     mounted() {
@@ -50,22 +52,23 @@ export default {
         .then((response) => {
             let data = response.data.data;
             if (data == null) {
-
+                this.showTip = true;
             } else {
                 this.archives = data;
+                this.showTip = false;
             }
 
         })
         .catch((error) => {
-            console.log(error)
+            this.$Message.error({
+                content: '出现异常！异常原因： ' + error,
+                duration: 2
+            });
         })
     },
     methods: {
+        //点击文章年份跳转指定年份文章位置
         goAnchor(selector) {
-            console.log(selector)
-            // var anchor = this.$el.querySelector(selector);
-            // console.log(anchor)
-            // document.body.scrollTop = anchor.offsetTop;
             document.querySelector(selector).scrollIntoView();  
         }
     }
