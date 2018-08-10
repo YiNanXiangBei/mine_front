@@ -2,7 +2,7 @@
   <div id="tag_articles">
     <section class="section">
       <div class="container is-fluid">
-        <div class="columns" v-for="(article, index) in articles" :v-for="index">
+        <div class="columns" v-for="(article, index) in articles" :key="index">
           <div class="column is-three-fifths is-offset-one-fifth" 
           :class="{'column-style': showNo == index}" 
           @mouseover="onMouseover(index)" 

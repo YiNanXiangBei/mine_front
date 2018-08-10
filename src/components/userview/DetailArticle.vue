@@ -134,6 +134,13 @@ export default {
         compiledMarkdown: function () {
             return marked(this.content, { sanitize: true })
         }
+    },
+    watch: {
+        '$route'(to, from) {
+            if (to.query.from) {
+                this.redirect2Deatil(to.query.article_id)
+            }
+        }
     }
 }
 </script>

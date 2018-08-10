@@ -1,7 +1,6 @@
 <template>
      <div class="modal" :class="{'is-active': showSearchPage}">
-            <div class="modal-background" @click="hideSearchPage"></div>
-            
+            <div class="modal-background" @click="hideSearchPage"></div>   
             <div class="modal-card">
                 <button class="delete is-large is-pulled-right is-hidden-tablet" aria-label="close" @click="hideSearchPage"></button>
                 
@@ -19,52 +18,28 @@
                     </div>
                     <div class="box" :class="{height:resultHeight}">
                         <div class="content">
-                            <!-- <p class="image" v-if="showResultImg">
+                            <p class="image" v-if="showResultImg">
                                 <img src="../../assets/back.jpg">
-                            </p> -->
+                            </p>
+
+                            <!-- <router-link 
+                            v-for="(article, index) in articles" 
+                            :key="index"
+                            :to="{path: '/detail_article', query: {article_id: article.id}}" 
+                            tag="div"
+                            class="detail-article">
+                                <h1 class="title">{{article.title}}</h1>
+                                <p class="hide-content" v-html="htmlToText(compiledMarkdown(article.content))"></p>
+                                <hr>
+                            </router-link> -->
+
                             <div
-                                v-for="(article, index) in articles"
-                                :key="index" 
+                                v-for="(article, index) in articles" :key="index"
                                 @click="redirect2DetailArticle(article.id)" class="detail-article">
                                 <h1 class="title">{{article.title}}</h1>
-                                <p>{{article.content}}</p>
+                                <p class="hide-content" v-html="htmlToText(compiledMarkdown(article.content))"></p>
                                 <hr>
                             </div>
-                            <div>
-                                <p v-for="(article, index) in articles" :key="index">
-                                    {{article.title}}
-                                </p>
-                            </div>
-                            <div>
-                                <h1 class="title">文章标题</h1>
-                                <p>文章内容</p>
-                                <hr>
-                            </div>
-                           <!--  <div>
-                                <h1 class="title">文章标题</h1>
-                                <p>文章内容</p>
-                                <hr>
-                            </div>
-                            <div>
-                                <h1 class="title">文章标题</h1>
-                                <p>文章内容</p>
-                                <hr>
-                            </div>
-                            <div>
-                                <h1 class="title">文章标题</h1>
-                                <p>文章内容</p>
-                                <hr>
-                            </div>
-                            <div>
-                                <h1 class="title">文章标题</h1>
-                                <p>文章内容</p>
-                                <hr>
-                            </div>
-                            <div>
-                                <h1 class="title">文章标题</h1>
-                                <p>文章内容</p>
-                                <hr>
-                            </div> -->
                         </div>
                     </div>
                 </section>
@@ -76,6 +51,18 @@
 <script>
 import axios from 'axios'
 import Encrypt from '../../util/encrypt.js'
+import marked from 'marked'
+var rendererMD = new marked.Renderer()
+marked.setOptions({
+    renderer: rendererMD,
+    gfm: true,
+    tables: true,
+    breaks: false,
+    pedantic: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false
+})
 export default {
     data() {
         return {
@@ -89,8 +76,10 @@ export default {
     },
     methods: {
         redirect2DetailArticle(val) {
+            
+            this.$router.push({path: '/detail_article', query: {article_id: val, from: 'search'}});
+            this.showClip = false;
             this.showSearchPage = false;
-            this.$router.push({path: '/detail_article', query: {article_id: val}});
         },
         hideSearchPage() {
             this.showClip = false;
@@ -108,13 +97,15 @@ export default {
                 params: params
             })
             .then((response) => {
-                console.log(response);
+                // console.log(response);
                 let data = response.data.data;
                 if (data == null) {
                     this.showPage = true;
+                    this.articles = [];
+                    this.showResultImg = true;
                 } else {
                     this.showResultImg = false;
-                    this.articles = data;
+                    this.articles = data.articles;
                     console.log(this.articles)
                 }
                 
@@ -123,6 +114,14 @@ export default {
                 console.log(error);
             })
 
+        },
+        //markdown to html
+        compiledMarkdown: function (content) {
+            return marked(content, { sanitize: true })
+        },
+        //html to txt
+        htmlToText(html) {
+            return html.replace(/<(style|script|iframe)[^>]*?>[\s\S]+?<\/\1\s*>/gi,'').replace(/<[^>]+?>/g,'').replace(/\s+/g,' ').replace(/ /g,' ').replace(/>/g,' ');  
         }
     },
     props: [
@@ -140,6 +139,7 @@ export default {
         },
         showClip: {
             handler: function (newVal, oldVal) {
+                console.log(newVal)
                 if (newVal == true) {
                     document.body.classList.add('is-clipped');
                 } else {
@@ -157,6 +157,14 @@ export default {
 
 .detail-article{
   cursor: pointer
+}
+/* 隐藏多余文字 */
+.hide-content {
+  overflow : hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;	
+  -webkit-line-clamp: 4;	
+  -webkit-box-orient: vertical;
 }
 </style>
 
