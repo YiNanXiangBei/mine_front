@@ -5,7 +5,7 @@
             <div class="container is-fluid">
                 <div class="navbar-brand">
                     <a class="navbar-item" href="http://127.0.0.1:8080/index">
-                    <img src="../../../static/black_title.png" alt="Bulma: a modern CSS framework based on Flexbox" width="112" height="28">
+                    <img src="../../../static/black_title.png" alt="Yinan" width="112" height="28">
                     </a>
                     <div class="navbar-burger" :class="{'is-active': isActive}" @click="isActive = !isActive">
                         <span></span>
@@ -16,23 +16,14 @@
                 <div class="navbar-menu" :class="{'is-active': isActive}">
                     <div class="navbar-end">
                         <router-link to="/index" class="navbar-item">首页</router-link>
-                        <!-- <a class="navbar-item is-active">首页</a> -->
                         <router-link to="/archive" class="navbar-item">归档</router-link>
-                        <!-- <a class="navbar-item">归档</a> -->
-                        <!-- <a class="navbar-item">标签</a> -->
                         <router-link to="/tags" class="navbar-item">标签</router-link>
-                        <!-- <a class="navbar-item">关于</a> -->
                         <router-link to="/about" class="navbar-item">关于</router-link>
                         <a class="navbar-item" @click="showSearchPage = true">  
                             <span class="icon">
                                     <i class="fa fa-search" aria-hidden="true"></i>
                             </span>
                         </a>
-                        <!-- <router-link to="/search" class="navbar-item">
-                            <span class="icon">
-                                    <i class="fa fa-search" aria-hidden="true"></i>
-                            </span>
-                        </router-link> -->
                     </div>
                 </div>
             </div>
@@ -44,7 +35,7 @@
                     <div class="container is-fluid">
                         <div class="navbar-brand">
                             <a class="navbar-item">
-                                <img src="../../../static/white_title.png" alt="Logo">
+                                <img src="../../../static/white_title.png" alt="Yinan">
                             </a>
                             <span class="navbar-burger burger" :class="{'is-active': isActive}" data-target="navbarMenuHeroA" @click="isActive = !isActive">
                                 <span></span>

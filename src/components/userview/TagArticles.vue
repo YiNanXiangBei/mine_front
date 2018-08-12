@@ -82,7 +82,6 @@ export default {
         params: params
       })
       .then((response) => {
-        console.log(response)
         let data = response.data.data;
         if (data.total == 0) {
           this.showTip = true;

@@ -131,7 +131,6 @@ export default {
         },
         showClip: {
             handler: function (newVal, oldVal) {
-                console.log(newVal)
                 if (newVal == true) {
                     document.body.classList.add('is-clipped');
                 } else {

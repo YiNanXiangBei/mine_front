@@ -56,7 +56,10 @@ export default {
                 this.tags = response.data.data.tags;
             })
             .catch((error) => {
-                console.log(error)
+                this.$Message.error({
+                    content: '出现异常！异常原因： ' + error,
+                    duration: 2
+                });
             })
         }
     },
