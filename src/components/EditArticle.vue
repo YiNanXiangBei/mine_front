@@ -17,6 +17,13 @@
             </Row>
             <Row>
                 <Col span="18" offset="3">
+                    <FormItem label="背景图片">
+                        <Input size="large" v-model="formValues.back_img" type="text" :autosize='true'></Input>
+                    </FormItem>
+                </Col>
+            </Row>
+            <Row>
+                <Col span="18" offset="3">
                     <FormItem label="标签" prop="tag">
                         <Select
                             v-model="selectOption"
@@ -73,7 +80,8 @@ export default {
             formValues: {
                 title: '',
                 desc: '',
-                content: ''
+                content: '',
+                back_img: ''
             },
             ruleValidate: {
                 title: [
@@ -130,7 +138,8 @@ export default {
                     tags: this.selectOption,
                     title: this.formValues.title,
                     desc: this.formValues.desc,
-                    content: this.formValues.content
+                    content: this.formValues.content,
+                    back_img: this.formValues.back_img
                 },
                 transformRequest: [function(params) {
                     //解决传递数组变成对象的问题
@@ -316,6 +325,7 @@ export default {
                             _this.formValues.title = article.title;
                             _this.formValues.desc = article.desc;
                             _this.formValues.content = article.content;
+                            _this.formValues.back_img  = article.back_img;
                             _this.$store.commit('set_token', response.data.data.token);
                             break;
                         case 400:

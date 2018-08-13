@@ -133,13 +133,39 @@ export default {
 articles {
     min-height: 740px;
 }
+
+
+/* .hide-content {
+    position: relative;
+    line-height: 18px;
+    height: 72px;
+    overflow: hidden;
+}
+
+
+.hide-content::after {
+    content:"...";
+    font-weight:bold;
+    position:absolute;
+    bottom:0;
+    right:0;
+    padding:0 20px 1px 45px;
+    
+    background: -webkit-gradient(linear, left top, right top, from(rgba(255, 255, 255, 0)), to(white), color-stop(50%, white));
+    background: -moz-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+    background: -o-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+    background: -ms-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+    background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
+} */
+
 .hide-content {
   overflow : hidden;
   text-overflow: ellipsis;
   display: -webkit-box;	
   -webkit-line-clamp: 4;	
-  -webkit-box-orient: vertical;
+  -webkit-box-orient: vertical; 
 }
+
 .hot-content {
     padding: 3rem 0;
 }

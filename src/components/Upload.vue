@@ -5,7 +5,7 @@
                 <Upload
                 type="drag"
                 :headers="headers"
-                :max-size="10240"
+                :max-size="102400"
                 :on-exceeded-size="handleMaxSize"
                 :format="['jpg','jpeg','png']"
                 :on-format-error="handleFormatError"

@@ -29,7 +29,7 @@
             </div>
         </nav>
         <!-- 大图片 -->
-        <section class="hero is-primary is-medium is-bold" :style="{backgroundSize: 'cover', background: 'url(' + articles.backImg + ')'}">
+        <section class="hero is-primary is-medium is-bold" :style="{background: 'url(' + articles.backImg + ')'}">
             <div class="hero-head">
                 <nav class="navbar is-transparent">
                     <div class="container is-fluid">
@@ -107,7 +107,7 @@ export default {
                 desc: '',
                 tags: '',
                 auth: '',
-                backImg: 'http://127.0.0.1:5000/image/1534128522.webp'
+                backImg: 'http://127.0.0.1:5000/image/1534164139.webp'
             }
         }
     },
@@ -130,7 +130,8 @@ export default {
             this.articles.title = article.title;
             this.articles.desc = article.desc;
             this.articles.tags = article.tags;
-            this.articles.auth = article.publish_time
+            this.articles.auth = article.publish_time;
+            this.articles.backImg = article.back_url;
         }
         
     },

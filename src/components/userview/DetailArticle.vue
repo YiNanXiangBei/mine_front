@@ -126,7 +126,8 @@ export default {
             title: '首页标题',
             desc: '',
             tags: [],
-            publish_time: ''
+            publish_time: '',
+            back_url: ''
         }
         this.$emit('loadArticle', result);
     },

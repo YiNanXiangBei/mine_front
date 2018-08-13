@@ -17,6 +17,13 @@
             </Row>
             <Row>
                 <Col span="18" offset="3">
+                    <FormItem label="背景图片">
+                        <Input size="large" v-model="formValues.back_img" type="text" :autosize='true'></Input>
+                    </FormItem>
+                </Col>
+            </Row>
+            <Row>
+                <Col span="18" offset="3">
                     <FormItem label="标签" prop="tag">
                         <Select
                             v-model="selectOption"
@@ -74,7 +81,8 @@ export default {
             formValues: {
                 title: '',
                 desc: '',
-                content: ''
+                content: '',
+                back_img: ''
             },
             passagain: '',
             ruleValidate: {
@@ -123,7 +131,8 @@ export default {
                             tags: this.selectOption,
                             title: this.formValues.title.trim(),
                             desc: this.formValues.desc,
-                            content: this.formValues.content
+                            content: this.formValues.content,
+                            back_img: this.formValues.back_img
                         },
                         headers: {
                             Authorization: sessionStorage.getItem('token')
@@ -257,7 +266,7 @@ export default {
         */
         autoSubmit() {
             this.time += 1;
-            if (this.time == 1 * 30) {
+            if (this.time == 1 * 300) {
                 //自动保存数据操作
                 this.buttonDisable = true;
                 this.isAutoSave = true;
@@ -282,6 +291,7 @@ export default {
             this.formValues.title = '';
             this.formValues.desc = '';
             this.formValues.content = '';
+            this.formValues.back_img = '';
             this.selectOption = [];
             if (localStorage.getItem("formValues")) {
                 localStorage.removeItem("formValues");
@@ -313,13 +323,13 @@ export default {
                 } 
             }
         };
-        document.onclick = ()=> {
-            if (this.$route.path === '/sysadmin/publish') {
-                if(this.formValues) {
-                    _this.resetTime();
-                } 
-            }
-        }
+        // document.onclick = ()=> {
+        //     if (this.$route.path === '/sysadmin/publish') {
+        //         if(this.formValues) {
+        //             _this.resetTime();
+        //         } 
+        //     }
+        // }
     }
 
 }
