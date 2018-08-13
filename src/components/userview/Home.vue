@@ -29,9 +29,9 @@
             </div>
         </nav>
         <!-- 大图片 -->
-        <section class="hero is-primary is-medium is-bold">
+        <section class="hero is-primary is-medium is-bold" :style="{backgroundSize: 'cover', background: 'url(' + articles.backImg + ')'}">
             <div class="hero-head">
-                <nav class="navbar">
+                <nav class="navbar is-transparent">
                     <div class="container is-fluid">
                         <div class="navbar-brand">
                             <a class="navbar-item">
@@ -106,7 +106,8 @@ export default {
                 title: '首页标题',
                 desc: '',
                 tags: '',
-                auth: ''
+                auth: '',
+                backImg: 'http://127.0.0.1:5000/image/1534128522.webp'
             }
         }
     },
@@ -169,6 +170,7 @@ export default {
 }
 .tag {
     cursor: pointer;
+    
 }
 </style>
 

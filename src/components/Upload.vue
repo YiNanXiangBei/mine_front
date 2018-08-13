@@ -5,7 +5,7 @@
                 <Upload
                 type="drag"
                 :headers="headers"
-                :max-size="2048"
+                :max-size="10240"
                 :on-exceeded-size="handleMaxSize"
                 :format="['jpg','jpeg','png']"
                 :on-format-error="handleFormatError"
@@ -109,7 +109,7 @@ export default {
         handleMaxSize (file) {
             this.$Notice.warning({
                 title: '超出上传文件最大限制',
-                desc: '文件  ' + file.name + ' 太大，请确保上传文件在2M以内'
+                desc: '文件  ' + file.name + ' 太大，请确保上传文件在10M以内'
             });
         }
     }

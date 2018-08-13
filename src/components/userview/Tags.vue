@@ -8,25 +8,6 @@
                         <hr>
                         <div class="tags">
                             <span class="tag is-medium" v-for="(item, index) in tags" :key="index" @click="redirect2TagArticle(item.id)">{{item.tag}}</span>
-                            <!-- <span class="tag is-medium">Two</span>
-                            <span class="tag is-medium">Three</span>
-                            <span class="tag is-medium">Four</span>
-                            <span class="tag is-medium">Five</span>
-                            <span class="tag is-medium">Six</span>
-                            <span class="tag is-medium">Seven</span>
-                            <span class="tag is-medium">Eight</span>
-                            <span class="tag is-medium">Nine</span>
-                            <span class="tag is-medium">Ten</span>
-                            <span class="tag is-medium">Eleven</span>
-                            <span class="tag is-medium">Twelve</span>
-                            <span class="tag is-medium">Thirteen</span>
-                            <span class="tag is-medium">Fourteen</span>
-                            <span class="tag is-medium">Fifteen</span>
-                            <span class="tag is-medium">Sixteen</span>
-                            <span class="tag is-medium">Seventeen</span>
-                            <span class="tag is-medium">Eighteen</span>
-                            <span class="tag is-medium">Nineteen</span>
-                            <span class="tag is-medium">Twenty</span> -->
                         </div>
                         
                     </div>
