@@ -11,7 +11,7 @@
                 <article class="media">
                   <figure class="media-left is-hidden-mobile">
                     <p class="image is-128x128">
-                      <img :src="article.back_url" src="https://avatars2.githubusercontent.com/u/39959737?s=460&v=4">
+                      <img :src="article.back_url" src="http://127.0.0.1:5000/image/1534240661.webp">
                     </p>
                   </figure>
                   <div class="media-content">
