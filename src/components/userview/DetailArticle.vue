@@ -123,11 +123,11 @@ export default {
     },
     destroyed() {
         let result = {
-            title: '首页标题',
+            title: '长路漫漫',
             desc: '',
             tags: [],
             publish_time: '',
-            back_url: ''
+            back_url: 'http://127.0.0.1:5000/image/1534261401.webp'
         }
         this.$emit('loadArticle', result);
     },

@@ -13,6 +13,9 @@
                 :on-progress="processUpload"
                 :on-success="uploadSuccess"
                 :on-error="uploadError"
+                :data="{
+                    'back_img': 1
+                }"
                 action="http://127.0.0.1:5000/sysadmin/upload_image">
                     <div style="padding: 20px 0">
                         <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>

@@ -29,7 +29,7 @@
             </div>
         </nav>
         <!-- 大图片 -->
-        <section class="hero is-primary is-medium is-bold" :style="{background: 'url(' + articles.backImg + ')'}">
+        <section class="hero is-primary is-medium is-bold" :style="backgroundImg">
             <div class="hero-head">
                 <nav class="navbar is-transparent">
                     <div class="container is-fluid">
@@ -103,11 +103,11 @@ export default {
             isActive: false,
             showSearchPage: false,
             articles: {
-                title: '首页标题',
+                title: '',
                 desc: '',
                 tags: '',
                 auth: '',
-                backImg: 'http://127.0.0.1:5000/image/1534164139.webp'
+                backImg: ''
             }
         }
     },
@@ -135,11 +135,23 @@ export default {
         }
         
     },
+    computed: {
+      backgroundImg () {
+        let pic = `url(${this.articles.backImg}) no-repeat center center  / cover`
+        return {
+          background: pic
+        }
+      }
+    },
     mounted() {
         //页面为/则直接跳转到/index
         let path = this.$route.path;
         if (path === '/') {
             this.$router.replace({path: '/index'})
+        }
+        if (path == '/' || path == '/index') {
+            this.articles.title = '长路漫漫';
+            this.articles.backImg = 'http://127.0.0.1:5000/image/1534261401.webp';
         }
         let _this = this;
         document.onscroll= ()=> {
