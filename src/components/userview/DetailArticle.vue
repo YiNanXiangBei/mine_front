@@ -132,15 +132,18 @@ export default {
 </script>
 <style scoped>
 @font-face {
-    font-family: Monaco;
-    src: url('../../../static/font/Monaco.ttf')
+    font-family: 'Hiragino Sans GB';
+    src: url('../../../static/font/Hiragino-Sans-GB-W3.otf');
+}
+@font-face {
+    font-family: 'Monaco';
+    src: url('../../../static/font/Monaco.ttf');
 }
 #detail_article {
     min-height: 740px;
 }
 .content {
-    font-family: Monaco;
-    font-size: 18px
+    font-family: Arial, "Hiragino Sans GB", 冬青黑, "Microsoft YaHei", 微软雅黑, SimSun, 宋体, Helvetica, Tahoma, "Arial sans-serif";
 }
 </style>
 

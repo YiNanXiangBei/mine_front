@@ -10,11 +10,11 @@
                                     <div class="content" v-for="(article, index) in articles" :key="index">
                                         <router-link 
                                             :to="{path: '/detail_article', query: {article_id: article.id}}" 
-                                            class="detail-article" 
-                                            tag="div">
+                                            class="detail-article"
+                                            >
                                             <h3 class="title is-spaced">{{article.title}}</h3>
-                                            <h5 class="subtitle">{{article.desc}}</h5>
-                                            <p class="hide-content" v-html="htmlToText(compiledMarkdown(article.content))">
+                                            <h5 class="subtitle is-6">{{article.desc}}</h5>
+                                            <p class="hide-content is-italic" v-html="htmlToText(compiledMarkdown(article.content))">
                                                 
                                             </p>
                                            
@@ -26,7 +26,7 @@
                                 </section>
                                 <section class="section">
                                     <page @onChange="getAllArticles" :total="total" v-if="showPage"></page>
-                                    <h4 class="title is-4" v-if="showTip">这个人很懒没有写过文章！</h4>
+                                    <h4 class="title is-4" v-if="showTip">这个家伙很懒没有写过文章！</h4>
                                 </section>
                             </div>
                         </div>    
@@ -36,7 +36,9 @@
                             <div class="box">
                                 <h3 class="title is-6">最热文章</h3>
                                 <p v-for="(article, index) in topArticles"
-                                :key="index">
+                                :key="index"
+                                :style="{'font-size':'13px'}">
+                                {{index + 1}}.
                                     <router-link 
                                     :to="{path: '/detail_article', query: {article_id: article.id}}"
                                     >{{article.title}}</router-link>
@@ -135,15 +137,12 @@ articles {
 }
 
 
-/* .hide-content {
-    position: relative;
-    line-height: 18px;
-    height: 72px;
-    overflow: hidden;
+.hide-content {
+    color: #a3a3a3
 }
 
 
-.hide-content::after {
+/* .hide-content::after {
     content:"...";
     font-weight:bold;
     position:absolute;
@@ -156,7 +155,7 @@ articles {
     background: -o-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
     background: -ms-linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
     background: linear-gradient(to right, rgba(255, 255, 255, 0), white 50%, white);
-} */
+}  */
 
 .hide-content {
   overflow : hidden;
