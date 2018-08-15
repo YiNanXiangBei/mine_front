@@ -99,27 +99,12 @@ export default {
         redirect2Deatil(article_id) {
             this.$router.push({path: 'detail_article', query: {article_id: article_id}});
             this.getDetailArticle(article_id);
-            this.timer = setInterval(() =>{
-                var osTop = document.documentElement.scrollTop || document.body.scrollTop;
-                var ispeed = Math.floor(-osTop / 5);
-                document.documentElement.scrollTop = document.body.scrollTop = osTop + ispeed;
-                if(osTop == 0 ){
-                    clearInterval(this.timer)
-                }
-                this.isTop = true
-            },30)
         }
     },
     mounted() {
         //页面初始化时向后端请求数据
         let article_id = this.$route.query.article_id;
         this.getDetailArticle(article_id);
-        window.onscroll = ()=> {
-            if (!this.isTop) {
-                clearInterval(this.timer)
-            }
-            this.isTop = false
-        }
     },
     destroyed() {
         let result = {
@@ -146,12 +131,16 @@ export default {
 }
 </script>
 <style scoped>
+@font-face {
+    font-family: Monaco;
+    src: url('../../../static/font/Monaco.ttf')
+}
 #detail_article {
     min-height: 740px;
 }
-code {
-    font-family: Monaco, Andale Mono, Courier New, monospace;
-    font-size: 28px
+.content {
+    font-family: Monaco;
+    font-size: 18px
 }
 </style>
 

@@ -123,6 +123,15 @@ export default {
     }
   },
   mounted() {
+    //初始化背景图片和标题
+    let result = {
+        title: '长路漫漫',
+        desc: '',
+        tags: [],
+        publish_time: '',
+        back_url: 'http://127.0.0.1:5000/image/1534261401.webp'
+    }
+    this.$emit('loadArticle', result);
     let tag_id = this.$route.query.tag_id;
     this.getArticlesByTagId(tag_id, this.page);
   },

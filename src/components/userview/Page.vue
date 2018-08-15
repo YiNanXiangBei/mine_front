@@ -105,7 +105,7 @@ export default {
         scrollToTop() {
             this.timer = setInterval(() =>{
                 var osTop = document.documentElement.scrollTop || document.body.scrollTop;
-                var ispeed = Math.floor(-osTop / 5);
+                var ispeed = Math.floor(-osTop / 7);
                 document.documentElement.scrollTop = document.body.scrollTop = osTop + ispeed;
                 if(osTop == 0 ){
                     clearInterval(this.timer)
@@ -117,7 +117,7 @@ export default {
     mounted() {
         window.onscroll = ()=> {
             if (!this.isTop) {
-                clearInterval(this.timer)
+                clearInterval(this.timer);
             }
             this.isTop = false
         }

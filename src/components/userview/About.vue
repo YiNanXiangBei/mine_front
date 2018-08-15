@@ -17,7 +17,16 @@
 </template>
 <script>
 export default {
-    
+    mounted() {
+        let result = {
+            title: '长路漫漫',
+            desc: '',
+            tags: [],
+            publish_time: '',
+            back_url: 'http://127.0.0.1:5000/image/1534261401.webp'
+        }
+        this.$emit('loadArticle', result);
+    }
 }
 </script>
 <style scoped>

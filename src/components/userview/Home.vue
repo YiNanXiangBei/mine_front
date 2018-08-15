@@ -102,6 +102,8 @@ export default {
             scrollTop: 0,
             isActive: false,
             showSearchPage: false,
+            isTop: true,
+            timer: null,
             articles: {
                 title: '',
                 desc: '',
@@ -166,24 +168,57 @@ export default {
                 }
             }
             _this.scrollTop = pageOffset;
+            
         };
+        //监听鼠标滚轮事件，鼠标滚动停止自动滚动
+        window.onmousewheel = ()=> {
+            if (!this.isTop) {
+                clearInterval(this.timer)
+            }
+            this.isTop = false
+        }
     },
     components: {
         search: Search
+    },
+    watch: {
+        //监听页面路由跳转
+        '$route'(to, from) {
+            this.timer = setInterval(() =>{
+                var osTop = document.documentElement.scrollTop || document.body.scrollTop;
+                var ispeed = Math.floor(-osTop / 7);
+                document.documentElement.scrollTop = document.body.scrollTop = osTop + ispeed;
+                if(osTop == 0 ){
+                    clearInterval(this.timer)
+                }
+                this.isTop = true
+            },30)
+        }
     }
 }
 </script>
 <style scoped>
+@font-face {
+    font-family: 'Hiragino Sans GB';
+    src: url('../../../static/font/Hiragino-Sans-GB-W3.otf');
+}
+@font-face {
+    font-family: 'Monaco';
+    src: url('../../../static/font/Monaco.ttf');
+}
 .home-navbar-header {
     opacity:0.8;
     filter:alpha(opacity=80);
 }
-.post-meta {
+/* .post-meta {
     font-family: Lora,'Times New Roman',serif
-}
+} */
 .tag {
     cursor: pointer;
     
+}
+#home {
+     font-family: Arial, "Hiragino Sans GB", 冬青黑, "Microsoft YaHei", 微软雅黑, SimSun, 宋体, Helvetica, Tahoma, "Arial sans-serif";
 }
 </style>
 

@@ -23,7 +23,7 @@
                     <div class="column">
                         <div class="content is-hidden-mobile">
                             <p>
-                                年份列表
+                                目录
                             </p>
                             <ul>
                                 <li v-for="(archive, index) in archives" :key="index">
@@ -48,23 +48,33 @@ export default {
         }
     },
     mounted() {
+        //初始化背景图片和标题
+        let result = {
+            title: '长路漫漫',
+            desc: '',
+            tags: [],
+            publish_time: '',
+            back_url: 'http://127.0.0.1:5000/image/1534261401.webp'
+        }
+        this.$emit('loadArticle', result);
+        //获取后台数据
         axios.get('http://127.0.0.1:5000/archive')
-        .then((response) => {
-            let data = response.data.data;
-            if (data == null) {
-                this.showTip = true;
-            } else {
-                this.archives = data;
-                this.showTip = false;
-            }
+            .then((response) => {
+                let data = response.data.data;
+                if (data == null) {
+                    this.showTip = true;
+                } else {
+                    this.archives = data;
+                    this.showTip = false;
+                }
 
-        })
-        .catch((error) => {
-            this.$Message.error({
-                content: '出现异常！异常原因： ' + error,
-                duration: 2
-            });
-        })
+            })
+            .catch((error) => {
+                this.$Message.error({
+                    content: '出现异常！异常原因： ' + error,
+                    duration: 2
+                });
+            })
     },
     methods: {
         //点击文章年份跳转指定年份文章位置
