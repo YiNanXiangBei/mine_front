@@ -151,6 +151,7 @@ export default {
                             _this.$Spin.hide();
                             response = JSON.parse(response);
                             _this.detailResult(response);
+                            _this.canclePublish();
                         }]
                     })
                 } else {

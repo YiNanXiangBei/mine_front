@@ -23,7 +23,7 @@
                 </div> 
             </div>   
         </section>
-        <section class="section">
+        <section class="section" v-show="showDisqus">
             <div class="container is-fluid">
                 <div class="column is-three-fifths is-offset-one-fifth">
                     <vue-disqus v-if="hackReset" shortname="min-blog-1" :identifier="articleId"   language="zh"></vue-disqus>
@@ -60,18 +60,22 @@ export default {
             timer: null,
             showPagination: true,
             articleId: '',
-            hackReset: true
+            hackReset: false,
+            showDisqus: false
         }
     },
     methods: {
         //获取详细文章数据
         getDetailArticle(article_id) {
+            //验证能否加载disqus
+            this.validateDisqus()
             //强制下一次重新渲染组件
-            this.hackReset = false;
-            this.$nextTick(() => {
-                this.hackReset = true
-            });
-
+            if (this.showDisqus) {
+                this.hackReset = false;
+                this.$nextTick(() => {
+                    this.hackReset = true
+                });
+            }
             this.articleId = article_id.toString();
             let data = {
                 article_id: article_id
@@ -108,6 +112,20 @@ export default {
         redirect2Deatil(article_id) {
             this.$router.push({path: 'detail_article', query: {article_id: article_id}});
             this.getDetailArticle(article_id);
+        },
+        //验证disqus是否可以访问，如果允许访问则加载，否则不允许加载
+        validateDisqus() {
+            axios.get('//disqus.com/next/config.json?' + + new Date().getTime(), {
+                timeout: 2000
+            })
+            .then((response) => {
+                this.showDisqus = true;
+                this.hackReset = true;
+            })
+            .catch((error) => {
+                this.hackReset = false;
+                this.showDisqus = false;
+            })
         }
     },
     mounted() {
