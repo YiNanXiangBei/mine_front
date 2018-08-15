@@ -26,7 +26,7 @@
         <section class="section">
             <div class="container is-fluid">
                 <div class="column is-three-fifths is-offset-one-fifth">
-                    <vue-disqus shortname="min-blog-1" identifier="1"  language="zh"></vue-disqus>
+                    <vue-disqus shortname="min-blog-1"   language="zh"></vue-disqus>
                 </div>
                 
             </div>
@@ -122,11 +122,12 @@ export default {
         }
     },
     watch: {
-        '$route'(to, from) {
-            if (to.query.from) {
-                this.redirect2Deatil(to.query.article_id)
-            }
-        }
+        // '$route'(to, from) {
+        //     if (to.query.from) {
+        //         console.log(1)
+        //         this.redirect2Deatil(to.query.article_id)
+        //     }
+        // }
     }
 }
 </script>
