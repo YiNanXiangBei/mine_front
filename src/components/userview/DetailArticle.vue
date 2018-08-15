@@ -26,7 +26,7 @@
         <section class="section">
             <div class="container is-fluid">
                 <div class="column is-three-fifths is-offset-one-fifth">
-                    <vue-disqus shortname="min-blog-1"   language="zh"></vue-disqus>
+                    <vue-disqus v-if="hackReset" shortname="min-blog-1" :identifier="articleId"   language="zh"></vue-disqus>
                 </div>
                 
             </div>
@@ -58,12 +58,21 @@ export default {
             nextDisabled: true,
             isTop: true,
             timer: null,
-            showPagination: true
+            showPagination: true,
+            articleId: '',
+            hackReset: true
         }
     },
     methods: {
         //获取详细文章数据
         getDetailArticle(article_id) {
+            //强制下一次重新渲染组件
+            this.hackReset = false;
+            this.$nextTick(() => {
+                this.hackReset = true
+            });
+
+            this.articleId = article_id.toString();
             let data = {
                 article_id: article_id
             }
