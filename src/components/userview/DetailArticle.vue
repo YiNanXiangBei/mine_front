@@ -6,8 +6,13 @@
                     <div class="column is-three-fifths is-offset-one-fifth">
                         <div class="content">
                             <div v-html="compiledMarkdown" v-highlight>
-
+                                
                             </div>
+                        </div>
+                    </div>
+                    <div class="column is-one-fifths">
+                        <div class="content">
+                            {{headlines}}
                         </div>
                     </div>
                 </div>
@@ -20,7 +25,7 @@
                         <a class="pagination-previous" :disabled="previousDisabled" @click="redirect2Deatil(previous)">Previous</a>
                         <a class="pagination-next" :disabled="nextDisabled" @click="redirect2Deatil(next)">Next page</a>
                     </nav>
-                </div> 
+                </div>
             </div>   
         </section>
         <section class="section" v-show="showDisqus">
@@ -28,7 +33,6 @@
                 <div class="column is-three-fifths is-offset-one-fifth">
                     <vue-disqus v-if="hackReset" shortname="min-blog-1" :identifier="articleId"   language="zh"></vue-disqus>
                 </div>
-                
             </div>
         </section>
     </div>
@@ -38,8 +42,9 @@ import Encrypt from '../../util/encrypt.js'
 import axios from 'axios'
 import marked from 'marked'
 var rendererMD = new marked.Renderer()
+// var toc = []
 marked.setOptions({
-    renderer: rendererMD,
+    // renderer: rendererMD,
     gfm: true,
     tables: true,
     breaks: false,
@@ -61,7 +66,9 @@ export default {
             showPagination: true,
             articleId: '',
             hackReset: false,
-            showDisqus: false
+            showDisqus: false,
+            toc: [],
+            headlines: []
         }
     },
     methods: {
@@ -126,6 +133,20 @@ export default {
                 this.hackReset = false;
                 this.showDisqus = false;
             })
+        },
+        //将toc数组转换成树
+        tocToTree(tocs) {
+            let last = {};
+            tocs.forEach((headline, index) => {
+                let level = headline.level == null ? 1 : headline.level;
+                if (last[level - 1]) {
+                    last[level - 1].children = last[level - 1].childern == null ? [] : last[level - 1].childern;
+                    last[level - 1].children.push(headline);
+                } else {
+                    this.headlines.push(headline);
+                }
+                last[level] = headline;
+            });
         }
     },
     mounted() {
@@ -145,8 +166,22 @@ export default {
     },
     computed: {
         compiledMarkdown: function () {
-            return marked(this.content, { sanitize: true })
+            let toc = [];
+            rendererMD.heading = function(text, level) {
+                var slug = text.toLowerCase().replace(/[^\w]+/g, '-');
+                toc.push({
+                    level: level,
+                    slug: slug,
+                    title: text
+                });
+                return "<h" + level + " id=\"" + slug + "\"><a href=\"#" + slug + "\" class=\"anchor\"></a>" + text + "</h" + level + ">";
+            };
+            return marked(this.content, { sanitize: true, renderer: rendererMD}, (err, content) => {
+                this.tocToTree(toc)
+                return content;
+            });
         }
+        
     },
     watch: {
         // '$route'(to, from) {
