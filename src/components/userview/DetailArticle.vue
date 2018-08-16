@@ -12,7 +12,13 @@
                     </div>
                     <div class="column is-one-fifths">
                         <div class="content">
-                            {{headlines}}
+                            <p>目录</p>
+                            <div v-for="(item, index) in headlines">
+                                <p :style="{'text-indent': firstLineIndent(item.level)}">
+                                    <a href="javascript:void(0)" @click="goAnchor('#'+item.slug)">{{item.title}}</a>
+                                </p>
+                                
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -67,7 +73,6 @@ export default {
             articleId: '',
             hackReset: false,
             showDisqus: false,
-            toc: [],
             headlines: []
         }
     },
@@ -134,19 +139,17 @@ export default {
                 this.showDisqus = false;
             })
         },
-        //将toc数组转换成树
+        //回调将toc数组传给headlines
         tocToTree(tocs) {
-            let last = {};
-            tocs.forEach((headline, index) => {
-                let level = headline.level == null ? 1 : headline.level;
-                if (last[level - 1]) {
-                    last[level - 1].children = last[level - 1].childern == null ? [] : last[level - 1].childern;
-                    last[level - 1].children.push(headline);
-                } else {
-                    this.headlines.push(headline);
-                }
-                last[level] = headline;
-            });
+            this.headlines = tocs;
+        },
+        //点击文章年份跳转指定年份文章位置
+        goAnchor(selector) {
+            document.querySelector(selector).scrollIntoView();  
+        },
+        //依据markdown文本自动生成目录树，并定位锚点
+        firstLineIndent(level) {
+            return (level - 1) + 'rem'
         }
     },
     mounted() {
@@ -167,21 +170,23 @@ export default {
     computed: {
         compiledMarkdown: function () {
             let toc = [];
+            let endPadd = 1;
             rendererMD.heading = function(text, level) {
-                var slug = text.toLowerCase().replace(/[^\w]+/g, '-');
+                debugger
+                var slug = 'anchor' + text.toLowerCase().replace(/[^\w]+/g, 'anchor') + endPadd;
+                endPadd += 1;
                 toc.push({
                     level: level,
                     slug: slug,
                     title: text
                 });
-                return "<h" + level + " id=\"" + slug + "\"><a href=\"#" + slug + "\" class=\"anchor\"></a>" + text + "</h" + level + ">";
+                return "<h" + level + " id=\"" + slug + "\"><a href=\"javascript:void(0)" + "\" class=\"anchor\"># </a>" + text + "</h" + level + ">";
             };
             return marked(this.content, { sanitize: true, renderer: rendererMD}, (err, content) => {
                 this.tocToTree(toc)
                 return content;
             });
         }
-        
     },
     watch: {
         // '$route'(to, from) {
