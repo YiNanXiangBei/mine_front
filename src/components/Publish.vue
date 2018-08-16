@@ -272,7 +272,7 @@ export default {
         */
         autoSubmit() {
             this.time += 1;
-            if (this.time == 1 * 300) {
+            if (this.time == 10 * 60) {
                 //自动保存数据操作
                 this.buttonDisable = true;
                 this.isAutoSave = true;
