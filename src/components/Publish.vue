@@ -53,6 +53,11 @@
                 </Col>
                 <Col span="3" offset="1">
                     <FormItem>
+                        <Button type="primary" size="large" :disabled="buttonDisable" long @click="preview">预览</Button>
+                    </FormItem>
+                </Col>
+                <Col span="3" offset="1">
+                    <FormItem>
                         <Button size="large" :disabled="buttonDisable" long @click="canclePublish">放弃</Button>
                     </FormItem>
                 </Col>
@@ -301,6 +306,21 @@ export default {
                 localStorage.removeItem("tags");
             }
             
+        },
+        //打开预览页面
+        preview() {
+            if (this.formValues) {
+                localStorage.setItem("formValues", JSON.stringify(this.formValues));
+            }
+            if (this.selectOption) {
+                localStorage.setItem("tags", JSON.stringify(this.selectOption));
+            }
+            const {href} = this.$router.resolve({
+                name: 'preview',
+                path: '/sysadmin/preview',
+                query: {}
+            });
+            window.open(href, '_blank');
         }
     },
     mounted() {

@@ -20,6 +20,7 @@ import DetailArticle from '@/components/userview/DetailArticle'
 import Search from '@/components/userview/Search'
 import Articles from '@/components/userview/Articles'
 import Tags from '@/components/userview/Tags'
+import Preview from '@/components/Preview'
 import store from '../store'
 import axios from 'axios'
 Vue.use(Router)
@@ -124,6 +125,11 @@ const router =  new Router({
       meta: {
         requireAuth: true
       }
+    },
+    {
+      path: '/sysadmin/preview',
+      name: 'preview',
+      component: Preview
     },
     {
       path: '/',

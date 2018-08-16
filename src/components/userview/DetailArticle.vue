@@ -48,9 +48,7 @@ import Encrypt from '../../util/encrypt.js'
 import axios from 'axios'
 import marked from 'marked'
 var rendererMD = new marked.Renderer()
-// var toc = []
 marked.setOptions({
-    // renderer: rendererMD,
     gfm: true,
     tables: true,
     breaks: false,
@@ -172,7 +170,6 @@ export default {
             let toc = [];
             let endPadd = 1;
             rendererMD.heading = function(text, level) {
-                debugger
                 var slug = 'anchor' + text.toLowerCase().replace(/[^\w]+/g, 'anchor') + endPadd;
                 endPadd += 1;
                 toc.push({
