@@ -11,10 +11,10 @@
                         </div>
                     </div>
                     <div class="column is-one-fifths">
-                        <div class="content">
-                            <p>目录</p>
+                        <div class="box">
+                            <h3 class="title is-6">文章目录</h3>
                             <div v-for="(item, index) in headlines">
-                                <p :style="{'text-indent': firstLineIndent(item.level)}">
+                                <p :style="{'text-indent': firstLineIndent(item.level), 'font-size':'13px'}">
                                     <a href="javascript:void(0)" @click="goAnchor('#'+item.slug)">{{item.title}}</a>
                                 </p>
                                 
@@ -179,6 +179,9 @@ export default {
                 });
                 return "<h" + level + " id=\"" + slug + "\"><a href=\"javascript:void(0)" + "\" class=\"anchor\"># </a>" + text + "</h" + level + ">";
             };
+            rendererMD.image = function (href, title, text) {
+                return "<p style=\"padding: 17.5px 21px 17.5px 21px;\"><img src=\"" + href + "\"" + " alt=\"" + text + "\"></p>"
+            };
             return marked(this.content, { sanitize: true, renderer: rendererMD}, (err, content) => {
                 this.tocToTree(toc)
                 return content;
@@ -210,6 +213,7 @@ export default {
 .content {
     font-family: Arial, "Hiragino Sans GB", 冬青黑, "Microsoft YaHei", 微软雅黑, SimSun, 宋体, Helvetica, Tahoma, "Arial sans-serif";
 }
+
 </style>
 
 
