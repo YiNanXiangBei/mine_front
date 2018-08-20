@@ -42,7 +42,7 @@
             <br>
         </div>
         <BackTop></BackTop>
-        <Page :total="total" v-show="showPage" @on-change="research" style="text-align: center; padding-bottom: 15px"></Page>
+        <Page :total="total" :page-size=7 v-show="showPage" @on-change="research" style="text-align: center; padding-bottom: 15px"></Page>
         <Modal
             v-model="showmodal"
             title="您将删除这一篇文章以及这篇文章的相关评论，请确认这篇文章的标题"
