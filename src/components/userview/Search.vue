@@ -72,6 +72,7 @@ export default {
             this.hideSearchPage();
         },
         hideSearchPage() {
+            this.search_params = '';
             this.showClip = false;
             this.showSearchPage = false;
         },
