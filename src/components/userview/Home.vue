@@ -184,7 +184,9 @@ export default {
     watch: {
         //监听页面路由跳转
         '$route'(to, from) {
-            this.timer = setInterval(() =>{
+            if (to.query.from) {
+            } else {
+                this.timer = setInterval(() =>{
                 var osTop = document.documentElement.scrollTop || document.body.scrollTop;
                 var ispeed = Math.floor(-osTop / 7);
                 document.documentElement.scrollTop = document.body.scrollTop = osTop + ispeed;
@@ -193,6 +195,8 @@ export default {
                 }
                 this.isTop = true
             },30)
+            }
+            
         }
     }
 }

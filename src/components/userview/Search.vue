@@ -7,13 +7,13 @@
                 <section class="modal-card-body">
                     <div class="field is-grouped">
                         <div class="control has-icons-left has-icons-right is-expanded">
-                            <input class="input" type="text" v-model="search_params" placeholder="请输入要查询的内容">
+                            <input class="input" type="text" v-model="search_params" @keyup.enter="search" placeholder="请输入要查询的内容">
                             <span class="icon is-left">
                                 <i class="fa fa-search" aria-hidden="true"></i>
                             </span>
                         </div>
                         <div class="control">
-                            <button class="button is-primary" @click="search">提交</button>
+                            <button class="button is-primary" @click="search">查找</button>
                         </div>
                     </div>
                     <div class="box" :class="{height:resultHeight}">
@@ -69,8 +69,7 @@ export default {
         redirect2DetailArticle(val) {
             
             this.$router.push({path: '/detail_article', query: {article_id: val, from: 'search'}});
-            this.showClip = false;
-            this.showSearchPage = false;
+            this.hideSearchPage();
         },
         hideSearchPage() {
             this.showClip = false;
@@ -84,12 +83,12 @@ export default {
             let params = {
                 params: Encrypt.encrypt(JSON.stringify(data))
             }
-            axios.get('http://127.0.0.1:5000/search', {
+            axios.get('http://127.0.0.1:5000/search_articles', {
                 params: params
             })
             .then((response) => {
                 let data = response.data.data;
-                if (data == null) {
+                if (data.articles.length == 0) {
                     this.showPage = true;
                     this.articles = [];
                     this.showResultImg = true;

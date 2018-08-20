@@ -10,7 +10,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="column is-one-fifths">
+                    <div class="column is-one-fifths is-hidden-mobile">
                         <div class="box">
                             <h3 class="title is-6">文章目录</h3>
                             <div v-for="(item, index) in headlines">
@@ -189,12 +189,11 @@ export default {
         }
     },
     watch: {
-        // '$route'(to, from) {
-        //     if (to.query.from) {
-        //         console.log(1)
-        //         this.redirect2Deatil(to.query.article_id)
-        //     }
-        // }
+        '$route'(to, from) {
+            if (to.query.from) {
+                this.redirect2Deatil(to.query.article_id)
+            }
+        }
     }
 }
 </script>
