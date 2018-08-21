@@ -77,34 +77,40 @@ export default {
         },
         //依据输入字符串查询数据
         search() {
-            let data = {
-                'search_params': this.search_params
-            }
-            let params = {
-                params: Encrypt.encrypt(JSON.stringify(data))
-            }
-            axios.get(process.env.API_HOST + '/search_articles', {
-                params: params
-            })
-            .then((response) => {
-                let data = response.data.data;
-                if (data.articles.length == 0) {
-                    this.showPage = true;
-                    this.articles = [];
-                    this.showResultImg = true;
-                } else {
-                    this.showResultImg = false;
-                    this.articles = data.articles;
-                }
-                
-            })
-            .catch((error) => {
-                this.$Message.error({
-                    content: '出现异常！异常原因： ' + error,
+            if (this.search_params == null || this.search_params == '') {
+                this.$Message.warning({
+                    content: '查询条件不能为空！',
                     duration: 2
                 });
-            })
-
+            } else {
+                let data = {
+                    'search_params': this.search_params
+                }
+                let params = {
+                    params: Encrypt.encrypt(JSON.stringify(data))
+                }
+                axios.get(process.env.API_HOST + '/search_articles', {
+                    params: params
+                })
+                .then((response) => {
+                    let data = response.data.data;
+                    if (data.articles.length == 0) {
+                        this.showPage = true;
+                        this.articles = [];
+                        this.showResultImg = true;
+                    } else {
+                        this.showResultImg = false;
+                        this.articles = data.articles;
+                    }
+                    
+                })
+                .catch((error) => {
+                    this.$Message.error({
+                        content: '出现异常！异常原因： ' + error,
+                        duration: 2
+                    });
+                })
+            }
         },
         //markdown to html
         compiledMarkdown: function (content) {
