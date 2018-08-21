@@ -84,7 +84,7 @@ export default {
                     let _this = this;
                     _this.$Spin.show();
                     axios({
-                        url: 'http://127.0.0.1:5000/sysadmin/resetPwd',
+                        url: process.env.API_HOST + '/sysadmin/resetPwd',
                         method: 'put',
                         data: params,
                         transformRequest: [

@@ -38,7 +38,7 @@ export default {
             this.$Spin.show();
             let _this = this;
             axios({
-                url: 'http://127.0.0.1:5000/sysadmin/add_tags',
+                url: process.env.API_HOST + '/sysadmin/add_tags',
                 method: 'post',
                 data: {tag: _this.newTag},
                 headers: {
@@ -70,7 +70,7 @@ export default {
             let _this = this;
             axios({
                 method: 'GET',
-                url: 'http://127.0.0.1:5000/sysadmin/tags',
+                url: process.env.API_HOST + '/sysadmin/tags',
                 headers: {
                     Authorization: sessionStorage.getItem('token')
                 },

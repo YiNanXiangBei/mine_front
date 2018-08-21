@@ -82,7 +82,7 @@ export default {
         },
         //查询数据
         search() {
-            axios.get('http://127.0.0.1:5000/sysadmin/oldArticles',{
+            axios.get(process.env.API_HOST + '/sysadmin/oldArticles',{
                 params: this.formValues,
                 headers: {
                     Authorization: sessionStorage.getItem('token')
@@ -123,7 +123,7 @@ export default {
          */
         validateTitle() {
             if (this.currentTitle === this.tagTitle.trim()) {
-                axios.delete('http://127.0.0.1:5000/sysadmin/article',{
+                axios.delete(process.env.API_HOST + '/sysadmin/article',{
                     params: {
                         article_id: this.articleId
                     },

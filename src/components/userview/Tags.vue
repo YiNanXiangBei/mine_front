@@ -32,7 +32,7 @@ export default {
 
         //获取所有的标签
         getAllTags() {
-            axios.get('http://127.0.0.1:5000/tags')
+            axios.get(process.env.API_HOST + '/tags')
             .then((response) => {
                 this.tags = response.data.data.tags;
             })
@@ -51,7 +51,7 @@ export default {
             desc: '',
             tags: [],
             publish_time: '',
-            back_url: 'http://127.0.0.1:5000/image/1534261401.webp'
+            back_url: process.env.API_HOST + '/image/1534261401.webp'
         }
         this.$emit('loadArticle', result);
         this.getAllTags();

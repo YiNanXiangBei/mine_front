@@ -88,7 +88,7 @@ export default {
             let params = {
                 params: Encrypt.encrypt(JSON.stringify(data))
             }
-            axios.get('http://127.0.0.1:5000/index', {
+            axios.get(process.env.API_HOST + '/index', {
                 params: params
             })
             .then((response) => {

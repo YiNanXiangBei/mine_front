@@ -67,8 +67,7 @@ export default {
     },
     methods: {
         redirect2DetailArticle(val) {
-            
-            this.$router.push({path: '/detail_article', query: {article_id: val, from: 'search'}});
+            this.$router.push({path:'/detail_article', query: {article_id: val, from: 'search'}});
             this.hideSearchPage();
         },
         hideSearchPage() {
@@ -84,7 +83,7 @@ export default {
             let params = {
                 params: Encrypt.encrypt(JSON.stringify(data))
             }
-            axios.get('http://127.0.0.1:5000/search_articles', {
+            axios.get(process.env.API_HOST + '/search_articles', {
                 params: params
             })
             .then((response) => {

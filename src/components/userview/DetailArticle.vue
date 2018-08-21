@@ -94,7 +94,7 @@ export default {
                 params: Encrypt.encrypt(JSON.stringify(data))
             }
             //ajax请求获取数据
-            axios.get('http://127.0.0.1:5000/detail_article',{
+            axios.get(process.env.API_HOST + '/detail_article',{
                 params: params
             }).then((response) => {
                 let data = response.data;
@@ -161,7 +161,7 @@ export default {
             desc: '',
             tags: [],
             publish_time: '',
-            back_url: 'http://127.0.0.1:5000/image/1534261401.webp'
+            back_url: process.env.API_HOST + '/image/1534261401.webp'
         }
         this.$emit('loadArticle', result);
     },

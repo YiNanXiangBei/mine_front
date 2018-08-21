@@ -16,7 +16,7 @@
                 :data="{
                     'back_img': 1
                 }"
-                action="http://127.0.0.1:5000/sysadmin/upload_image">
+                :action="actionUrl">
                     <div style="padding: 20px 0">
                         <Icon type="ios-cloud-upload" size="52" style="color: #3399ff"></Icon>
                         <p>Click or drag files here to upload</p>
@@ -44,7 +44,8 @@ export default {
             imgUrl: '',
             headers: {
                 Authorization: sessionStorage.getItem('token')
-            }
+            },
+            actionUrl: process.env.API_HOST + "/sysadmin/upload_image"
         }
     },
     methods: {

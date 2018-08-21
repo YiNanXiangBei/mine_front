@@ -49,7 +49,7 @@ export default {
                     let _this = this;
                     _this.$Spin.show();
                     axios({
-                        url: 'http://127.0.0.1:5000/sysadmin/login',
+                        url: process.env.API_HOST + '/sysadmin/login',
                         method: 'post',
                         data: params,
                         headers: {

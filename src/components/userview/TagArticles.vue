@@ -78,7 +78,7 @@ export default {
       let params = {
           params: Encrypt.encrypt(JSON.stringify(data))
       }
-      axios.get('http://127.0.0.1:5000/tag_articles', {
+      axios.get(process.env.API_HOST + '/tag_articles', {
         params: params
       })
       .then((response) => {
@@ -129,7 +129,7 @@ export default {
         desc: '',
         tags: [],
         publish_time: '',
-        back_url: 'http://127.0.0.1:5000/image/1534261401.webp'
+        back_url: process.env.API_HOST + '/image/1534261401.webp'
     }
     this.$emit('loadArticle', result);
     let tag_id = this.$route.query.tag_id;

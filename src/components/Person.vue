@@ -45,7 +45,7 @@
             v-model="showavatar"
             :width="300"
             :height="300"
-            url="http://127.0.0.1:5000/sysadmin/upload"
+            :url="uploadUrl"
             :params="params"
             :headers="headers"
             img-format="png">
@@ -61,6 +61,7 @@ import myUpload from 'vue-image-crop-upload';
 export default {
     data() {
         return {
+            uploadUrl: process.env.API_HOST + "/sysadmin/upload",
             showmodal: false,
             showspin: false,
             oldPass: '',
@@ -119,7 +120,7 @@ export default {
             let _this = this;
             this.$Spin.show();
             axios({
-                url: 'http://127.0.0.1:5000/sysadmin/info',
+                url: process.env.API_HOST + '/sysadmin/info',
                 method: 'post',
                 data: params,
                 headers: {
@@ -177,7 +178,7 @@ export default {
             if(this.passagain === this.formValues.password) {
                 _this.$Spin.show();
                 axios({
-                    url: 'http://127.0.0.1:5000/sysadmin/info',
+                    url: process.env.API_HOST + '/sysadmin/info',
                     method: 'post',
                     data: params,
                     headers: {
@@ -284,7 +285,7 @@ export default {
          */
         loadData() {
             let _this = this;
-            axios.get('http://127.0.0.1:5000/sysadmin/info',{
+            axios.get(process.env.API_HOST + '/sysadmin/info',{
                 params: {
                     'username': sessionStorage.getItem('username')
                 },

@@ -131,7 +131,7 @@ export default {
                     this.$Spin.show();
                     axios({
                         method: 'post',
-                        url: 'http://127.0.0.1:5000/sysadmin/article',
+                        url: process.env.API_HOST + '/sysadmin/article',
                         data: {
                             tags: this.selectOption,
                             title: this.formValues.title.trim(),
@@ -184,7 +184,7 @@ export default {
         onQueryChange(value) {
             let _this = this;
             if (value != '') {
-                axios.get('http://127.0.0.1:5000/sysadmin/blurry_tags', {
+                axios.get(process.env.API_HOST + '/sysadmin/blurry_tags', {
                     params: {
                         tag: value
                     },
@@ -244,7 +244,7 @@ export default {
             var formdata = new FormData();
             formdata.append('file', $file);
             axios({
-                url: 'http://127.0.0.1:5000/sysadmin/upload_image',
+                url: process.env.API_HOST + '/sysadmin/upload_image',
                 method: 'post',
                 data: formdata,
                 headers: {

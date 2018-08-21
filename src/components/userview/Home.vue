@@ -81,10 +81,14 @@
         <footer class="footer">
             <div class="container">
                 <div class="content has-text-centered">
-                    <p>
-                        <strong>Mine Blog</strong> by <a href="https://github.com/YiNanXiangBei">YiNanXiangBei</a> and <a href="https://github.com/Jasbeauty">Jasmine</a>. The source code is licensed
-                        <a href="https://github.com/YiNanXiangBei/mine_front/blob/master/LICENSE">Apache-2.0</a>.
-                    </p>
+
+                    <small>
+                         ©&nbsp;2018&nbsp;-&nbsp;YiNan&nbsp;-&nbsp;
+                        <a target="_blank" href="http://www.miitbeian.gov.cn/">皖 ICP 备 16017414 号</a>
+                        <br>
+                        Powered by <a href="https://github.com/YiNanXiangBei">YiNanXiangBei</a> and <a href="https://github.com/Jasbeauty">Jasmine</a>.                        
+                    </small>
+                    
                 </div>
             </div>
         </footer>

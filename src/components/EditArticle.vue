@@ -137,7 +137,7 @@ export default {
             let _this = this;
             axios({
                 method: 'put',
-                url: 'http://127.0.0.1:5000/sysadmin/article',
+                url: process.env.API_HOST + '/sysadmin/article',
                 data: {
                     article_id: localStorage.getItem("article_id"),
                     tags: this.selectOption,
@@ -206,7 +206,7 @@ export default {
         onQueryChange(value) {
             let _this = this;
             if (value != '') {
-                axios.get('http://127.0.0.1:5000/sysadmin/blurry_tags', {
+                axios.get(process.env.API_HOST + '/sysadmin/blurry_tags', {
                     params: {
                         tag: value
                     }
@@ -284,7 +284,7 @@ export default {
             console.log($file);
             formdata.append('file', $file);
             axios({
-                url: 'http://127.0.0.1:5000/sysadmin/upload_image',
+                url: process.env.API_HOST + '/sysadmin/upload_image',
                 method: 'post',
                 data: formdata,
                 headers: { 
@@ -307,7 +307,7 @@ export default {
             let _this = this;
             let article_id = localStorage.getItem("article_id");
             if (article_id) {
-                axios.get('http://127.0.0.1:5000/sysadmin/article', {
+                axios.get(process.env.API_HOST + '/sysadmin/article', {
                     params: {
                         article_id: localStorage.getItem("article_id")
                     },

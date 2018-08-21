@@ -19,7 +19,7 @@
         <Row v-if="showResult">
             <Col span="8" offset="8">
                 <h1 class="title is-4">邮件发送成功，请立即前往收件箱点击相关链接，重置密码！</h1>
-                <a href="http://127.0.0.1:8080/sysadmin/password_find">如未受到邮件，请点击这里重新发送邮件！>></a>
+                <a href="/sysadmin/password_find">如未受到邮件，请点击这里重新发送邮件！>></a>
             </Col>
         </Row>
     </div>
@@ -55,7 +55,7 @@ export default {
                     _this.$Spin.show();
                     console.log(params)
                     axios({
-                        url: 'http://127.0.0.1:5000/sysadmin/verify',
+                        url: process.env.API_HOST + '/sysadmin/verify',
                         method: 'post',
                         data: params,
                         transformRequest: [
