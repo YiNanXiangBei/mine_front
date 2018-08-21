@@ -77,7 +77,7 @@ export default {
         },
         //依据输入字符串查询数据
         search() {
-            if (this.search_params == null || this.search_params == '') {
+            if (this.search_params == null || this.search_params.replace(/(^\s*)|(\s*$)/g, "").length == 0) {
                 this.$Message.warning({
                     content: '查询条件不能为空！',
                     duration: 2
