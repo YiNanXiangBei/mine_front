@@ -157,7 +157,7 @@ export default {
         }
         if (path == '/' || path == '/index') {
             this.articles.title = '长路漫漫';
-            this.articles.backImg = 'http://127.0.0.1:5000/image/1534261401.webp';
+            this.articles.backImg = process.env.API_HOST + '/image/1534261401.webp';
         }
         let _this = this;
         document.onscroll= ()=> {
