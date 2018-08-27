@@ -1,31 +1,31 @@
 import Vue from 'vue'
-import Router from 'vue-router'
-import Comments from '@/components/Comment'
-import Editor from '@/components/Editor'
-import Person from '@/components/Person'
-import Publish from '@/components/Publish'
-import Sidebar from '@/components/Sidebar'
-import Tag from '@/components/Tag'
-import Upload from '@/components/Upload'
-import Login from '@/components/Login'
-import EditArticle from '@/components/EditArticle'
-import PasswordFind from '@/components/PasswordFind'
-import PasswordChange from '@/components/PasswordChange'
-import DetailTag from '@/components/DetailTag'
-import TagArticles from '@/components/userview/TagArticles'
-import Home from '@/components/userview/Home'
-import About from '@/components/userview/About'
-import Archive from '@/components/userview/Archive'
-import DetailArticle from '@/components/userview/DetailArticle'
-import Search from '@/components/userview/Search'
-import Articles from '@/components/userview/Articles'
-import Tags from '@/components/userview/Tags'
-import Preview from '@/components/Preview'
+import VueRouter from 'vue-router'
+const Comments = () => import('@/components/Comment')
+const Editor = () => import('@/components/Editor')
+const Person = () => import('@/components/Person')
+const Publish = () => import('@/components/Publish')
+const Sidebar = () => import('@/components/Sidebar')
+const Tag = () => import('@/components/Tag')
+const Upload = () => import('@/components/Upload')
+const Login = () => import('@/components/Login')
+const EditArticle = () => import('@/components/EditArticle')
+const PasswordFind = () => import('@/components/PasswordFind')
+const PasswordChange = () => import('@/components/PasswordChange')
+const DetailTag = () => import('@/components/DetailTag')
+const TagArticles = () => import('@/components/userview/TagArticles')
+const Home = () => import('@/components/userview/Home')
+const About = () => import('@/components/userview/About')
+const Archive = () => import('@/components/userview/Archive')
+const DetailArticle = () => import('@/components/userview/DetailArticle')
+const Search = () => import('@/components/userview/Search')
+const Articles = () => import('@/components/userview/Articles')
+const Tags = () => import('@/components/userview/Tags')
+const Preview = () => import('@/components/Preview')
+
 import store from '../store'
 import axios from 'axios'
-Vue.use(Router)
 
-const router =  new Router({
+const router =  new VueRouter({
   //修改默认路由格式
   mode: 'history',
   routes: [

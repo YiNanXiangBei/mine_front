@@ -5,20 +5,15 @@ import Vuex from 'vuex'
 import App from './App'
 import router from './router'
 import store from './store'
-import iView from 'iview'
-import 'iview/dist/styles/iview.css'
+import iview from 'iview'
 import mavonEditor from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
 import axios from 'axios'
-import 'bulma/css/bulma.min.css'
-import 'font-awesome/css/font-awesome.min.css'
 import VueDisqus from 'vue-disqus'
 import Highlight from './util/highlight.js'
 Vue.use(Highlight)
 Vue.config.productionTip = false
-Vue.use(iView)
 Vue.use(mavonEditor)
-Vue.use(Vuex)
 Vue.use(VueDisqus)
 /* eslint-disable no-new */
 // http request 拦截器

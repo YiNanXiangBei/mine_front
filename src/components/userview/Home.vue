@@ -207,10 +207,6 @@ export default {
 </script>
 <style scoped>
 @font-face {
-    font-family: 'Hiragino Sans GB';
-    src: url('../../../static/font/Hiragino-Sans-GB-W3.otf');
-}
-@font-face {
     font-family: 'Monaco';
     src: url('../../../static/font/Monaco.ttf');
 }
