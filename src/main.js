@@ -15,6 +15,14 @@ Vue.use(Highlight)
 Vue.config.productionTip = false
 Vue.use(mavonEditor)
 Vue.use(VueDisqus)
+
+/**
+ * 关闭生产环境下的调试信息
+ */
+const isDebugMode = process.env.NODE_ENV !== "production";
+Vue.config.debug = isDebugMode;
+Vue.config.devtools = isDebugMode;
+Vue.config.productionTip = isDebugMode;
 /* eslint-disable no-new */
 // http request 拦截器
 axios.interceptors.request.use(

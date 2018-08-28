@@ -53,7 +53,6 @@ export default {
                     let params = this.formItems;
                     let _this = this;
                     _this.$Spin.show();
-                    console.log(params)
                     axios({
                         url: process.env.API_HOST + '/sysadmin/verify',
                         method: 'post',
@@ -74,7 +73,6 @@ export default {
                             // Do whatever you want to transform the data
                             _this.$Spin.hide();
                             data = JSON.parse(data);
-                            console.log(data)
                             switch(data.code) {
                                 //请求发送邮件成功
                                 case 200:

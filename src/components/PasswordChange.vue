@@ -21,13 +21,13 @@
         </Row>
         <Row v-if="showMessage" v-show="!showResult">
             <Col span="8" offset="8">
-                <h1 class="title is-4">链接以失效，请重新发送邮件重置密码！</h1>
+                <h1 class="title is-4">链接已失效，请重新发送邮件重置密码！</h1>
             </Col>
         </Row>
         <Row v-if="showResult">
             <Col span="6" offset="9">
                 <h1 class="title is-4">密码重置成功！</h1>
-                <a href="/">点击链接，跳转到登录页面</a>
+                <a href="/sysadmin">点击链接，跳转到登录页面</a>
             </Col>
         </Row>
     </div>    
@@ -128,10 +128,9 @@ export default {
         this.backUsername = array[0].split('=')[1];
         this.backEmail = array[1].split('=')[1];
         let sys_timstamp = parseInt(parseInt(array[2].split('=')[1]) / 1000);
-        // console.log(array)
         let username = params;
         let time = Date.parse(new Date()) /1000;
-        if (sys_timstamp + 60 < time) {
+        if (sys_timstamp + 60*60*24 < time) {
             //超时，所有输入框和按钮都为disabled
             this.showMessage = true;
         } 
