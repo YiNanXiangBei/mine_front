@@ -24,7 +24,7 @@ export default {
             nextDisabled: false,
             isTop: true,
             timer: null,
-            showPages: true
+            showPages: false
         }
     },
     props: ['total'],

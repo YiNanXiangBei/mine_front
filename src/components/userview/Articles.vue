@@ -14,7 +14,7 @@
                                             >
                                             <h3 class="title is-spaced">{{article.title}}</h3>
                                             <h5 class="subtitle is-6">{{article.desc}}</h5>
-                                            <p class="hide-content is-italic" v-html="htmlToText(compiledMarkdown(article.content))">
+                                            <p class="hide-content is-italic" :style="styles" v-html="htmlToText(compiledMarkdown(article.content))">
                                                 
                                             </p>
                                            
@@ -76,7 +76,15 @@ export default {
             articles: [],
             showPage: true,
             showTip: false,
-            topArticles: []
+            topArticles: [],
+            styles: {
+                'color': '#a3a3a3', 
+                'overflow' : 'hidden',
+                'text-overflow' : 'ellipsis',
+                'display' : '-webkit-box',
+                '-webkit-line-clamp' : '4',
+                '-webkit-box-orient' : 'vertical'
+            }
         }
     },
     methods: {
@@ -132,18 +140,8 @@ export default {
 .detail-article{
     cursor: pointer;
 }
-articles {
+#articles {
     min-height: 740px;
-}
-
-
-.hide-content {
-    color: #a3a3a3; 
-    overflow : hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;	
-    -webkit-line-clamp: 4;	
-    -webkit-box-orient: vertical; 
 }
 
 .hot-content {

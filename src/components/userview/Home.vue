@@ -1,7 +1,7 @@
 <template>
     <div id="home">
         <!-- 头部 -->
-        <nav class="navbar is-fixed-top home-navbar-header" role="navigation" aria-label="main navigation" v-show="showHeader">
+        <nav class="navbar is-fixed-top home-navbar-header is-hidden-touch" role="navigation" aria-label="main navigation" v-show="showHeader">
             <div class="container is-fluid">
                 <div class="navbar-brand">
                     <a class="navbar-item" href="http://127.0.0.1:8080/index">

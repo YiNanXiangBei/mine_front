@@ -17,7 +17,7 @@
                   <div class="media-content">
                     <div class="content">
                       <strong class="title is-5">{{article.title}}</strong>
-                      <p class="hide-content is-italic" v-html="htmlToText(compiledMarkdown(article.content))">
+                      <p class="hide-content is-italic" :style="styles" v-html="htmlToText(compiledMarkdown(article.content))">
                       </p>
                     </div>
                   </div>
@@ -65,7 +65,15 @@ export default {
       total: 0,
       articles: [],
       showTip: false,
-      showPage: true
+      showPage: true,
+      styles: {
+          'color': '#a3a3a3', 
+          'overflow' : 'hidden',
+          'text-overflow' : 'ellipsis',
+          'display' : '-webkit-box',
+          '-webkit-line-clamp' : '4',
+          '-webkit-box-orient' : 'vertical'
+      }
     }
   },
   methods: {
@@ -156,11 +164,11 @@ export default {
   min-height: 740px;
 }
 /* 隐藏多余文字 */
-.hide-content {
+/* .hide-content {
   overflow : hidden;
   text-overflow: ellipsis;
   display: -webkit-box;	
   -webkit-line-clamp: 4;	
   -webkit-box-orient: vertical;
-}
+} */
 </style>
