@@ -25,7 +25,7 @@
                                 v-for="(article, index) in articles" :key="index"
                                 @click="redirect2DetailArticle(article.id)" class="detail-article">
                                 <h1 class="title is-5">{{article.title}}</h1>
-                                <p class="hide-content" v-html="htmlToText(compiledMarkdown(article.content))"></p>
+                                <p class="hide-content" :style="styles" v-html="htmlToText(compiledMarkdown(article.content))"></p>
                                 <hr>
                             </div>
                         </div>
@@ -62,7 +62,15 @@ export default {
             showClip: false,
             search_params: '',
             articles: [],
-            showResultImg: true
+            showResultImg: true,
+            styles: {
+                'color': '#a3a3a3', 
+                'overflow' : 'hidden',
+                'text-overflow' : 'ellipsis',
+                'display' : '-webkit-box',
+                '-webkit-line-clamp' : '4',
+                '-webkit-box-orient' : 'vertical'
+            }
         }
     },
     methods: {
@@ -153,14 +161,6 @@ export default {
 
 .detail-article{
   cursor: pointer
-}
-/* 隐藏多余文字 */
-.hide-content {
-  overflow : hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;	
-  -webkit-line-clamp: 4;	
-  -webkit-box-orient: vertical;
 }
 </style>
 
